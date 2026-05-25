@@ -1,0 +1,610 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ironfield Resources — H1 FY26 Investor Presentation</title>
+  <style>
+    :root {
+      --brand: #1a3a5c;
+      --brand-mid: #2e5984;
+      --gold: #b8892e;
+      --green: #1a6e38;
+      --text: #1a1a1a;
+      --muted: #4a5568;
+      --line: #d1d5db;
+      --bg: #f0f4f8;
+      --surface: #ffffff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: "Segoe UI", Arial, sans-serif; font-size: 10pt; color: var(--text); background: var(--bg); }
+
+    /* Slide containers */
+    .slide {
+      max-width: 960px;
+      margin: 0 auto 24px;
+      background: var(--surface);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+    }
+    .slide-header {
+      background: linear-gradient(120deg, var(--brand), var(--brand-mid));
+      color: #fff;
+      padding: 18px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .slide-header h2 { font-size: 13pt; font-weight: 700; }
+    .slide-header .slide-num { font-size: 8pt; opacity: 0.65; }
+    .slide-body { padding: 24px 28px; }
+
+    /* Cover slide */
+    .cover {
+      max-width: 960px;
+      margin: 0 auto 24px;
+      background: linear-gradient(135deg, var(--brand) 0%, #0e2a44 50%, #0e3a22 100%);
+      border-radius: 8px;
+      padding: 60px 56px;
+      color: #fff;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    }
+    .cover .tag { font-size: 8pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--gold); margin-bottom: 12px; }
+    .cover h1 { font-size: 22pt; font-weight: 700; line-height: 1.2; margin-bottom: 8px; }
+    .cover .sub { font-size: 12pt; color: #a8c8e0; margin-bottom: 24px; }
+    .cover .meta { font-size: 9pt; color: #8ab4cc; }
+    .cover .disclaimer { font-size: 7.5pt; color: #6a96b0; margin-top: 32px; line-height: 1.5; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.15); }
+
+    /* KPI grids */
+    .kpi-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+    .kpi-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
+    .kpi-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 20px; }
+    .kpi { border-radius: 8px; padding: 16px; text-align: center; }
+    .kpi.dark { background: var(--brand); color: #fff; }
+    .kpi.gold { background: var(--gold); color: #fff; }
+    .kpi.green { background: var(--green); color: #fff; }
+    .kpi.light { background: #eef3f8; color: var(--brand); }
+    .kpi .val { font-size: 18pt; font-weight: 700; line-height: 1; margin-bottom: 4px; }
+    .kpi .lbl { font-size: 7.5pt; opacity: 0.85; text-transform: uppercase; letter-spacing: 0.05em; }
+    .kpi .delta { font-size: 8pt; margin-top: 4px; opacity: 0.75; }
+
+    /* Text */
+    h3.sub { font-size: 10.5pt; font-weight: 700; color: var(--brand); margin: 16px 0 8px; }
+    p.body { font-size: 9.5pt; color: var(--text); line-height: 1.6; margin-bottom: 8px; }
+    ul.bullets { padding-left: 18px; margin-bottom: 12px; }
+    ul.bullets li { font-size: 9.5pt; line-height: 1.55; margin-bottom: 5px; }
+    ul.bullets li strong { color: var(--brand); }
+
+    /* Two-col layout */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .two-col-60 { display: grid; grid-template-columns: 1.4fr 1fr; gap: 20px; }
+
+    /* Tables */
+    .tbl-wrap { border: 1px solid var(--line); border-radius: 6px; overflow: hidden; margin-bottom: 12px; }
+    table { width: 100%; border-collapse: collapse; font-size: 8.5pt; }
+    thead tr { background: var(--brand); color: #fff; }
+    thead th { padding: 7px 10px; text-align: left; font-weight: 600; }
+    thead th.r { text-align: right; }
+    tbody tr:nth-child(even) { background: #f4f7fb; }
+    tbody td { padding: 6px 10px; border-bottom: 1px solid var(--line); }
+    tbody tr:last-child td { border-bottom: none; }
+    td.r { text-align: right; }
+    td.total { font-weight: 700; color: var(--brand); }
+    .section-row td { background: #e6eef5 !important; font-weight: 700; color: var(--brand); font-size: 8pt; text-transform: uppercase; }
+
+    /* Progress bar */
+    .progress-item { margin-bottom: 10px; }
+    .progress-label { display: flex; justify-content: space-between; font-size: 8.5pt; color: var(--muted); margin-bottom: 3px; }
+    .progress-bar { height: 10px; background: #e0e7f0; border-radius: 5px; overflow: hidden; }
+    .progress-fill { height: 100%; border-radius: 5px; background: var(--brand); }
+    .progress-fill.gold-fill { background: var(--gold); }
+    .progress-fill.green-fill { background: var(--green); }
+
+    /* Milestone timeline */
+    .timeline { border-left: 3px solid var(--brand); padding-left: 20px; margin: 12px 0; }
+    .t-item { position: relative; margin-bottom: 14px; }
+    .t-item::before { content: ""; position: absolute; left: -26px; top: 4px; width: 10px; height: 10px; border-radius: 50%; background: var(--gold); border: 2px solid var(--brand); }
+    .t-item.done::before { background: var(--green); }
+    .t-item .t-date { font-size: 8pt; font-weight: 700; color: var(--gold); text-transform: uppercase; letter-spacing: 0.04em; }
+    .t-item.done .t-date { color: var(--green); }
+    .t-item .t-text { font-size: 9pt; color: var(--text); line-height: 1.45; }
+
+    /* Callout */
+    .callout { border-radius: 6px; padding: 12px 16px; margin-bottom: 12px; }
+    .callout.blue { background: #eef3f8; border: 1px solid var(--brand-mid); }
+    .callout.green { background: #e8f5ee; border: 1px solid #5a9e78; }
+    .callout p { font-size: 9pt; line-height: 1.55; }
+    .callout.blue p { color: #1a3a5c; }
+    .callout.green p { color: #1a4a2e; }
+
+    /* Disclaimer slide */
+    .disclaimer-slide { max-width: 960px; margin: 0 auto; background: #1a3a5c; border-radius: 8px; padding: 32px 40px; color: #a8c0d0; font-size: 8pt; line-height: 1.6; box-shadow: 0 4px 16px rgba(0,0,0,0.15); }
+    .disclaimer-slide h3 { color: #fff; font-size: 10pt; margin-bottom: 12px; }
+    .disclaimer-slide p { margin-bottom: 8px; }
+
+    @media print { body { background: #fff; } .slide, .cover, .disclaimer-slide { max-width: 100%; margin-bottom: 0; page-break-after: always; border-radius: 0; box-shadow: none; } }
+  </style>
+</head>
+<body>
+
+  <!-- Cover -->
+  <div class="cover">
+    <div class="tag">Investor Presentation</div>
+    <h1>H1 FY26 Results &amp; Creston Development Update</h1>
+    <div class="sub">Six months ended 31 December 2025</div>
+    <div class="meta">February 2026 &nbsp;|&nbsp; Ironfield Resources Limited &nbsp;|&nbsp; Kalgara Gold-Copper Mine, Murchison Province WA</div>
+    <div class="disclaimer">This presentation contains forward-looking statements. Actual results may differ materially from those expressed or implied. Past performance is not a reliable indicator of future performance. This presentation has been prepared as general information only and does not constitute financial product advice. A complete Competent Persons statement and JORC Table 1 in respect of exploration results and resource estimates referred to in this presentation are available in the relevant ASX announcements.</div>
+  </div>
+
+  <!-- Slide 1: H1 FY26 Snapshot -->
+  <div class="slide">
+    <div class="slide-header">
+      <h2>H1 FY26 Snapshot — Record First Half</h2>
+      <span class="slide-num">01</span>
+    </div>
+    <div class="slide-body">
+      <div class="kpi-4">
+        <div class="kpi dark"><div class="val">83,417oz</div><div class="lbl">Gold Produced H1</div><div class="delta">Record H1 production</div></div>
+        <div class="kpi dark"><div class="val">A$2,341/oz</div><div class="lbl">H1 AISC</div><div class="delta">Below H1 guidance midpoint</div></div>
+        <div class="kpi gold"><div class="val">A$461m</div><div class="lbl">H1 Revenue</div><div class="delta">vs A$14m pcp</div></div>
+        <div class="kpi green"><div class="val">A$422m</div><div class="lbl">Cash at Dec 2025</div><div class="delta">+A$193m in H1</div></div>
+      </div>
+
+      <div class="two-col">
+        <div>
+          <h3 class="sub">Key Operational Achievements</h3>
+          <ul class="bullets">
+            <li>Record quarterly gold production of <strong>44,273oz</strong> in Dec quarter</li>
+            <li>87.2% average gold recovery maintained across H1</li>
+            <li>Total material mined increased <strong>28%</strong> half-on-half, driven by North Pit Stage 2 ramp and West Pit Stage 4 productivity gains</li>
+            <li>10 drill rigs operating; 107,747m resource drilling completed in H1</li>
+            <li>LTIFR improved; zero LTIs in Sep quarter; TRIFR 4.4 at Dec 2025</li>
+          </ul>
+          <h3 class="sub">Key Financial Achievements</h3>
+          <ul class="bullets">
+            <li>NPAT A$155.5 million — <strong>447% increase</strong> on pcp</li>
+            <li>Free cash flow of A$193.2 million; cash build to <strong>A$421.8 million</strong></li>
+            <li>A$150 million debt facility committed — <strong>no equity required for Creston</strong></li>
+            <li>FY26 production tracking to <strong>upper end</strong> of 130–155koz guidance</li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="sub">H1 vs H2 FY26 — Production Weighting</h3>
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>Period</th><th class="r">Au (oz)</th><th class="r">AISC (A$/oz)</th></tr></thead>
+              <tbody>
+                <tr><td>Sep Q 2025</td><td class="r">39,144</td><td class="r">2,392</td></tr>
+                <tr><td>Dec Q 2025</td><td class="r">44,273</td><td class="r">2,296</td></tr>
+                <tr><td class="total">H1 FY26 Total</td><td class="r total">83,417</td><td class="r total">2,341</td></tr>
+                <tr><td>H2 FY26 Est.</td><td class="r">~46,600–71,600</td><td class="r">~2,300–2,650</td></tr>
+                <tr><td class="total">FY26 Guidance</td><td class="r total">130,000–155,000</td><td class="r total">2,200–2,600</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout blue">
+            <p><strong>Guidance tracking:</strong> Based on H1 performance, full-year production expected to trend towards the <strong>upper end</strong> of guidance (130–155koz) and AISC towards the <strong>lower end</strong> (A$2,200–A$2,600/oz).</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 2: Financial Performance -->
+  <div class="slide">
+    <div class="slide-header">
+      <h2>Financial Performance — H1 FY26</h2>
+      <span class="slide-num">02</span>
+    </div>
+    <div class="slide-body">
+      <div class="kpi-3">
+        <div class="kpi light"><div class="val">A$155.5m</div><div class="lbl">NPAT</div><div class="delta">vs A$28.4m pcp</div></div>
+        <div class="kpi light"><div class="val">A$256.6m</div><div class="lbl">Underlying EBITDA</div><div class="delta">56% EBITDA margin</div></div>
+        <div class="kpi light"><div class="val">A$318.2m</div><div class="lbl">Operating Cash Flow</div><div class="delta">vs A$(8.2m) pcp</div></div>
+      </div>
+
+      <div class="two-col">
+        <div>
+          <h3 class="sub">P&amp;L Summary (A$m)</h3>
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>Item</th><th class="r">H1 FY26</th><th class="r">H1 FY25</th></tr></thead>
+              <tbody>
+                <tr><td>Revenue</td><td class="r">460.8</td><td class="r">14.3</td></tr>
+                <tr><td>Cost of sales</td><td class="r">(228.6)</td><td class="r">(9.1)</td></tr>
+                <tr><td class="total">Gross profit</td><td class="r total">232.2</td><td class="r total">5.2</td></tr>
+                <tr><td>Corporate &amp; exploration</td><td class="r">(14.6)</td><td class="r">(15.1)</td></tr>
+                <tr><td>Other (losses)/gains</td><td class="r">(1.8)</td><td class="r">—</td></tr>
+                <tr><td>EBIT</td><td class="r">215.8</td><td class="r">(9.9)</td></tr>
+                <tr><td>Net finance income</td><td class="r">6.2</td><td class="r">14.6</td></tr>
+                <tr><td>Income tax</td><td class="r">(66.5)</td><td class="r">23.7</td></tr>
+                <tr><td class="total">NPAT</td><td class="r total">155.5</td><td class="r total">28.4</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div>
+          <h3 class="sub">Revenue Bridge (A$m) — H1 FY26</h3>
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>Revenue Component</th><th class="r">A$m</th><th class="r">%</th></tr></thead>
+              <tbody>
+                <tr><td>Gold doré &amp; concentrate</td><td class="r">440.4</td><td class="r">95.6%</td></tr>
+                <tr><td>Copper (net of T&amp;R)</td><td class="r">20.4</td><td class="r">4.4%</td></tr>
+                <tr><td>Silver &amp; freight</td><td class="r">6.0</td><td class="r">1.3%</td></tr>
+                <tr><td>Hedge losses</td><td class="r">(6.0)</td><td class="r">(1.3%)</td></tr>
+                <tr><td class="total">Total revenue</td><td class="r total">460.8</td><td class="r total">100%</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3 class="sub">Cash Flow Waterfall (A$m)</h3>
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>Item</th><th class="r">A$m</th></tr></thead>
+              <tbody>
+                <tr><td>Opening cash (30 Jun 2025)</td><td class="r">228.6</td></tr>
+                <tr><td>Operating cash flow</td><td class="r">+318.2</td></tr>
+                <tr><td>Kalgara capex (sustaining + growth)</td><td class="r">(66.8)</td></tr>
+                <tr><td>Creston early works</td><td class="r">(38.2)</td></tr>
+                <tr><td>Resource development</td><td class="r">(16.2)</td></tr>
+                <tr><td>Stamp duty &amp; other</td><td class="r">(3.8)</td></tr>
+                <tr><td class="total">Closing cash (31 Dec 2025)</td><td class="r total">421.8</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 3: Balance Sheet Strength -->
+  <div class="slide">
+    <div class="slide-header">
+      <h2>Balance Sheet Strength — Debt Free, A$422m Cash</h2>
+      <span class="slide-num">03</span>
+    </div>
+    <div class="slide-body">
+      <div class="kpi-4">
+        <div class="kpi dark"><div class="val">A$422m</div><div class="lbl">Cash &amp; Equivalents</div></div>
+        <div class="kpi dark"><div class="val">A$0m</div><div class="lbl">Corporate Debt</div></div>
+        <div class="kpi gold"><div class="val">A$1.38bn</div><div class="lbl">Total Assets</div></div>
+        <div class="kpi green"><div class="val">A$836m</div><div class="lbl">Net Assets / Equity</div></div>
+      </div>
+
+      <div class="two-col">
+        <div>
+          <h3 class="sub">Liquidity Position</h3>
+          <ul class="bullets">
+            <li><strong>A$421.8m cash</strong> at 31 December 2025 — the highest in Ironfield's history</li>
+            <li>A$150m committed revolving debt facility (ANZ/CBA/Westpac), <strong>undrawn</strong></li>
+            <li>A$30m working capital facility (ANZ/CBA), undrawn; extended to June 2026</li>
+            <li>Total liquidity position: <strong>A$601.8 million</strong></li>
+          </ul>
+          <h3 class="sub">Funding Creston (A$420m capex)</h3>
+          <div class="progress-item">
+            <div class="progress-label"><span>Existing cash (Dec 2025)</span><span>A$422m</span></div>
+            <div class="progress-bar"><div class="progress-fill" style="width:70%"></div></div>
+          </div>
+          <div class="progress-item">
+            <div class="progress-label"><span>+ Committed debt facility</span><span>A$150m</span></div>
+            <div class="progress-bar"><div class="progress-fill gold-fill" style="width:25%"></div></div>
+          </div>
+          <div class="progress-item">
+            <div class="progress-label"><span>+ Kalgara H2 cash generation (est.)</span><span>~A$140–200m</span></div>
+            <div class="progress-bar"><div class="progress-fill green-fill" style="width:28%"></div></div>
+          </div>
+          <div class="callout green" style="margin-top:12px;">
+            <p><strong>No equity issuance required.</strong> Creston's A$420m pre-production capex is fully covered by existing cash, committed debt, and ongoing Kalgara cash generation.</p>
+          </div>
+        </div>
+        <div>
+          <h3 class="sub">Balance Sheet Summary (A$m)</h3>
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>Item</th><th class="r">Dec 2025</th><th class="r">Jun 2025</th></tr></thead>
+              <tbody>
+                <tr class="section-row"><td colspan="3">Assets</td></tr>
+                <tr><td>Cash</td><td class="r">421.8</td><td class="r">228.6</td></tr>
+                <tr><td>Trade receivables</td><td class="r">28.4</td><td class="r">18.2</td></tr>
+                <tr><td>Inventories</td><td class="r">118.6</td><td class="r">108.2</td></tr>
+                <tr><td>Other current assets</td><td class="r">8.5</td><td class="r">7.0</td></tr>
+                <tr><td>E&amp;E assets</td><td class="r">98.4</td><td class="r">82.2</td></tr>
+                <tr><td>Property, plant &amp; equipment</td><td class="r">648.2</td><td class="r">615.4</td></tr>
+                <tr><td>Other non-current</td><td class="r">56.6</td><td class="r">52.4</td></tr>
+                <tr><td class="total">Total assets</td><td class="r total">1,380.5</td><td class="r total">1,112.0</td></tr>
+                <tr class="section-row"><td colspan="3">Liabilities &amp; Equity</td></tr>
+                <tr><td>Total liabilities</td><td class="r">(545.0)</td><td class="r">(310.0)</td></tr>
+                <tr><td class="total">Net assets</td><td class="r total">835.5</td><td class="r total">802.0</td></tr>
+                <tr><td>Gearing ratio</td><td class="r total">0% (debt free)</td><td class="r total">0%</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 4: Kalgara Operations -->
+  <div class="slide">
+    <div class="slide-header">
+      <h2>Kalgara Operations — Consistent Performance</h2>
+      <span class="slide-num">04</span>
+    </div>
+    <div class="slide-body">
+      <div class="kpi-4">
+        <div class="kpi light"><div class="val">4,820kt</div><div class="lbl">Ore Milled H1</div></div>
+        <div class="kpi light"><div class="val">0.62 g/t</div><div class="lbl">H1 Head Grade (Au)</div></div>
+        <div class="kpi light"><div class="val">87.2%</div><div class="lbl">H1 Au Recovery</div></div>
+        <div class="kpi light"><div class="val">3,037t</div><div class="lbl">Copper Produced H1</div></div>
+      </div>
+
+      <div class="two-col">
+        <div>
+          <h3 class="sub">Quarterly Production Trend</h3>
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>Quarter</th><th class="r">Au (oz)</th><th class="r">Cu (t)</th><th class="r">AISC (A$/oz)</th></tr></thead>
+              <tbody>
+                <tr><td>Mar Q 2025</td><td class="r">37,284</td><td class="r">1,188</td><td class="r">2,398</td></tr>
+                <tr><td>Jun Q 2025</td><td class="r">38,009</td><td class="r">1,206</td><td class="r">2,462</td></tr>
+                <tr><td>Sep Q 2025</td><td class="r">39,144</td><td class="r">1,274</td><td class="r">2,392</td></tr>
+                <tr><td class="total">Dec Q 2025 ▲ Record</td><td class="r total">44,273</td><td class="r total">1,763</td><td class="r total">2,296</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3 class="sub">Cost Bridge — Dec Q vs Sep Q (A$/oz)</h3>
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>Driver</th><th class="r">Impact (A$/oz)</th></tr></thead>
+              <tbody>
+                <tr><td>Sep Q 2025 AISC</td><td class="r">2,392</td></tr>
+                <tr><td>Higher gold production (volume effect)</td><td class="r">(134)</td></tr>
+                <tr><td>Higher mining and processing costs</td><td class="r">+82</td></tr>
+                <tr><td>Higher by-product Cu credits</td><td class="r">(44)</td></tr>
+                <tr><td class="total">Dec Q 2025 AISC</td><td class="r total">2,296</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div>
+          <h3 class="sub">H1 Cost Breakdown (A$/oz produced)</h3>
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>Cost Category</th><th class="r">A$m (H1)</th><th class="r">A$/oz Au</th></tr></thead>
+              <tbody>
+                <tr><td>Mining</td><td class="r">71.2</td><td class="r">854</td></tr>
+                <tr><td>Processing</td><td class="r">87.6</td><td class="r">1,050</td></tr>
+                <tr><td>Site services</td><td class="r">23.5</td><td class="r">282</td></tr>
+                <tr><td>TC/RC and freight</td><td class="r">6.8</td><td class="r">82</td></tr>
+                <tr><td>Royalties</td><td class="r">16.0</td><td class="r">192</td></tr>
+                <tr><td>Sustaining capex</td><td class="r">22.6</td><td class="r">271</td></tr>
+                <tr><td>Rehabilitation</td><td class="r">1.4</td><td class="r">17</td></tr>
+                <tr><td>By-product Cu credits</td><td class="r">(26.9)</td><td class="r">(323)</td></tr>
+                <tr><td class="total">AISC</td><td class="r total">202.2</td><td class="r total">2,341</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3 class="sub">FY26 Guidance — Progress at H1</h3>
+          <div class="progress-item">
+            <div class="progress-label"><span>Gold production</span><span>83,417 / 130–155koz</span></div>
+            <div class="progress-bar"><div class="progress-fill" style="width:59%"></div></div>
+          </div>
+          <div class="progress-item">
+            <div class="progress-label"><span>Sustaining capex</span><span>A$22.6m / A$40–50m</span></div>
+            <div class="progress-bar"><div class="progress-fill gold-fill" style="width:49%"></div></div>
+          </div>
+          <div class="progress-item">
+            <div class="progress-label"><span>Growth capex (Kalgara)</span><span>A$44.2m / A$80–95m</span></div>
+            <div class="progress-bar"><div class="progress-fill gold-fill" style="width:51%"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 5: Creston Development -->
+  <div class="slide">
+    <div class="slide-header">
+      <h2>Creston Underground Project — Transformational Growth</h2>
+      <span class="slide-num">05</span>
+    </div>
+    <div class="slide-body">
+      <div class="kpi-3">
+        <div class="kpi green"><div class="val">A$1.42bn</div><div class="lbl">Post-tax NPV (5%)</div><div class="delta">A$4,500/oz base case</div></div>
+        <div class="kpi green"><div class="val">24.2%</div><div class="lbl">Post-tax IRR</div><div class="delta">A$4,500/oz base case</div></div>
+        <div class="kpi green"><div class="val">A$2.4bn</div><div class="lbl">Post-tax NPV (spot)</div><div class="delta">A$6,250/oz gold</div></div>
+      </div>
+
+      <div class="two-col-60">
+        <div>
+          <h3 class="sub">Creston at a Glance</h3>
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>Metric</th><th class="r">Value</th></tr></thead>
+              <tbody>
+                <tr><td>Ore Reserve</td><td class="r">12.8Mt @ 3.1g/t Au</td></tr>
+                <tr><td>Contained gold</td><td class="r">1.27Moz Au</td></tr>
+                <tr><td>Steady-state production</td><td class="r">120,000oz Au/yr</td></tr>
+                <tr><td>By-product copper</td><td class="r">4,000t Cu/yr</td></tr>
+                <tr><td>AISC (steady state)</td><td class="r">A$1,580/oz</td></tr>
+                <tr><td>Mine life</td><td class="r">12 years</td></tr>
+                <tr><td>Pre-production capex</td><td class="r total">A$420 million</td></tr>
+                <tr><td>Time to first gold from FID</td><td class="r">~2.5 years</td></tr>
+                <tr><td>Processing</td><td class="r">Leverages Kalgara plant (25km)</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3 class="sub">Production Impact — Kalgara + Creston Combined</h3>
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>Period</th><th class="r">Kalgara (oz/yr)</th><th class="r">Creston (oz/yr)</th><th class="r">Total (oz/yr)</th></tr></thead>
+              <tbody>
+                <tr><td>FY26 (current)</td><td class="r">130–155k</td><td class="r">—</td><td class="r total">130–155k</td></tr>
+                <tr><td>FY28 (ramp)</td><td class="r">130–155k</td><td class="r">~40k</td><td class="r total">~170–195k</td></tr>
+                <tr><td>FY29+ (steady state)</td><td class="r">130–155k</td><td class="r">120k</td><td class="r total">250–275k</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div>
+          <h3 class="sub">Development Progress</h3>
+          <div class="timeline">
+            <div class="t-item done">
+              <div class="t-date">✓ Sep 2025</div>
+              <div class="t-text">Environmental Impact Statement submitted to WA EPA. A$150m debt facility committed.</div>
+            </div>
+            <div class="t-item done">
+              <div class="t-date">✓ Oct 2025</div>
+              <div class="t-text">Feasibility Study completed. NPV A$1.42bn, IRR 24.2% confirmed. FS announced ASX 3 Oct 2025.</div>
+            </div>
+            <div class="t-item done">
+              <div class="t-date">✓ Dec 2025</div>
+              <div class="t-text">Decline tunnelling: 712m cumulative. A$38.2m invested in H1. Early works on critical path.</div>
+            </div>
+            <div class="t-item">
+              <div class="t-date">H2 FY26 Target</div>
+              <div class="t-text">WA EPA approval and Commonwealth EPBC Act approval. Prerequisites for FID.</div>
+            </div>
+            <div class="t-item">
+              <div class="t-date">H1 FY27 Target</div>
+              <div class="t-text">Final Investment Decision (FID). Debt financial close. Construction commencement.</div>
+            </div>
+            <div class="t-item">
+              <div class="t-date">~FY29 Target</div>
+              <div class="t-text">First gold production (~2.5 years from FID).</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 6: Resource Development -->
+  <div class="slide">
+    <div class="slide-header">
+      <h2>Resource Development — Record 220,000m Program</h2>
+      <span class="slide-num">06</span>
+    </div>
+    <div class="slide-body">
+      <div class="kpi-4">
+        <div class="kpi light"><div class="val">107,747m</div><div class="lbl">H1 Metres Drilled</div></div>
+        <div class="kpi light"><div class="val">10 rigs</div><div class="lbl">Active Drill Rigs</div></div>
+        <div class="kpi light"><div class="val">220,000m</div><div class="lbl">FY26 Program Target</div></div>
+        <div class="kpi light"><div class="val">Q3 FY26</div><div class="lbl">LKU MRE Target</div></div>
+      </div>
+
+      <div class="two-col">
+        <div>
+          <h3 class="sub">West Pit Open Pit Extension</h3>
+          <ul class="bullets">
+            <li>Stage 4 Extension drilling complete; capacity shifting to <strong>Stage 3 Extension</strong></li>
+            <li>Results support multi-year mine life extension <strong>beyond FY27</strong></li>
+            <li>Stage 3 Extension to remain a priority target through Q3 FY26</li>
+          </ul>
+
+          <h3 class="sub">Lower Kalgara Underground (LKU)</h3>
+          <ul class="bullets">
+            <li>Highest grade results to date in Dec quarter: <strong>48.6m @ 6.2g/t Au &amp; 0.38% Cu</strong> from 412m</li>
+            <li>Other key intercepts: 24.2m @ 8.8g/t Au from 468m; 42.4m @ 2.6g/t Au from 284m</li>
+            <li>System remains open at depth; third drill rig allocated for H2 FY26</li>
+            <li>Maiden Mineral Resource Estimate targeted <strong>Q3 FY26 (March quarter)</strong></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="sub">Near-Mine Satellite Targets</h3>
+          <ul class="bullets">
+            <li>Drilling completed on 4 satellite deposits within 30km of the Kalgara plant</li>
+            <li>Results from Ridgeview and Eastern Corridor North targets pending</li>
+            <li>Potential to provide incremental ore feed to supplement Kalgara plant capacity</li>
+          </ul>
+
+          <h3 class="sub">H1 FY26 Resource Drilling (metres)</h3>
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>Target / Area</th><th class="r">Sep Q (m)</th><th class="r">Dec Q (m)</th><th class="r">H1 Total (m)</th></tr></thead>
+              <tbody>
+                <tr><td>West Pit Extension</td><td class="r">31,284</td><td class="r">34,812</td><td class="r">66,096</td></tr>
+                <tr><td>Lower Kalgara Underground</td><td class="r">14,212</td><td class="r">12,284</td><td class="r">26,496</td></tr>
+                <tr><td>Satellite targets (near-mine)</td><td class="r">8,047</td><td class="r">7,108</td><td class="r">15,155</td></tr>
+                <tr><td class="total">Total</td><td class="r total">53,543</td><td class="r total">54,204</td><td class="r total">107,747</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 7: Outlook -->
+  <div class="slide">
+    <div class="slide-header">
+      <h2>Outlook — H2 FY26 Priorities</h2>
+      <span class="slide-num">07</span>
+    </div>
+    <div class="slide-body">
+      <div class="two-col">
+        <div>
+          <h3 class="sub">Kalgara Operational Priorities</h3>
+          <ul class="bullets">
+            <li>Maintain gold production trajectory toward <strong>upper end of 130–155koz guidance</strong></li>
+            <li>Continue North Pit Stage 2 waste stripping (baseload from FY28)</li>
+            <li>Complete open pit fleet rebuild program (8 trucks); deploy 2 new haul trucks (Q2 FY27)</li>
+            <li>TSF6 Stage 2 lift construction completion (on track)</li>
+            <li>H2 processing costs expected to be modestly lower than H1 (no major shutdown)</li>
+          </ul>
+
+          <h3 class="sub">Creston Development Priorities</h3>
+          <ul class="bullets">
+            <li><strong>EPA approval targeted H2 FY26</strong> — key prerequisite for FID</li>
+            <li>Continue decline tunnelling and early works investment on critical path</li>
+            <li>Contractor selection and EPCM engagement ahead of FID</li>
+            <li>Financial close of A$150m debt facility prior to or concurrent with FID</li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="sub">Resource Development Priorities</h3>
+          <ul class="bullets">
+            <li>LKU maiden Mineral Resource Estimate — <strong>targeted Q3 FY26</strong></li>
+            <li>Stage 3 Extension drilling — multi-year open pit mine life extension</li>
+            <li>Near-mine satellite deposit assessment (4 targets within 30km)</li>
+          </ul>
+
+          <h3 class="sub">H2 FY26 Financial Guidance</h3>
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>Metric</th><th class="r">H2 FY26 Estimate</th></tr></thead>
+              <tbody>
+                <tr><td>Gold production</td><td class="r">~46,600–71,600oz</td></tr>
+                <tr><td>AISC</td><td class="r">~A$2,300–A$2,650/oz</td></tr>
+                <tr><td>Sustaining capex</td><td class="r">~A$18–A$28m</td></tr>
+                <tr><td>Growth capex (Kalgara)</td><td class="r">~A$35–A$53m</td></tr>
+                <tr><td>Growth capex (Creston)</td><td class="r">~A$20–A$28m</td></tr>
+                <tr><td>Exploration (capitalised)</td><td class="r">~A$8–A$12m</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="callout blue">
+            <p>Ironfield is on track to deliver a <strong>record full-year production</strong> and materially grow its resource base while fully funding Creston development from its own cash flow — without equity issuance.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Disclaimer -->
+  <div class="disclaimer-slide">
+    <h3>Important Notices</h3>
+    <p>This presentation has been prepared by Ironfield Resources Limited (Ironfield) for general information only. It does not constitute financial product advice and must not be relied upon as such. Ironfield does not guarantee the accuracy, reliability or completeness of the information contained herein. Nothing in this presentation constitutes legal, tax or investment advice.</p>
+    <p><strong>Forward-looking statements:</strong> This presentation contains certain forward-looking statements, which are subject to significant uncertainties and contingencies, many of which are outside the control of Ironfield. Forward-looking statements are not guarantees of future performance and actual results may differ materially from those expressed or implied by such statements. Ironfield undertakes no obligation to update forward-looking statements.</p>
+    <p><strong>Production targets:</strong> The Creston FS Mine Plan is a production target underpinned by approximately 78% Probable Ore Reserves, 4% Indicated Mineral Resources, 12% Inferred Mineral Resources and 6% Exploration Target on a contained gold basis. There is no certainty that the production target will be achieved. Full cautionary statements are contained in the Feasibility Study ASX announcement dated 3 October 2025.</p>
+    <p><strong>Competent Persons:</strong> Information in this presentation relating to Mineral Resources and Ore Reserves has been prepared and first disclosed under the JORC Code (2012). A list of Competent Persons and their qualifications is contained in the relevant ASX announcements.</p>
+    <p style="margin-top:12px;color:#c8d8e4;"><strong>Ironfield Resources Limited</strong> &nbsp;|&nbsp; Level 8, 140 St Georges Terrace, Perth WA 6000 &nbsp;|&nbsp; February 2026</p>
+  </div>
+
+</body>
+</html>

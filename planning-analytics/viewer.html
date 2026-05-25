@@ -1,0 +1,1404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Planning Analytics — Ironfield Resources FY26</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg:      #0f1117; --surface: #1a1d27; --border:  #2a2d3a;
+    --text:    #e4e6f0; --muted:   #8b8fa8;
+    --gold:    #f5a623; --blue:    #4a9ef5; --green:   #34c77b;
+    --red:     #e05555; --teal:    #4acfe8; --budget:  #6272a4;
+  }
+  body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-size: 14px; line-height: 1.4; }
+  header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 14px 24px; display: flex; align-items: center; }
+  header h1 { font-size: 17px; font-weight: 600; }
+  header span { color: var(--muted); font-size: 12px; margin-left: 14px; }
+  .toolbar { display: flex; align-items: center; gap: 20px; padding: 10px 24px; background: var(--surface); border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+  .period-group { display: flex; gap: 3px; }
+  .pbtn { background: var(--bg); border: 1px solid var(--border); color: var(--muted); font-size: 12px; padding: 4px 13px; border-radius: 4px; cursor: pointer; transition: all .15s; }
+  .pbtn.active { border-color: var(--gold); color: var(--gold); background: rgba(245,166,35,.1); }
+  #period-label { font-size: 11px; color: var(--muted); }
+  nav { display: flex; gap: 0; padding: 0 24px; border-bottom: 1px solid var(--border); background: var(--surface); }
+  nav button { background: none; border: none; color: var(--muted); font-size: 13px; padding: 10px 18px; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; }
+  nav button.active { color: var(--text); border-bottom-color: var(--gold); }
+  .page { display: none; padding: 20px 24px; }
+  .page.active { display: block; }
+  .kpi-row { display: grid; grid-template-columns: repeat(auto-fill, minmax(155px, 1fr)); gap: 10px; margin-bottom: 18px; }
+  .kpi { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 14px; }
+  .kpi .lbl { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 5px; }
+  .kpi .val { font-size: 20px; font-weight: 700; }
+  .kpi .sub { font-size: 11px; color: var(--muted); margin-top: 3px; }
+  .kpi.gold .val { color: var(--gold); }
+  .kpi.blue .val { color: var(--blue); }
+  .kpi.green .val { color: var(--green); }
+  .kpi.red .val { color: var(--red); }
+  .kpi.teal .val { color: var(--teal); }
+  .charts-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 18px; }
+  .chart-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 14px; }
+  .chart-card h3 { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 10px; font-weight: 500; }
+  .chart-card canvas { max-height: 190px; }
+  .table-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; overflow: auto; }
+  .tc-head { padding: 11px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+  .tc-head h3 { font-size: 13px; font-weight: 600; }
+  .tc-head span { font-size: 11px; color: var(--muted); }
+  table { width: 100%; border-collapse: collapse; min-width: 520px; }
+  th { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; padding: 8px 14px; text-align: right; font-weight: 500; border-bottom: 1px solid var(--border); white-space: nowrap; }
+  th:first-child { text-align: left; min-width: 210px; }
+  td { padding: 6px 14px; border-bottom: 1px solid rgba(42,45,58,.45); font-size: 12.5px; text-align: right; white-space: nowrap; }
+  td:first-child { text-align: left; }
+  tr:last-child td { border-bottom: none; }
+  .tr-group td { padding-top: 10px; padding-bottom: 3px; font-size: 10px; color: var(--gold); text-transform: uppercase; letter-spacing: .07em; font-weight: 600; border-bottom: none; background: none; }
+  .tr-row td:first-child { padding-left: 22px; color: var(--text); }
+  .tr-subtotal td { font-weight: 600; background: rgba(42,45,58,.3); }
+  .tr-subtotal td:first-child { padding-left: 22px; }
+  .tr-ebitda td, .tr-ebit td, .tr-npbt td { font-weight: 700; background: rgba(42,45,58,.5); border-top: 1px solid var(--border); }
+  .tr-npat td { font-weight: 700; background: rgba(245,166,35,.08); border-top: 1px solid var(--border); color: var(--gold); }
+  .tr-balance td { font-weight: 600; color: var(--teal); }
+  .tr-ocf td, .tr-icf td, .tr-fcf td { font-weight: 700; background: rgba(42,45,58,.5); border-top: 1px solid var(--border); }
+  .tr-netchg td { font-weight: 700; background: rgba(74,158,245,.07); border-top: 1px solid var(--border); color: var(--blue); }
+  .tr-closing td { font-weight: 700; color: var(--teal); background: rgba(74,207,232,.06); border-top: 1px solid var(--border); }
+  .tr-total td { font-weight: 700; background: rgba(42,45,58,.6); border-top: 1px solid var(--border); }
+  .fav  { color: var(--green); }
+  .unfav{ color: var(--red); }
+  .neut { color: var(--muted); }
+  @media (max-width: 800px) { .charts-2col { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Planning Analytics Cube Viewer</h1>
+  <span>Ironfield Resources &mdash; FY26 | Kalgara Operations</span>
+</header>
+
+<div class="toolbar">
+  <div class="period-group">
+    <button class="pbtn" data-p="FY26-Q1" onclick="setPeriod(this)">Q1</button>
+    <button class="pbtn" data-p="FY26-Q2" onclick="setPeriod(this)">Q2</button>
+    <button class="pbtn" data-p="FY26-Q3" onclick="setPeriod(this)">Q3</button>
+    <button class="pbtn" data-p="FY26-Q4" onclick="setPeriod(this)">Q4</button>
+    <button class="pbtn active" data-p="FY" onclick="setPeriod(this)">Full Year</button>
+  </div>
+  <span id="period-label">Full Year FY26 &mdash; Actual (Q1&ndash;Q2) + Latest Forecast (Q3&ndash;Q4) vs Budget</span>
+</div>
+
+<nav>
+  <button class="active" onclick="showTab('fp', this)">Financial Performance</button>
+  <button onclick="showTab('kpi', this)">Production KPIs</button>
+  <button onclick="showTab('capex', this)">Capital Expenditure</button>
+  <button onclick="showTab('cf', this)">Cash Flow</button>
+</nav>
+
+<div id="page-fp" class="page active">
+  <div class="kpi-row" id="fp-kpis"></div>
+  <div class="charts-2col">
+    <div class="chart-card"><h3>NPAT by Quarter &mdash; A$m</h3><canvas id="chartNPAT"></canvas></div>
+    <div class="chart-card"><h3>Revenue by Source &mdash; A$m</h3><canvas id="chartRev"></canvas></div>
+  </div>
+  <div class="table-card">
+    <div class="tc-head"><h3>Profit &amp; Loss Statement (A$000)</h3><span id="fp-col-lbl"></span></div>
+    <table id="fp-table"></table>
+  </div>
+</div>
+
+<div id="page-kpi" class="page">
+  <div class="kpi-row" id="kpi-kpis"></div>
+  <div class="charts-2col">
+    <div class="chart-card"><h3>Gold Produced &mdash; koz Au</h3><canvas id="chartGoldProd"></canvas></div>
+    <div class="chart-card"><h3>AISC &mdash; A$/oz Au</h3><canvas id="chartAISC"></canvas></div>
+  </div>
+  <div class="table-card">
+    <div class="tc-head"><h3>Production KPI Summary &mdash; Total Kalgara</h3><span id="kpi-col-lbl"></span></div>
+    <table id="kpi-table"></table>
+  </div>
+</div>
+
+<div id="page-capex" class="page">
+  <div class="kpi-row" id="capex-kpis"></div>
+  <div class="charts-2col">
+    <div class="chart-card"><h3>CapEx by Project &mdash; A$m</h3><canvas id="chartCapexProj"></canvas></div>
+    <div class="chart-card"><h3>Sustaining vs Growth &mdash; A$m</h3><canvas id="chartCapexType"></canvas></div>
+  </div>
+  <div class="table-card">
+    <div class="tc-head"><h3>Capital Expenditure Detail (A$000)</h3><span id="capex-col-lbl"></span></div>
+    <table id="capex-table"></table>
+  </div>
+</div>
+
+<div id="page-cf" class="page">
+  <div class="kpi-row" id="cf-kpis"></div>
+  <div class="charts-2col">
+    <div class="chart-card"><h3>Closing Cash Balance &mdash; A$m</h3><canvas id="chartCashBal"></canvas></div>
+    <div class="chart-card"><h3>Cash Flow Components &mdash; A$m</h3><canvas id="chartCFComp"></canvas></div>
+  </div>
+  <div class="table-card">
+    <div class="tc-head"><h3>Statement of Cash Flows (A$000)</h3><span id="cf-col-lbl"></span></div>
+    <table id="cf-table"></table>
+  </div>
+</div>
+
+<script>
+// ── Embedded CSV data ─────────────────────────────────────────────────────────
+const FP_RAW = `Version,Year,Period,Account,Value_A$000
+Actual,FY26,FY26-Q1,Gold Revenue,203214
+Actual,FY26,FY26-Q1,Copper Revenue,17512
+Actual,FY26,FY26-Q1,Silver & Other Revenue,1086
+Actual,FY26,FY26-Q1,Hedge Gains/(Losses),-1506
+Actual,FY26,FY26-Q1,Mining Costs,-32800
+Actual,FY26,FY26-Q1,Processing Costs,-42400
+Actual,FY26,FY26-Q1,Site Services,-11400
+Actual,FY26,FY26-Q1,TC/RC & Freight,-3200
+Actual,FY26,FY26-Q1,Royalties,-7400
+Actual,FY26,FY26-Q1,Change in Inventories,2200
+Actual,FY26,FY26-Q1,Depreciation & Amort.,-16200
+Actual,FY26,FY26-Q1,Exploration Expense,-2800
+Actual,FY26,FY26-Q1,Corporate G&A,-4600
+Actual,FY26,FY26-Q1,Other Income/(Loss),-800
+Actual,FY26,FY26-Q1,Finance Income,4200
+Actual,FY26,FY26-Q1,Finance Costs,-1100
+Actual,FY26,FY26-Q1,Income Tax Expense,-31440
+Actual,FY26,FY26-Q2,Gold Revenue,238446
+Actual,FY26,FY26-Q2,Copper Revenue,8446
+Actual,FY26,FY26-Q2,Silver & Other Revenue,4896
+Actual,FY26,FY26-Q2,Hedge Gains/(Losses),-4482
+Actual,FY26,FY26-Q2,Mining Costs,-38400
+Actual,FY26,FY26-Q2,Processing Costs,-45200
+Actual,FY26,FY26-Q2,Site Services,-12100
+Actual,FY26,FY26-Q2,TC/RC & Freight,-3600
+Actual,FY26,FY26-Q2,Royalties,-8600
+Actual,FY26,FY26-Q2,Change in Inventories,6400
+Actual,FY26,FY26-Q2,Depreciation & Amort.,-17200
+Actual,FY26,FY26-Q2,Exploration Expense,-2618
+Actual,FY26,FY26-Q2,Corporate G&A,-4564
+Actual,FY26,FY26-Q2,Other Income/(Loss),-1042
+Actual,FY26,FY26-Q2,Finance Income,4182
+Actual,FY26,FY26-Q2,Finance Costs,-1045
+Actual,FY26,FY26-Q2,Income Tax Expense,-37091
+Latest Forecast,FY26,FY26-Q3,Gold Revenue,214000
+Latest Forecast,FY26,FY26-Q3,Copper Revenue,18600
+Latest Forecast,FY26,FY26-Q3,Silver & Other Revenue,1800
+Latest Forecast,FY26,FY26-Q3,Hedge Gains/(Losses),-800
+Latest Forecast,FY26,FY26-Q3,Mining Costs,-36000
+Latest Forecast,FY26,FY26-Q3,Processing Costs,-43000
+Latest Forecast,FY26,FY26-Q3,Site Services,-11800
+Latest Forecast,FY26,FY26-Q3,TC/RC & Freight,-3400
+Latest Forecast,FY26,FY26-Q3,Royalties,-7800
+Latest Forecast,FY26,FY26-Q3,Change in Inventories,2000
+Latest Forecast,FY26,FY26-Q3,Depreciation & Amort.,-18000
+Latest Forecast,FY26,FY26-Q3,Exploration Expense,-2800
+Latest Forecast,FY26,FY26-Q3,Corporate G&A,-4600
+Latest Forecast,FY26,FY26-Q3,Other Income/(Loss),-400
+Latest Forecast,FY26,FY26-Q3,Finance Income,3800
+Latest Forecast,FY26,FY26-Q3,Finance Costs,-1200
+Latest Forecast,FY26,FY26-Q3,Income Tax Expense,-32400
+Latest Forecast,FY26,FY26-Q4,Gold Revenue,196000
+Latest Forecast,FY26,FY26-Q4,Copper Revenue,18000
+Latest Forecast,FY26,FY26-Q4,Silver & Other Revenue,1600
+Latest Forecast,FY26,FY26-Q4,Hedge Gains/(Losses),-800
+Latest Forecast,FY26,FY26-Q4,Mining Costs,-35000
+Latest Forecast,FY26,FY26-Q4,Processing Costs,-42000
+Latest Forecast,FY26,FY26-Q4,Site Services,-11600
+Latest Forecast,FY26,FY26-Q4,TC/RC & Freight,-3200
+Latest Forecast,FY26,FY26-Q4,Royalties,-7400
+Latest Forecast,FY26,FY26-Q4,Change in Inventories,1800
+Latest Forecast,FY26,FY26-Q4,Depreciation & Amort.,-18000
+Latest Forecast,FY26,FY26-Q4,Exploration Expense,-2800
+Latest Forecast,FY26,FY26-Q4,Corporate G&A,-4600
+Latest Forecast,FY26,FY26-Q4,Other Income/(Loss),-400
+Latest Forecast,FY26,FY26-Q4,Finance Income,3600
+Latest Forecast,FY26,FY26-Q4,Finance Costs,-1200
+Latest Forecast,FY26,FY26-Q4,Income Tax Expense,-27360
+Budget,FY26,FY26-Q1,Gold Revenue,168000
+Budget,FY26,FY26-Q1,Copper Revenue,14000
+Budget,FY26,FY26-Q1,Silver & Other Revenue,1200
+Budget,FY26,FY26-Q1,Hedge Gains/(Losses),0
+Budget,FY26,FY26-Q1,Mining Costs,-30000
+Budget,FY26,FY26-Q1,Processing Costs,-40000
+Budget,FY26,FY26-Q1,Site Services,-10800
+Budget,FY26,FY26-Q1,TC/RC & Freight,-3000
+Budget,FY26,FY26-Q1,Royalties,-6200
+Budget,FY26,FY26-Q1,Change in Inventories,1000
+Budget,FY26,FY26-Q1,Depreciation & Amort.,-16000
+Budget,FY26,FY26-Q1,Exploration Expense,-2500
+Budget,FY26,FY26-Q1,Corporate G&A,-4500
+Budget,FY26,FY26-Q1,Other Income/(Loss),0
+Budget,FY26,FY26-Q1,Finance Income,3000
+Budget,FY26,FY26-Q1,Finance Costs,-1000
+Budget,FY26,FY26-Q1,Income Tax Expense,-21840
+Budget,FY26,FY26-Q2,Gold Revenue,183000
+Budget,FY26,FY26-Q2,Copper Revenue,16600
+Budget,FY26,FY26-Q2,Silver & Other Revenue,1400
+Budget,FY26,FY26-Q2,Hedge Gains/(Losses),0
+Budget,FY26,FY26-Q2,Mining Costs,-32000
+Budget,FY26,FY26-Q2,Processing Costs,-41000
+Budget,FY26,FY26-Q2,Site Services,-11200
+Budget,FY26,FY26-Q2,TC/RC & Freight,-3200
+Budget,FY26,FY26-Q2,Royalties,-6800
+Budget,FY26,FY26-Q2,Change in Inventories,1200
+Budget,FY26,FY26-Q2,Depreciation & Amort.,-16000
+Budget,FY26,FY26-Q2,Exploration Expense,-2500
+Budget,FY26,FY26-Q2,Corporate G&A,-4500
+Budget,FY26,FY26-Q2,Other Income/(Loss),0
+Budget,FY26,FY26-Q2,Finance Income,3000
+Budget,FY26,FY26-Q2,Finance Costs,-1000
+Budget,FY26,FY26-Q2,Income Tax Expense,-26160
+Budget,FY26,FY26-Q3,Gold Revenue,180000
+Budget,FY26,FY26-Q3,Copper Revenue,16400
+Budget,FY26,FY26-Q3,Silver & Other Revenue,1400
+Budget,FY26,FY26-Q3,Hedge Gains/(Losses),0
+Budget,FY26,FY26-Q3,Mining Costs,-32000
+Budget,FY26,FY26-Q3,Processing Costs,-41000
+Budget,FY26,FY26-Q3,Site Services,-11200
+Budget,FY26,FY26-Q3,TC/RC & Freight,-3200
+Budget,FY26,FY26-Q3,Royalties,-6600
+Budget,FY26,FY26-Q3,Change in Inventories,1200
+Budget,FY26,FY26-Q3,Depreciation & Amort.,-17000
+Budget,FY26,FY26-Q3,Exploration Expense,-2500
+Budget,FY26,FY26-Q3,Corporate G&A,-4500
+Budget,FY26,FY26-Q3,Other Income/(Loss),0
+Budget,FY26,FY26-Q3,Finance Income,2800
+Budget,FY26,FY26-Q3,Finance Costs,-1000
+Budget,FY26,FY26-Q3,Income Tax Expense,-25500
+Budget,FY26,FY26-Q4,Gold Revenue,172000
+Budget,FY26,FY26-Q4,Copper Revenue,16000
+Budget,FY26,FY26-Q4,Silver & Other Revenue,1200
+Budget,FY26,FY26-Q4,Hedge Gains/(Losses),0
+Budget,FY26,FY26-Q4,Mining Costs,-31000
+Budget,FY26,FY26-Q4,Processing Costs,-40000
+Budget,FY26,FY26-Q4,Site Services,-11000
+Budget,FY26,FY26-Q4,TC/RC & Freight,-3000
+Budget,FY26,FY26-Q4,Royalties,-6400
+Budget,FY26,FY26-Q4,Change in Inventories,1000
+Budget,FY26,FY26-Q4,Depreciation & Amort.,-17000
+Budget,FY26,FY26-Q4,Exploration Expense,-2500
+Budget,FY26,FY26-Q4,Corporate G&A,-4500
+Budget,FY26,FY26-Q4,Other Income/(Loss),0
+Budget,FY26,FY26-Q4,Finance Income,2600
+Budget,FY26,FY26-Q4,Finance Costs,-1000
+Budget,FY26,FY26-Q4,Income Tax Expense,-23400`;
+
+const KPI_RAW = `Version,Year,Period,Source,KPI,Value,Unit
+Actual,FY26,FY26-Q1,Total Kalgara,Ore Milled,1980,kt
+Actual,FY26,FY26-Q1,Total Kalgara,Mill Head Grade — Au,3.24,g/t Au
+Actual,FY26,FY26-Q1,Total Kalgara,Au Recovery,91.2,%
+Actual,FY26,FY26-Q1,Total Kalgara,Cu Recovery,88.4,%
+Actual,FY26,FY26-Q1,Total Kalgara,Mill Availability,91.8,%
+Actual,FY26,FY26-Q1,Total Kalgara,Throughput Rate,7920,ktpa
+Actual,FY26,FY26-Q1,Total Kalgara,Gold Produced,39144,oz Au
+Actual,FY26,FY26-Q1,Total Kalgara,Copper Produced,1680,t Cu
+Actual,FY26,FY26-Q1,Total Kalgara,Gold Sold,38400,oz Au
+Actual,FY26,FY26-Q1,Total Kalgara,Copper Sold,1590,t Cu
+Actual,FY26,FY26-Q1,Total Kalgara,Avg Realised Gold Price,5292,A$/oz
+Actual,FY26,FY26-Q1,Total Kalgara,Avg Realised Copper Price,11016,A$/t
+Actual,FY26,FY26-Q1,Total Kalgara,AISC,2392,A$/oz Au
+Actual,FY26,FY26-Q1,Total Kalgara,C1 Cash Cost,1814,A$/oz Au
+Actual,FY26,FY26-Q1,Open Pit,OP Total Material Mined,8420,kt
+Actual,FY26,FY26-Q1,Open Pit,OP Ore Mined (Mill Feed),1820,kt
+Actual,FY26,FY26-Q1,Open Pit,OP Au Grade Mined,2.84,g/t Au
+Actual,FY26,FY26-Q1,Open Pit,OP Strip Ratio,3.63,waste:ore
+Actual,FY26,FY26-Q1,Underground,UG Ore Mined,186,kt
+Actual,FY26,FY26-Q1,Underground,UG Au Grade Mined,6.42,g/t Au
+Actual,FY26,FY26-Q1,Underground,UG Development Metres,1840,m
+Actual,FY26,FY26-Q2,Total Kalgara,Ore Milled,2280,kt
+Actual,FY26,FY26-Q2,Total Kalgara,Mill Head Grade — Au,3.42,g/t Au
+Actual,FY26,FY26-Q2,Total Kalgara,Au Recovery,92.1,%
+Actual,FY26,FY26-Q2,Total Kalgara,Cu Recovery,87.6,%
+Actual,FY26,FY26-Q2,Total Kalgara,Mill Availability,93.4,%
+Actual,FY26,FY26-Q2,Total Kalgara,Throughput Rate,9120,ktpa
+Actual,FY26,FY26-Q2,Total Kalgara,Gold Produced,44273,oz Au
+Actual,FY26,FY26-Q2,Total Kalgara,Copper Produced,1620,t Cu
+Actual,FY26,FY26-Q2,Total Kalgara,Gold Sold,43800,oz Au
+Actual,FY26,FY26-Q2,Total Kalgara,Copper Sold,780,t Cu
+Actual,FY26,FY26-Q2,Total Kalgara,Avg Realised Gold Price,5443,A$/oz
+Actual,FY26,FY26-Q2,Total Kalgara,Avg Realised Copper Price,10828,A$/t
+Actual,FY26,FY26-Q2,Total Kalgara,AISC,2296,A$/oz Au
+Actual,FY26,FY26-Q2,Total Kalgara,C1 Cash Cost,1742,A$/oz Au
+Actual,FY26,FY26-Q2,Open Pit,OP Total Material Mined,9840,kt
+Actual,FY26,FY26-Q2,Open Pit,OP Ore Mined (Mill Feed),2120,kt
+Actual,FY26,FY26-Q2,Open Pit,OP Au Grade Mined,2.96,g/t Au
+Actual,FY26,FY26-Q2,Open Pit,OP Strip Ratio,3.64,waste:ore
+Actual,FY26,FY26-Q2,Underground,UG Ore Mined,202,kt
+Actual,FY26,FY26-Q2,Underground,UG Au Grade Mined,6.81,g/t Au
+Actual,FY26,FY26-Q2,Underground,UG Development Metres,1960,m
+Latest Forecast,FY26,FY26-Q3,Total Kalgara,Ore Milled,2100,kt
+Latest Forecast,FY26,FY26-Q3,Total Kalgara,Mill Head Grade — Au,3.12,g/t Au
+Latest Forecast,FY26,FY26-Q3,Total Kalgara,Au Recovery,91.5,%
+Latest Forecast,FY26,FY26-Q3,Total Kalgara,Cu Recovery,88.0,%
+Latest Forecast,FY26,FY26-Q3,Total Kalgara,Mill Availability,92.0,%
+Latest Forecast,FY26,FY26-Q3,Total Kalgara,Throughput Rate,8400,ktpa
+Latest Forecast,FY26,FY26-Q3,Total Kalgara,Gold Produced,38400,oz Au
+Latest Forecast,FY26,FY26-Q3,Total Kalgara,Copper Produced,1750,t Cu
+Latest Forecast,FY26,FY26-Q3,Total Kalgara,Gold Sold,38400,oz Au
+Latest Forecast,FY26,FY26-Q3,Total Kalgara,Copper Sold,1750,t Cu
+Latest Forecast,FY26,FY26-Q3,Total Kalgara,Avg Realised Gold Price,5573,A$/oz
+Latest Forecast,FY26,FY26-Q3,Total Kalgara,Avg Realised Copper Price,10629,A$/t
+Latest Forecast,FY26,FY26-Q3,Total Kalgara,AISC,2480,A$/oz Au
+Latest Forecast,FY26,FY26-Q3,Total Kalgara,C1 Cash Cost,1890,A$/oz Au
+Latest Forecast,FY26,FY26-Q3,Open Pit,OP Total Material Mined,8800,kt
+Latest Forecast,FY26,FY26-Q3,Open Pit,OP Ore Mined (Mill Feed),1960,kt
+Latest Forecast,FY26,FY26-Q3,Open Pit,OP Au Grade Mined,2.78,g/t Au
+Latest Forecast,FY26,FY26-Q3,Open Pit,OP Strip Ratio,3.49,waste:ore
+Latest Forecast,FY26,FY26-Q3,Underground,UG Ore Mined,195,kt
+Latest Forecast,FY26,FY26-Q3,Underground,UG Au Grade Mined,6.20,g/t Au
+Latest Forecast,FY26,FY26-Q3,Underground,UG Development Metres,1900,m
+Latest Forecast,FY26,FY26-Q4,Total Kalgara,Ore Milled,2020,kt
+Latest Forecast,FY26,FY26-Q4,Total Kalgara,Mill Head Grade — Au,2.96,g/t Au
+Latest Forecast,FY26,FY26-Q4,Total Kalgara,Au Recovery,91.0,%
+Latest Forecast,FY26,FY26-Q4,Total Kalgara,Cu Recovery,87.8,%
+Latest Forecast,FY26,FY26-Q4,Total Kalgara,Mill Availability,91.5,%
+Latest Forecast,FY26,FY26-Q4,Total Kalgara,Throughput Rate,8080,ktpa
+Latest Forecast,FY26,FY26-Q4,Total Kalgara,Gold Produced,36200,oz Au
+Latest Forecast,FY26,FY26-Q4,Total Kalgara,Copper Produced,1700,t Cu
+Latest Forecast,FY26,FY26-Q4,Total Kalgara,Gold Sold,36200,oz Au
+Latest Forecast,FY26,FY26-Q4,Total Kalgara,Copper Sold,1700,t Cu
+Latest Forecast,FY26,FY26-Q4,Total Kalgara,Avg Realised Gold Price,5414,A$/oz
+Latest Forecast,FY26,FY26-Q4,Total Kalgara,Avg Realised Copper Price,10588,A$/t
+Latest Forecast,FY26,FY26-Q4,Total Kalgara,AISC,2540,A$/oz Au
+Latest Forecast,FY26,FY26-Q4,Total Kalgara,C1 Cash Cost,1940,A$/oz Au
+Latest Forecast,FY26,FY26-Q4,Open Pit,OP Total Material Mined,8200,kt
+Latest Forecast,FY26,FY26-Q4,Open Pit,OP Ore Mined (Mill Feed),1880,kt
+Latest Forecast,FY26,FY26-Q4,Open Pit,OP Au Grade Mined,2.62,g/t Au
+Latest Forecast,FY26,FY26-Q4,Open Pit,OP Strip Ratio,3.36,waste:ore
+Latest Forecast,FY26,FY26-Q4,Underground,UG Ore Mined,188,kt
+Latest Forecast,FY26,FY26-Q4,Underground,UG Au Grade Mined,6.05,g/t Au
+Latest Forecast,FY26,FY26-Q4,Underground,UG Development Metres,1820,m
+Budget,FY26,FY26-Q1,Total Kalgara,Ore Milled,1960,kt
+Budget,FY26,FY26-Q1,Total Kalgara,Mill Head Grade — Au,2.82,g/t Au
+Budget,FY26,FY26-Q1,Total Kalgara,Au Recovery,90.5,%
+Budget,FY26,FY26-Q1,Total Kalgara,Cu Recovery,87.5,%
+Budget,FY26,FY26-Q1,Total Kalgara,Mill Availability,91.0,%
+Budget,FY26,FY26-Q1,Total Kalgara,Throughput Rate,7840,ktpa
+Budget,FY26,FY26-Q1,Total Kalgara,Gold Produced,32000,oz Au
+Budget,FY26,FY26-Q1,Total Kalgara,Copper Produced,1560,t Cu
+Budget,FY26,FY26-Q1,Total Kalgara,Gold Sold,32000,oz Au
+Budget,FY26,FY26-Q1,Total Kalgara,Copper Sold,1560,t Cu
+Budget,FY26,FY26-Q1,Total Kalgara,Avg Realised Gold Price,5250,A$/oz
+Budget,FY26,FY26-Q1,Total Kalgara,Avg Realised Copper Price,8974,A$/t
+Budget,FY26,FY26-Q1,Total Kalgara,AISC,2580,A$/oz Au
+Budget,FY26,FY26-Q1,Total Kalgara,C1 Cash Cost,1960,A$/oz Au
+Budget,FY26,FY26-Q1,Open Pit,OP Total Material Mined,8000,kt
+Budget,FY26,FY26-Q1,Open Pit,OP Ore Mined (Mill Feed),1800,kt
+Budget,FY26,FY26-Q1,Open Pit,OP Au Grade Mined,2.60,g/t Au
+Budget,FY26,FY26-Q1,Open Pit,OP Strip Ratio,3.44,waste:ore
+Budget,FY26,FY26-Q1,Underground,UG Ore Mined,180,kt
+Budget,FY26,FY26-Q1,Underground,UG Au Grade Mined,6.00,g/t Au
+Budget,FY26,FY26-Q1,Underground,UG Development Metres,1800,m
+Budget,FY26,FY26-Q2,Total Kalgara,Ore Milled,2060,kt
+Budget,FY26,FY26-Q2,Total Kalgara,Mill Head Grade — Au,2.98,g/t Au
+Budget,FY26,FY26-Q2,Total Kalgara,Au Recovery,91.0,%
+Budget,FY26,FY26-Q2,Total Kalgara,Cu Recovery,87.8,%
+Budget,FY26,FY26-Q2,Total Kalgara,Mill Availability,91.5,%
+Budget,FY26,FY26-Q2,Total Kalgara,Throughput Rate,8240,ktpa
+Budget,FY26,FY26-Q2,Total Kalgara,Gold Produced,34500,oz Au
+Budget,FY26,FY26-Q2,Total Kalgara,Copper Produced,1640,t Cu
+Budget,FY26,FY26-Q2,Total Kalgara,Gold Sold,34500,oz Au
+Budget,FY26,FY26-Q2,Total Kalgara,Copper Sold,1640,t Cu
+Budget,FY26,FY26-Q2,Total Kalgara,Avg Realised Gold Price,5304,A$/oz
+Budget,FY26,FY26-Q2,Total Kalgara,Avg Realised Copper Price,10122,A$/t
+Budget,FY26,FY26-Q2,Total Kalgara,AISC,2520,A$/oz Au
+Budget,FY26,FY26-Q2,Total Kalgara,C1 Cash Cost,1920,A$/oz Au
+Budget,FY26,FY26-Q2,Open Pit,OP Total Material Mined,8400,kt
+Budget,FY26,FY26-Q2,Open Pit,OP Ore Mined (Mill Feed),1900,kt
+Budget,FY26,FY26-Q2,Open Pit,OP Au Grade Mined,2.72,g/t Au
+Budget,FY26,FY26-Q2,Open Pit,OP Strip Ratio,3.42,waste:ore
+Budget,FY26,FY26-Q2,Underground,UG Ore Mined,190,kt
+Budget,FY26,FY26-Q2,Underground,UG Au Grade Mined,6.10,g/t Au
+Budget,FY26,FY26-Q2,Underground,UG Development Metres,1850,m
+Budget,FY26,FY26-Q3,Total Kalgara,Ore Milled,2040,kt
+Budget,FY26,FY26-Q3,Total Kalgara,Mill Head Grade — Au,2.90,g/t Au
+Budget,FY26,FY26-Q3,Total Kalgara,Au Recovery,91.0,%
+Budget,FY26,FY26-Q3,Total Kalgara,Cu Recovery,87.8,%
+Budget,FY26,FY26-Q3,Total Kalgara,Mill Availability,91.5,%
+Budget,FY26,FY26-Q3,Total Kalgara,Throughput Rate,8160,ktpa
+Budget,FY26,FY26-Q3,Total Kalgara,Gold Produced,33500,oz Au
+Budget,FY26,FY26-Q3,Total Kalgara,Copper Produced,1620,t Cu
+Budget,FY26,FY26-Q3,Total Kalgara,Gold Sold,33500,oz Au
+Budget,FY26,FY26-Q3,Total Kalgara,Copper Sold,1620,t Cu
+Budget,FY26,FY26-Q3,Total Kalgara,Avg Realised Gold Price,5373,A$/oz
+Budget,FY26,FY26-Q3,Total Kalgara,Avg Realised Copper Price,10123,A$/t
+Budget,FY26,FY26-Q3,Total Kalgara,AISC,2560,A$/oz Au
+Budget,FY26,FY26-Q3,Total Kalgara,C1 Cash Cost,1950,A$/oz Au
+Budget,FY26,FY26-Q3,Open Pit,OP Total Material Mined,8200,kt
+Budget,FY26,FY26-Q3,Open Pit,OP Ore Mined (Mill Feed),1880,kt
+Budget,FY26,FY26-Q3,Open Pit,OP Au Grade Mined,2.68,g/t Au
+Budget,FY26,FY26-Q3,Open Pit,OP Strip Ratio,3.36,waste:ore
+Budget,FY26,FY26-Q3,Underground,UG Ore Mined,185,kt
+Budget,FY26,FY26-Q3,Underground,UG Au Grade Mined,6.05,g/t Au
+Budget,FY26,FY26-Q3,Underground,UG Development Metres,1820,m
+Budget,FY26,FY26-Q4,Total Kalgara,Ore Milled,2000,kt
+Budget,FY26,FY26-Q4,Total Kalgara,Mill Head Grade — Au,2.76,g/t Au
+Budget,FY26,FY26-Q4,Total Kalgara,Au Recovery,90.5,%
+Budget,FY26,FY26-Q4,Total Kalgara,Cu Recovery,87.5,%
+Budget,FY26,FY26-Q4,Total Kalgara,Mill Availability,91.0,%
+Budget,FY26,FY26-Q4,Total Kalgara,Throughput Rate,8000,ktpa
+Budget,FY26,FY26-Q4,Total Kalgara,Gold Produced,32000,oz Au
+Budget,FY26,FY26-Q4,Total Kalgara,Copper Produced,1600,t Cu
+Budget,FY26,FY26-Q4,Total Kalgara,Gold Sold,32000,oz Au
+Budget,FY26,FY26-Q4,Total Kalgara,Copper Sold,1600,t Cu
+Budget,FY26,FY26-Q4,Total Kalgara,Avg Realised Gold Price,5375,A$/oz
+Budget,FY26,FY26-Q4,Total Kalgara,Avg Realised Copper Price,10000,A$/t
+Budget,FY26,FY26-Q4,Total Kalgara,AISC,2580,A$/oz Au
+Budget,FY26,FY26-Q4,Total Kalgara,C1 Cash Cost,1970,A$/oz Au
+Budget,FY26,FY26-Q4,Open Pit,OP Total Material Mined,7800,kt
+Budget,FY26,FY26-Q4,Open Pit,OP Ore Mined (Mill Feed),1840,kt
+Budget,FY26,FY26-Q4,Open Pit,OP Au Grade Mined,2.55,g/t Au
+Budget,FY26,FY26-Q4,Open Pit,OP Strip Ratio,3.24,waste:ore
+Budget,FY26,FY26-Q4,Underground,UG Ore Mined,182,kt
+Budget,FY26,FY26-Q4,Underground,UG Au Grade Mined,5.95,g/t Au
+Budget,FY26,FY26-Q4,Underground,UG Development Metres,1800,m`;
+
+const CAPEX_RAW = `Version,Year,Period,Project,Category,Value_A$000
+Actual,FY26,FY26-Q1,Kalgara Mine,Kalgara Sustaining — Maintenance,3800
+Actual,FY26,FY26-Q1,Kalgara Mine,Kalgara Sustaining — Underground Dev.,3200
+Actual,FY26,FY26-Q1,Kalgara Mine,Kalgara Sustaining — Fleet Rebuild,2400
+Actual,FY26,FY26-Q1,Kalgara Mine,Kalgara Growth — TSF Stage 2,4600
+Actual,FY26,FY26-Q1,Kalgara Mine,Kalgara Growth — North Pit Pre-strip,6800
+Actual,FY26,FY26-Q1,Kalgara Mine,Kalgara Growth — UG Growth Dev.,5200
+Actual,FY26,FY26-Q1,Kalgara Mine,Kalgara Growth — Fleet Expansion,8400
+Actual,FY26,FY26-Q1,Creston Project,Creston — Feasibility Study,1200
+Actual,FY26,FY26-Q1,Creston Project,Creston — Decline Tunnelling,9400
+Actual,FY26,FY26-Q1,Creston Project,Creston — Civil + Portal Works,2800
+Actual,FY26,FY26-Q1,Creston Project,Creston — Blind Bore + Ventilation,1600
+Actual,FY26,FY26-Q1,Creston Project,Creston — EPCM + Owner Costs,3200
+Actual,FY26,FY26-Q1,Resource Development,Resource Dev — West Pit Drilling,2000
+Actual,FY26,FY26-Q1,Resource Development,Resource Dev — LKU Drilling,1800
+Actual,FY26,FY26-Q1,Resource Development,Resource Dev — Satellite Deposits,800
+Actual,FY26,FY26-Q2,Kalgara Mine,Kalgara Sustaining — Maintenance,4200
+Actual,FY26,FY26-Q2,Kalgara Mine,Kalgara Sustaining — Underground Dev.,3400
+Actual,FY26,FY26-Q2,Kalgara Mine,Kalgara Sustaining — Fleet Rebuild,2800
+Actual,FY26,FY26-Q2,Kalgara Mine,Kalgara Growth — TSF Stage 2,5200
+Actual,FY26,FY26-Q2,Kalgara Mine,Kalgara Growth — North Pit Pre-strip,7400
+Actual,FY26,FY26-Q2,Kalgara Mine,Kalgara Growth — UG Growth Dev.,5800
+Actual,FY26,FY26-Q2,Kalgara Mine,Kalgara Growth — Fleet Expansion,9200
+Actual,FY26,FY26-Q2,Creston Project,Creston — Feasibility Study,600
+Actual,FY26,FY26-Q2,Creston Project,Creston — Decline Tunnelling,11200
+Actual,FY26,FY26-Q2,Creston Project,Creston — Civil + Portal Works,3400
+Actual,FY26,FY26-Q2,Creston Project,Creston — Blind Bore + Ventilation,2000
+Actual,FY26,FY26-Q2,Creston Project,Creston — EPCM + Owner Costs,3800
+Actual,FY26,FY26-Q2,Resource Development,Resource Dev — West Pit Drilling,2200
+Actual,FY26,FY26-Q2,Resource Development,Resource Dev — LKU Drilling,2000
+Actual,FY26,FY26-Q2,Resource Development,Resource Dev — Satellite Deposits,900
+Latest Forecast,FY26,FY26-Q3,Kalgara Mine,Kalgara Sustaining — Maintenance,4000
+Latest Forecast,FY26,FY26-Q3,Kalgara Mine,Kalgara Sustaining — Underground Dev.,3200
+Latest Forecast,FY26,FY26-Q3,Kalgara Mine,Kalgara Sustaining — Fleet Rebuild,2600
+Latest Forecast,FY26,FY26-Q3,Kalgara Mine,Kalgara Growth — TSF Stage 2,5000
+Latest Forecast,FY26,FY26-Q3,Kalgara Mine,Kalgara Growth — North Pit Pre-strip,7200
+Latest Forecast,FY26,FY26-Q3,Kalgara Mine,Kalgara Growth — UG Growth Dev.,5600
+Latest Forecast,FY26,FY26-Q3,Kalgara Mine,Kalgara Growth — Fleet Expansion,8800
+Latest Forecast,FY26,FY26-Q3,Creston Project,Creston — Feasibility Study,0
+Latest Forecast,FY26,FY26-Q3,Creston Project,Creston — Decline Tunnelling,12400
+Latest Forecast,FY26,FY26-Q3,Creston Project,Creston — Civil + Portal Works,3600
+Latest Forecast,FY26,FY26-Q3,Creston Project,Creston — Blind Bore + Ventilation,2400
+Latest Forecast,FY26,FY26-Q3,Creston Project,Creston — EPCM + Owner Costs,4000
+Latest Forecast,FY26,FY26-Q3,Resource Development,Resource Dev — West Pit Drilling,2100
+Latest Forecast,FY26,FY26-Q3,Resource Development,Resource Dev — LKU Drilling,1900
+Latest Forecast,FY26,FY26-Q3,Resource Development,Resource Dev — Satellite Deposits,800
+Latest Forecast,FY26,FY26-Q4,Kalgara Mine,Kalgara Sustaining — Maintenance,3600
+Latest Forecast,FY26,FY26-Q4,Kalgara Mine,Kalgara Sustaining — Underground Dev.,3000
+Latest Forecast,FY26,FY26-Q4,Kalgara Mine,Kalgara Sustaining — Fleet Rebuild,2200
+Latest Forecast,FY26,FY26-Q4,Kalgara Mine,Kalgara Growth — TSF Stage 2,4800
+Latest Forecast,FY26,FY26-Q4,Kalgara Mine,Kalgara Growth — North Pit Pre-strip,7000
+Latest Forecast,FY26,FY26-Q4,Kalgara Mine,Kalgara Growth — UG Growth Dev.,5200
+Latest Forecast,FY26,FY26-Q4,Kalgara Mine,Kalgara Growth — Fleet Expansion,8000
+Latest Forecast,FY26,FY26-Q4,Creston Project,Creston — Feasibility Study,0
+Latest Forecast,FY26,FY26-Q4,Creston Project,Creston — Decline Tunnelling,13000
+Latest Forecast,FY26,FY26-Q4,Creston Project,Creston — Civil + Portal Works,3200
+Latest Forecast,FY26,FY26-Q4,Creston Project,Creston — Blind Bore + Ventilation,2800
+Latest Forecast,FY26,FY26-Q4,Creston Project,Creston — EPCM + Owner Costs,4200
+Latest Forecast,FY26,FY26-Q4,Resource Development,Resource Dev — West Pit Drilling,2000
+Latest Forecast,FY26,FY26-Q4,Resource Development,Resource Dev — LKU Drilling,1800
+Latest Forecast,FY26,FY26-Q4,Resource Development,Resource Dev — Satellite Deposits,800
+Budget,FY26,FY26-Q1,Kalgara Mine,Kalgara Sustaining — Maintenance,3500
+Budget,FY26,FY26-Q1,Kalgara Mine,Kalgara Sustaining — Underground Dev.,3000
+Budget,FY26,FY26-Q1,Kalgara Mine,Kalgara Sustaining — Fleet Rebuild,2200
+Budget,FY26,FY26-Q1,Kalgara Mine,Kalgara Growth — TSF Stage 2,4000
+Budget,FY26,FY26-Q1,Kalgara Mine,Kalgara Growth — North Pit Pre-strip,6000
+Budget,FY26,FY26-Q1,Kalgara Mine,Kalgara Growth — UG Growth Dev.,5000
+Budget,FY26,FY26-Q1,Kalgara Mine,Kalgara Growth — Fleet Expansion,8000
+Budget,FY26,FY26-Q1,Creston Project,Creston — Feasibility Study,2000
+Budget,FY26,FY26-Q1,Creston Project,Creston — Decline Tunnelling,8000
+Budget,FY26,FY26-Q1,Creston Project,Creston — Civil + Portal Works,2500
+Budget,FY26,FY26-Q1,Creston Project,Creston — Blind Bore + Ventilation,1500
+Budget,FY26,FY26-Q1,Creston Project,Creston — EPCM + Owner Costs,3000
+Budget,FY26,FY26-Q1,Resource Development,Resource Dev — West Pit Drilling,1800
+Budget,FY26,FY26-Q1,Resource Development,Resource Dev — LKU Drilling,1600
+Budget,FY26,FY26-Q1,Resource Development,Resource Dev — Satellite Deposits,700
+Budget,FY26,FY26-Q2,Kalgara Mine,Kalgara Sustaining — Maintenance,3800
+Budget,FY26,FY26-Q2,Kalgara Mine,Kalgara Sustaining — Underground Dev.,3200
+Budget,FY26,FY26-Q2,Kalgara Mine,Kalgara Sustaining — Fleet Rebuild,2500
+Budget,FY26,FY26-Q2,Kalgara Mine,Kalgara Growth — TSF Stage 2,4500
+Budget,FY26,FY26-Q2,Kalgara Mine,Kalgara Growth — North Pit Pre-strip,7000
+Budget,FY26,FY26-Q2,Kalgara Mine,Kalgara Growth — UG Growth Dev.,5500
+Budget,FY26,FY26-Q2,Kalgara Mine,Kalgara Growth — Fleet Expansion,9000
+Budget,FY26,FY26-Q2,Creston Project,Creston — Feasibility Study,1000
+Budget,FY26,FY26-Q2,Creston Project,Creston — Decline Tunnelling,10000
+Budget,FY26,FY26-Q2,Creston Project,Creston — Civil + Portal Works,3000
+Budget,FY26,FY26-Q2,Creston Project,Creston — Blind Bore + Ventilation,1800
+Budget,FY26,FY26-Q2,Creston Project,Creston — EPCM + Owner Costs,3500
+Budget,FY26,FY26-Q2,Resource Development,Resource Dev — West Pit Drilling,2000
+Budget,FY26,FY26-Q2,Resource Development,Resource Dev — LKU Drilling,1800
+Budget,FY26,FY26-Q2,Resource Development,Resource Dev — Satellite Deposits,800
+Budget,FY26,FY26-Q3,Kalgara Mine,Kalgara Sustaining — Maintenance,3800
+Budget,FY26,FY26-Q3,Kalgara Mine,Kalgara Sustaining — Underground Dev.,3200
+Budget,FY26,FY26-Q3,Kalgara Mine,Kalgara Sustaining — Fleet Rebuild,2500
+Budget,FY26,FY26-Q3,Kalgara Mine,Kalgara Growth — TSF Stage 2,4500
+Budget,FY26,FY26-Q3,Kalgara Mine,Kalgara Growth — North Pit Pre-strip,7000
+Budget,FY26,FY26-Q3,Kalgara Mine,Kalgara Growth — UG Growth Dev.,5500
+Budget,FY26,FY26-Q3,Kalgara Mine,Kalgara Growth — Fleet Expansion,9000
+Budget,FY26,FY26-Q3,Creston Project,Creston — Feasibility Study,0
+Budget,FY26,FY26-Q3,Creston Project,Creston — Decline Tunnelling,11000
+Budget,FY26,FY26-Q3,Creston Project,Creston — Civil + Portal Works,3200
+Budget,FY26,FY26-Q3,Creston Project,Creston — Blind Bore + Ventilation,2000
+Budget,FY26,FY26-Q3,Creston Project,Creston — EPCM + Owner Costs,3800
+Budget,FY26,FY26-Q3,Resource Development,Resource Dev — West Pit Drilling,2000
+Budget,FY26,FY26-Q3,Resource Development,Resource Dev — LKU Drilling,1800
+Budget,FY26,FY26-Q3,Resource Development,Resource Dev — Satellite Deposits,800
+Budget,FY26,FY26-Q4,Kalgara Mine,Kalgara Sustaining — Maintenance,3500
+Budget,FY26,FY26-Q4,Kalgara Mine,Kalgara Sustaining — Underground Dev.,3000
+Budget,FY26,FY26-Q4,Kalgara Mine,Kalgara Sustaining — Fleet Rebuild,2200
+Budget,FY26,FY26-Q4,Kalgara Mine,Kalgara Growth — TSF Stage 2,4200
+Budget,FY26,FY26-Q4,Kalgara Mine,Kalgara Growth — North Pit Pre-strip,6500
+Budget,FY26,FY26-Q4,Kalgara Mine,Kalgara Growth — UG Growth Dev.,5000
+Budget,FY26,FY26-Q4,Kalgara Mine,Kalgara Growth — Fleet Expansion,8500
+Budget,FY26,FY26-Q4,Creston Project,Creston — Feasibility Study,0
+Budget,FY26,FY26-Q4,Creston Project,Creston — Decline Tunnelling,12000
+Budget,FY26,FY26-Q4,Creston Project,Creston — Civil + Portal Works,3000
+Budget,FY26,FY26-Q4,Creston Project,Creston — Blind Bore + Ventilation,2200
+Budget,FY26,FY26-Q4,Creston Project,Creston — EPCM + Owner Costs,4000
+Budget,FY26,FY26-Q4,Resource Development,Resource Dev — West Pit Drilling,1800
+Budget,FY26,FY26-Q4,Resource Development,Resource Dev — LKU Drilling,1600
+Budget,FY26,FY26-Q4,Resource Development,Resource Dev — Satellite Deposits,700`;
+
+const CF_RAW = `Version,Year,Period,LineItem,Value_A$000
+Actual,FY26,FY26-Q1,Opening Cash Balance,282400
+Actual,FY26,FY26-Q1,Receipts from Customers,218600
+Actual,FY26,FY26-Q1,Payments to Suppliers and Employees,-78400
+Actual,FY26,FY26-Q1,Royalties Paid,-7400
+Actual,FY26,FY26-Q1,Interest Received,4200
+Actual,FY26,FY26-Q1,Interest and Financing Costs Paid,-1100
+Actual,FY26,FY26-Q1,Income Tax Paid,-36100
+Actual,FY26,FY26-Q1,Operating Cash Flow,99800
+Actual,FY26,FY26-Q1,Sustaining Capex,-9400
+Actual,FY26,FY26-Q1,Growth Capex — Kalgara,-25000
+Actual,FY26,FY26-Q1,Growth Capex — Creston,-18200
+Actual,FY26,FY26-Q1,Resource Development Capex,-4600
+Actual,FY26,FY26-Q1,Total Investing Cash Flow,-57200
+Actual,FY26,FY26-Q1,Proceeds from Borrowings,0
+Actual,FY26,FY26-Q1,Repayment of Borrowings,0
+Actual,FY26,FY26-Q1,Lease Payments,-600
+Actual,FY26,FY26-Q1,Dividends Paid,-6400
+Actual,FY26,FY26-Q1,Total Financing Cash Flow,-7000
+Actual,FY26,FY26-Q1,Net Change in Cash,35600
+Actual,FY26,FY26-Q1,Closing Cash Balance,318000
+Actual,FY26,FY26-Q2,Opening Cash Balance,318000
+Actual,FY26,FY26-Q2,Receipts from Customers,247200
+Actual,FY26,FY26-Q2,Payments to Suppliers and Employees,-89100
+Actual,FY26,FY26-Q2,Royalties Paid,-8600
+Actual,FY26,FY26-Q2,Interest Received,4182
+Actual,FY26,FY26-Q2,Interest and Financing Costs Paid,-1045
+Actual,FY26,FY26-Q2,Income Tax Paid,-38000
+Actual,FY26,FY26-Q2,Operating Cash Flow,114637
+Actual,FY26,FY26-Q2,Sustaining Capex,-10400
+Actual,FY26,FY26-Q2,Growth Capex — Kalgara,-28200
+Actual,FY26,FY26-Q2,Growth Capex — Creston,-21000
+Actual,FY26,FY26-Q2,Resource Development Capex,-5100
+Actual,FY26,FY26-Q2,Total Investing Cash Flow,-64700
+Actual,FY26,FY26-Q2,Proceeds from Borrowings,150000
+Actual,FY26,FY26-Q2,Repayment of Borrowings,0
+Actual,FY26,FY26-Q2,Lease Payments,-600
+Actual,FY26,FY26-Q2,Dividends Paid,-96111
+Actual,FY26,FY26-Q2,Total Financing Cash Flow,53289
+Actual,FY26,FY26-Q2,Net Change in Cash,103226
+Actual,FY26,FY26-Q2,Closing Cash Balance,421226
+Latest Forecast,FY26,FY26-Q3,Opening Cash Balance,421226
+Latest Forecast,FY26,FY26-Q3,Receipts from Customers,230000
+Latest Forecast,FY26,FY26-Q3,Payments to Suppliers and Employees,-82000
+Latest Forecast,FY26,FY26-Q3,Royalties Paid,-7800
+Latest Forecast,FY26,FY26-Q3,Interest Received,3800
+Latest Forecast,FY26,FY26-Q3,Interest and Financing Costs Paid,-1200
+Latest Forecast,FY26,FY26-Q3,Income Tax Paid,-34000
+Latest Forecast,FY26,FY26-Q3,Operating Cash Flow,108800
+Latest Forecast,FY26,FY26-Q3,Sustaining Capex,-9800
+Latest Forecast,FY26,FY26-Q3,Growth Capex — Kalgara,-26600
+Latest Forecast,FY26,FY26-Q3,Growth Capex — Creston,-22400
+Latest Forecast,FY26,FY26-Q3,Resource Development Capex,-4800
+Latest Forecast,FY26,FY26-Q3,Total Investing Cash Flow,-63600
+Latest Forecast,FY26,FY26-Q3,Proceeds from Borrowings,0
+Latest Forecast,FY26,FY26-Q3,Repayment of Borrowings,0
+Latest Forecast,FY26,FY26-Q3,Lease Payments,-600
+Latest Forecast,FY26,FY26-Q3,Dividends Paid,0
+Latest Forecast,FY26,FY26-Q3,Total Financing Cash Flow,-600
+Latest Forecast,FY26,FY26-Q3,Net Change in Cash,44600
+Latest Forecast,FY26,FY26-Q3,Closing Cash Balance,465826
+Latest Forecast,FY26,FY26-Q4,Opening Cash Balance,465826
+Latest Forecast,FY26,FY26-Q4,Receipts from Customers,211600
+Latest Forecast,FY26,FY26-Q4,Payments to Suppliers and Employees,-80200
+Latest Forecast,FY26,FY26-Q4,Royalties Paid,-7400
+Latest Forecast,FY26,FY26-Q4,Interest Received,3600
+Latest Forecast,FY26,FY26-Q4,Interest and Financing Costs Paid,-1200
+Latest Forecast,FY26,FY26-Q4,Income Tax Paid,-30000
+Latest Forecast,FY26,FY26-Q4,Operating Cash Flow,96400
+Latest Forecast,FY26,FY26-Q4,Sustaining Capex,-9200
+Latest Forecast,FY26,FY26-Q4,Growth Capex — Kalgara,-24800
+Latest Forecast,FY26,FY26-Q4,Growth Capex — Creston,-23000
+Latest Forecast,FY26,FY26-Q4,Resource Development Capex,-4600
+Latest Forecast,FY26,FY26-Q4,Total Investing Cash Flow,-61600
+Latest Forecast,FY26,FY26-Q4,Proceeds from Borrowings,0
+Latest Forecast,FY26,FY26-Q4,Repayment of Borrowings,0
+Latest Forecast,FY26,FY26-Q4,Lease Payments,-600
+Latest Forecast,FY26,FY26-Q4,Dividends Paid,-96000
+Latest Forecast,FY26,FY26-Q4,Total Financing Cash Flow,-96600
+Latest Forecast,FY26,FY26-Q4,Net Change in Cash,-61800
+Latest Forecast,FY26,FY26-Q4,Closing Cash Balance,404026
+Budget,FY26,FY26-Q1,Opening Cash Balance,282400
+Budget,FY26,FY26-Q1,Receipts from Customers,183200
+Budget,FY26,FY26-Q1,Payments to Suppliers and Employees,-73800
+Budget,FY26,FY26-Q1,Royalties Paid,-6200
+Budget,FY26,FY26-Q1,Interest Received,3000
+Budget,FY26,FY26-Q1,Interest and Financing Costs Paid,-1000
+Budget,FY26,FY26-Q1,Income Tax Paid,-24000
+Budget,FY26,FY26-Q1,Operating Cash Flow,81200
+Budget,FY26,FY26-Q1,Sustaining Capex,-8700
+Budget,FY26,FY26-Q1,Growth Capex — Kalgara,-19000
+Budget,FY26,FY26-Q1,Growth Capex — Creston,-15000
+Budget,FY26,FY26-Q1,Resource Development Capex,-4100
+Budget,FY26,FY26-Q1,Total Investing Cash Flow,-46800
+Budget,FY26,FY26-Q1,Proceeds from Borrowings,0
+Budget,FY26,FY26-Q1,Repayment of Borrowings,0
+Budget,FY26,FY26-Q1,Lease Payments,-600
+Budget,FY26,FY26-Q1,Dividends Paid,-6400
+Budget,FY26,FY26-Q1,Total Financing Cash Flow,-7000
+Budget,FY26,FY26-Q1,Net Change in Cash,27400
+Budget,FY26,FY26-Q1,Closing Cash Balance,309800
+Budget,FY26,FY26-Q2,Opening Cash Balance,309800
+Budget,FY26,FY26-Q2,Receipts from Customers,201000
+Budget,FY26,FY26-Q2,Payments to Suppliers and Employees,-79200
+Budget,FY26,FY26-Q2,Royalties Paid,-6800
+Budget,FY26,FY26-Q2,Interest Received,3000
+Budget,FY26,FY26-Q2,Interest and Financing Costs Paid,-1000
+Budget,FY26,FY26-Q2,Income Tax Paid,-28000
+Budget,FY26,FY26-Q2,Operating Cash Flow,89000
+Budget,FY26,FY26-Q2,Sustaining Capex,-9500
+Budget,FY26,FY26-Q2,Growth Capex — Kalgara,-22000
+Budget,FY26,FY26-Q2,Growth Capex — Creston,-16300
+Budget,FY26,FY26-Q2,Resource Development Capex,-4600
+Budget,FY26,FY26-Q2,Total Investing Cash Flow,-52400
+Budget,FY26,FY26-Q2,Proceeds from Borrowings,150000
+Budget,FY26,FY26-Q2,Repayment of Borrowings,0
+Budget,FY26,FY26-Q2,Lease Payments,-600
+Budget,FY26,FY26-Q2,Dividends Paid,-96111
+Budget,FY26,FY26-Q2,Total Financing Cash Flow,53289
+Budget,FY26,FY26-Q2,Net Change in Cash,89889
+Budget,FY26,FY26-Q2,Closing Cash Balance,399689
+Budget,FY26,FY26-Q3,Opening Cash Balance,399689
+Budget,FY26,FY26-Q3,Receipts from Customers,197800
+Budget,FY26,FY26-Q3,Payments to Suppliers and Employees,-79200
+Budget,FY26,FY26-Q3,Royalties Paid,-6600
+Budget,FY26,FY26-Q3,Interest Received,2800
+Budget,FY26,FY26-Q3,Interest and Financing Costs Paid,-1000
+Budget,FY26,FY26-Q3,Income Tax Paid,-27000
+Budget,FY26,FY26-Q3,Operating Cash Flow,86800
+Budget,FY26,FY26-Q3,Sustaining Capex,-9500
+Budget,FY26,FY26-Q3,Growth Capex — Kalgara,-22000
+Budget,FY26,FY26-Q3,Growth Capex — Creston,-17000
+Budget,FY26,FY26-Q3,Resource Development Capex,-4600
+Budget,FY26,FY26-Q3,Total Investing Cash Flow,-53100
+Budget,FY26,FY26-Q3,Proceeds from Borrowings,0
+Budget,FY26,FY26-Q3,Repayment of Borrowings,0
+Budget,FY26,FY26-Q3,Lease Payments,-600
+Budget,FY26,FY26-Q3,Dividends Paid,0
+Budget,FY26,FY26-Q3,Total Financing Cash Flow,-600
+Budget,FY26,FY26-Q3,Net Change in Cash,33100
+Budget,FY26,FY26-Q3,Closing Cash Balance,432789
+Budget,FY26,FY26-Q4,Opening Cash Balance,432789
+Budget,FY26,FY26-Q4,Receipts from Customers,189200
+Budget,FY26,FY26-Q4,Payments to Suppliers and Employees,-77000
+Budget,FY26,FY26-Q4,Royalties Paid,-6400
+Budget,FY26,FY26-Q4,Interest Received,2600
+Budget,FY26,FY26-Q4,Interest and Financing Costs Paid,-1000
+Budget,FY26,FY26-Q4,Income Tax Paid,-25000
+Budget,FY26,FY26-Q4,Operating Cash Flow,82400
+Budget,FY26,FY26-Q4,Sustaining Capex,-8900
+Budget,FY26,FY26-Q4,Growth Capex — Kalgara,-20200
+Budget,FY26,FY26-Q4,Growth Capex — Creston,-18200
+Budget,FY26,FY26-Q4,Resource Development Capex,-4100
+Budget,FY26,FY26-Q4,Total Investing Cash Flow,-51400
+Budget,FY26,FY26-Q4,Proceeds from Borrowings,0
+Budget,FY26,FY26-Q4,Repayment of Borrowings,0
+Budget,FY26,FY26-Q4,Lease Payments,-600
+Budget,FY26,FY26-Q4,Dividends Paid,-96000
+Budget,FY26,FY26-Q4,Total Financing Cash Flow,-96600
+Budget,FY26,FY26-Q4,Net Change in Cash,-65600
+Budget,FY26,FY26-Q4,Closing Cash Balance,367189`;
+
+// ── Parse ─────────────────────────────────────────────────────────────────────
+function parseCSV(text) {
+  const lines = text.trim().split('\n');
+  const headers = lines[0].split(',').map(h => h.trim());
+  return lines.slice(1).map(line => {
+    const cols = line.split(',');
+    const o = {};
+    headers.forEach((h, i) => o[h] = (cols[i] ?? '').trim());
+    return o;
+  });
+}
+
+// ── Build lookup maps ─────────────────────────────────────────────────────────
+let fpMap = {}, kpiMap = {}, capexMap = {}, cfMap = {};
+
+function buildMaps() {
+  // FP: fpMap[version][period][account] = number
+  for (const r of parseCSV(FP_RAW)) {
+    const {Version: v, Period: p, Account: a} = r;
+    const val = parseFloat(r['Value_A$000']);
+    if (!fpMap[v]) fpMap[v] = {};
+    if (!fpMap[v][p]) fpMap[v][p] = {};
+    fpMap[v][p][a] = val;
+  }
+  // KPI: kpiMap[version][period][source][kpi] = {value, unit}
+  for (const r of parseCSV(KPI_RAW)) {
+    const {Version: v, Period: p, Source: s, KPI: k, Unit: u} = r;
+    const val = parseFloat(r.Value);
+    if (!kpiMap[v]) kpiMap[v] = {};
+    if (!kpiMap[v][p]) kpiMap[v][p] = {};
+    if (!kpiMap[v][p][s]) kpiMap[v][p][s] = {};
+    kpiMap[v][p][s][k] = {value: val, unit: u};
+  }
+  // CAPEX: capexMap[version][period][project][category] = number
+  for (const r of parseCSV(CAPEX_RAW)) {
+    const {Version: v, Period: p, Project: proj, Category: cat} = r;
+    const val = parseFloat(r['Value_A$000']);
+    if (!capexMap[v]) capexMap[v] = {};
+    if (!capexMap[v][p]) capexMap[v][p] = {};
+    if (!capexMap[v][p][proj]) capexMap[v][p][proj] = {};
+    capexMap[v][p][proj][cat] = val;
+  }
+  // CF: cfMap[version][period][lineitem] = number
+  for (const r of parseCSV(CF_RAW)) {
+    const {Version: v, Period: p, LineItem: li} = r;
+    const val = parseFloat(r['Value_A$000']);
+    if (!cfMap[v]) cfMap[v] = {};
+    if (!cfMap[v][p]) cfMap[v][p] = {};
+    cfMap[v][p][li] = val;
+  }
+}
+
+// ── Constants ─────────────────────────────────────────────────────────────────
+const QUARTERS = ['FY26-Q1','FY26-Q2','FY26-Q3','FY26-Q4'];
+const QLABELS  = ['Q1','Q2','Q3','Q4'];
+const PROJECTS = ['Kalgara Mine','Creston Project','Resource Development'];
+
+function qVer(i) { return i < 2 ? 'Actual' : 'Latest Forecast'; }
+
+// ── State ─────────────────────────────────────────────────────────────────────
+let selPeriod = 'FY';
+let selTab = 'fp';
+let charts = {};
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+const fmt  = (n, d=0) => (n == null || isNaN(n)) ? '—' : n.toLocaleString('en-AU', {minimumFractionDigits:d, maximumFractionDigits:d});
+const fmtM = n => fmt(n/1000, 1);  // A$m
+const fmtPct = n => (!isFinite(n) || n == null) ? '—' : (n>=0?'+':'')+n.toFixed(1)+'%';
+const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+function vClass(val, invert=false) {
+  if (!val || isNaN(val) || val === 0) return 'neut';
+  return (invert ? val < 0 : val > 0) ? 'fav' : 'unfav';
+}
+
+function primaryLabel() {
+  if (selPeriod === 'FY') return 'Actual + Forecast';
+  return QUARTERS.indexOf(selPeriod) < 2 ? 'Actual' : 'Latest Forecast';
+}
+
+// ── FP value getters ──────────────────────────────────────────────────────────
+function fpGet(version, period, account) {
+  if (period === 'FY') {
+    return QUARTERS.reduce((s, q, i) => {
+      const v = version === 'primary' ? qVer(i) : version;
+      return s + (fpMap[v]?.[q]?.[account] ?? 0);
+    }, 0);
+  }
+  const i = QUARTERS.indexOf(period);
+  const v = version === 'primary' ? qVer(i) : version;
+  return fpMap[v]?.[period]?.[account] ?? 0;
+}
+
+function fpSum(version, period, accounts) {
+  return accounts.reduce((s, a) => s + fpGet(version, period, a), 0);
+}
+
+// ── KPI value getters ─────────────────────────────────────────────────────────
+function kpiGet(version, period, source, kpi) {
+  const i = QUARTERS.indexOf(period);
+  const v = version === 'primary' ? qVer(i) : version;
+  return kpiMap[v]?.[period]?.[source]?.[kpi]?.value ?? null;
+}
+
+function kpiUnit(period, source, kpi) {
+  const i = QUARTERS.indexOf(period);
+  const v = qVer(i);
+  return kpiMap[v]?.[period]?.[source]?.[kpi]?.unit ?? '';
+}
+
+// For FY: sum if volume, weighted-avg if rate
+const KPI_VOL = new Set(['Gold Produced','Copper Produced','Ore Milled','Gold Sold','Copper Sold','UG Ore Mined','UG Development Metres','OP Total Material Mined','OP Ore Mined (Mill Feed)']);
+const KPI_WAVG_BY_GOLD_SOLD = new Set(['AISC','C1 Cash Cost','Avg Realised Gold Price','Avg Realised Copper Price']);
+
+function kpiGetFY(version, source, kpi) {
+  if (KPI_VOL.has(kpi)) {
+    return QUARTERS.reduce((s, q, i) => {
+      const v = version === 'primary' ? qVer(i) : version;
+      return s + (kpiMap[v]?.[q]?.[source]?.[kpi]?.value ?? 0);
+    }, 0);
+  }
+  if (KPI_WAVG_BY_GOLD_SOLD.has(kpi)) {
+    let totalVal = 0, totalW = 0;
+    QUARTERS.forEach((q, i) => {
+      const v = version === 'primary' ? qVer(i) : version;
+      const val = kpiMap[v]?.[q]?.[source]?.[kpi]?.value;
+      const gs  = kpiMap[v]?.[q]?.[source]?.['Gold Sold']?.value ?? 0;
+      if (val != null) { totalVal += val * gs; totalW += gs; }
+    });
+    return totalW > 0 ? totalVal / totalW : null;
+  }
+  // For rate KPIs (grade, recovery, availability) — use Q4 LF as indicative
+  const lf = kpiMap['Latest Forecast']?.['FY26-Q4']?.[source]?.[kpi]?.value;
+  const bud = kpiMap['Budget']?.['FY26-Q4']?.[source]?.[kpi]?.value;
+  return version === 'Budget' ? bud ?? null : lf ?? null;
+}
+
+function kpiGetFull(version, period, source, kpi) {
+  if (period === 'FY') return kpiGetFY(version, source, kpi);
+  return kpiGet(version, period, source, kpi);
+}
+
+// ── CapEx getters ─────────────────────────────────────────────────────────────
+function capexProjTotal(version, period, project) {
+  if (period === 'FY') {
+    return QUARTERS.reduce((s, q, i) => {
+      const v = version === 'primary' ? qVer(i) : version;
+      const d = capexMap[v]?.[q]?.[project];
+      return s + (d ? Object.values(d).reduce((a,b) => a+b, 0) : 0);
+    }, 0);
+  }
+  const i = QUARTERS.indexOf(period);
+  const v = version === 'primary' ? qVer(i) : version;
+  const d = capexMap[v]?.[period]?.[project];
+  return d ? Object.values(d).reduce((a,b) => a+b, 0) : 0;
+}
+
+function capexCatVal(version, period, project, cat) {
+  if (period === 'FY') {
+    return QUARTERS.reduce((s, q, i) => {
+      const v = version === 'primary' ? qVer(i) : version;
+      return s + (capexMap[v]?.[q]?.[project]?.[cat] ?? 0);
+    }, 0);
+  }
+  const i = QUARTERS.indexOf(period);
+  const v = version === 'primary' ? qVer(i) : version;
+  return capexMap[v]?.[period]?.[project]?.[cat] ?? 0;
+}
+
+function capexCats(project) {
+  const cats = new Set();
+  for (const ver of Object.values(capexMap)) {
+    for (const qData of Object.values(ver)) {
+      const d = qData[project];
+      if (d) Object.keys(d).forEach(c => cats.add(c));
+    }
+  }
+  return [...cats];
+}
+
+// ── CF getters ────────────────────────────────────────────────────────────────
+const CF_BALANCE_ITEMS = new Set(['Opening Cash Balance','Closing Cash Balance']);
+
+function cfGet(version, period, item) {
+  if (period === 'FY') {
+    if (item === 'Opening Cash Balance') {
+      const v = version === 'primary' ? qVer(0) : version;
+      return cfMap[v]?.['FY26-Q1']?.[item] ?? null;
+    }
+    if (item === 'Closing Cash Balance') {
+      const v = version === 'primary' ? qVer(3) : version;
+      return cfMap[v]?.['FY26-Q4']?.[item] ?? null;
+    }
+    return QUARTERS.reduce((s, q, i) => {
+      const v = version === 'primary' ? qVer(i) : version;
+      return s + (cfMap[v]?.[q]?.[item] ?? 0);
+    }, 0);
+  }
+  const i = QUARTERS.indexOf(period);
+  const v = version === 'primary' ? qVer(i) : version;
+  return cfMap[v]?.[period]?.[item] ?? null;
+}
+
+// ── Chart helpers ─────────────────────────────────────────────────────────────
+function mkChart(id, config) {
+  if (charts[id]) { charts[id].destroy(); }
+  const ctx = document.getElementById(id);
+  if (!ctx) return;
+  charts[id] = new Chart(ctx, config);
+}
+
+const C_ACTUAL = '#f5a623';
+const C_LF     = '#4a9ef5';
+const C_BUD    = 'rgba(98,114,164,0.65)';
+const C_GREEN  = '#34c77b';
+const C_TEAL   = '#4acfe8';
+
+function qBarColor(i) { return i < 2 ? C_ACTUAL : C_LF; }
+
+const CHART_DEFAULTS = {
+  responsive: true,
+  maintainAspectRatio: true,
+  plugins: { legend: { labels: { color: '#8b8fa8', font: { size: 11 } } }, tooltip: { mode: 'index' } },
+  scales: {
+    x: { ticks: { color: '#8b8fa8', font:{size:11} }, grid: { color:'rgba(42,45,58,.5)' } },
+    y: { ticks: { color: '#8b8fa8', font:{size:11} }, grid: { color:'rgba(42,45,58,.5)' } }
+  }
+};
+
+// ── Render: FP ────────────────────────────────────────────────────────────────
+const REV_ACCTS  = ['Gold Revenue','Copper Revenue','Silver & Other Revenue','Hedge Gains/(Losses)'];
+const OPCOST_ACCTS = ['Mining Costs','Processing Costs','Site Services','TC/RC & Freight','Royalties','Change in Inventories'];
+const NONCASH_ACCTS = ['Depreciation & Amort.','Exploration Expense','Corporate G&A','Other Income/(Loss)'];
+const FIN_ACCTS  = ['Finance Income','Finance Costs'];
+const TAX_ACCTS  = ['Income Tax Expense'];
+const ALL_ACCTS  = [...REV_ACCTS,...OPCOST_ACCTS,...NONCASH_ACCTS,...FIN_ACCTS,...TAX_ACCTS];
+
+function npat(ver, period) { return fpSum(ver, period, ALL_ACCTS); }
+function ebitda(ver, period) { return fpSum(ver, period, [...REV_ACCTS,...OPCOST_ACCTS]); }
+
+function renderFP() {
+  const pl = primaryLabel();
+  document.getElementById('fp-col-lbl').textContent = `${pl} vs Budget — A$000`;
+
+  // KPI cards
+  const fp_p = npat('primary', selPeriod);
+  const fp_b = npat('Budget',  selPeriod);
+  const fp_rev_p = fpSum('primary', selPeriod, REV_ACCTS);
+  const fp_ebitda_p = ebitda('primary', selPeriod);
+  const fp_var = fp_p - fp_b;
+  const kpis = [
+    { lbl:'Total Revenue', val: 'A$'+fmtM(fp_rev_p)+'m', sub:'A$000s', cls:'gold' },
+    { lbl:'EBITDA',        val: 'A$'+fmtM(fp_ebitda_p)+'m', sub:'A$000s', cls:'blue' },
+    { lbl:'NPAT',          val: 'A$'+fmtM(fp_p)+'m', sub:'A$000s', cls: fp_p >= 0 ? 'green' : 'red' },
+    { lbl:'NPAT vs Budget',val: (fp_var>=0?'+':'')+fmtM(fp_var)+'m', sub: fmtPct(fp_b?fp_var/Math.abs(fp_b)*100:null), cls: fp_var >= 0 ? 'green' : 'red' },
+  ];
+  document.getElementById('fp-kpis').innerHTML = kpis.map(k =>
+    `<div class="kpi ${k.cls}"><div class="lbl">${k.lbl}</div><div class="val">${k.val}</div><div class="sub">${k.sub}</div></div>`
+  ).join('');
+
+  // Table
+  function row(cls, label, accounts, isComputed=false) {
+    const p = fpSum('primary', selPeriod, accounts);
+    const b = fpSum('Budget',  selPeriod, accounts);
+    const v = p - b;
+    const vp = b !== 0 ? v / Math.abs(b) * 100 : null;
+    const vc = vClass(v);
+    return `<tr class="${cls}"><td>${esc(label)}</td><td>${fmt(p)}</td><td>${fmt(b)}</td><td class="${vc}">${fmt(v)}</td><td class="${vc}">${fmtPct(vp)}</td></tr>`;
+  }
+  function detailRow(account) {
+    const p = fpGet('primary', selPeriod, account);
+    const b = fpGet('Budget',  selPeriod, account);
+    const v = p - b;
+    const vp = b !== 0 ? v / Math.abs(b) * 100 : null;
+    const vc = vClass(v);
+    return `<tr class="tr-row"><td>${esc(account)}</td><td>${fmt(p)}</td><td>${fmt(b)}</td><td class="${vc}">${fmt(v)}</td><td class="${vc}">${fmtPct(vp)}</td></tr>`;
+  }
+  function groupRow(label) {
+    return `<tr class="tr-group"><td colspan="5">${label}</td></tr>`;
+  }
+
+  let html = `<tr><th>Account</th><th>${esc(pl)}</th><th>Budget</th><th>Var A$000</th><th>Var %</th></tr>`;
+  html += groupRow('Revenue');
+  REV_ACCTS.forEach(a => html += detailRow(a));
+  html += row('tr-subtotal','Total Revenue', REV_ACCTS);
+  html += groupRow('Operating Costs');
+  OPCOST_ACCTS.forEach(a => html += detailRow(a));
+  html += row('tr-subtotal','Total Operating Costs', OPCOST_ACCTS);
+  html += row('tr-ebitda','EBITDA', [...REV_ACCTS,...OPCOST_ACCTS]);
+  html += groupRow('Non-cash & Corporate');
+  NONCASH_ACCTS.forEach(a => html += detailRow(a));
+  html += row('tr-ebit','EBIT', [...REV_ACCTS,...OPCOST_ACCTS,...NONCASH_ACCTS]);
+  html += groupRow('Finance');
+  FIN_ACCTS.forEach(a => html += detailRow(a));
+  html += row('tr-npbt','NPBT', [...REV_ACCTS,...OPCOST_ACCTS,...NONCASH_ACCTS,...FIN_ACCTS]);
+  html += groupRow('Income Tax');
+  TAX_ACCTS.forEach(a => html += detailRow(a));
+  html += row('tr-npat','NPAT (A$000)', ALL_ACCTS);
+  document.getElementById('fp-table').innerHTML = html;
+
+  // Charts — always show all 4 quarters
+  const budNPAT = QUARTERS.map((_,i) => npat('Budget',QUARTERS[i]) / 1000);
+  const actNPAT = QUARTERS.map((_,i) => npat(qVer(i),QUARTERS[i]) / 1000);
+  mkChart('chartNPAT', {
+    type: 'bar',
+    data: {
+      labels: QLABELS,
+      datasets: [
+        { label:'Budget', data: budNPAT, backgroundColor: C_BUD, borderRadius: 3 },
+        { label:'Actual / LF', data: actNPAT, backgroundColor: QLABELS.map((_,i)=>qBarColor(i)), borderRadius: 3 },
+      ]
+    },
+    options: { ...CHART_DEFAULTS, plugins: { ...CHART_DEFAULTS.plugins, legend:{ labels:{color:'#8b8fa8',font:{size:11}} } } }
+  });
+
+  const revData = {
+    'Gold Revenue':      QUARTERS.map((q,i) => fpGet(qVer(i),q,'Gold Revenue')/1000),
+    'Copper Revenue':    QUARTERS.map((q,i) => fpGet(qVer(i),q,'Copper Revenue')/1000),
+    'Silver & Other':    QUARTERS.map((q,i) => fpGet(qVer(i),q,'Silver & Other Revenue')/1000),
+  };
+  mkChart('chartRev', {
+    type: 'bar',
+    data: {
+      labels: QLABELS,
+      datasets: [
+        { label:'Gold',   data: revData['Gold Revenue'],   backgroundColor:'rgba(245,166,35,0.8)', borderRadius:3 },
+        { label:'Copper', data: revData['Copper Revenue'], backgroundColor:'rgba(192,112,74,0.8)', borderRadius:3 },
+        { label:'Other',  data: revData['Silver & Other'], backgroundColor:'rgba(74,207,232,0.7)', borderRadius:3 },
+      ]
+    },
+    options: { ...CHART_DEFAULTS, scales: { ...CHART_DEFAULTS.scales, x:{...CHART_DEFAULTS.scales.x,stacked:true}, y:{...CHART_DEFAULTS.scales.y,stacked:true} } }
+  });
+}
+
+// ── Render: KPI ───────────────────────────────────────────────────────────────
+function renderKPI() {
+  const pl = primaryLabel();
+  document.getElementById('kpi-col-lbl').textContent = `${pl} vs Budget`;
+
+  const goldProd_p = kpiGetFull('primary', selPeriod, 'Total Kalgara', 'Gold Produced');
+  const goldProd_b = kpiGetFull('Budget',  selPeriod, 'Total Kalgara', 'Gold Produced');
+  const aisc_p     = kpiGetFull('primary', selPeriod, 'Total Kalgara', 'AISC');
+  const aisc_b     = kpiGetFull('Budget',  selPeriod, 'Total Kalgara', 'AISC');
+  const recov_p    = kpiGetFull('primary', selPeriod, 'Total Kalgara', 'Au Recovery');
+  const oreMill_p  = kpiGetFull('primary', selPeriod, 'Total Kalgara', 'Ore Milled');
+
+  const isFY = selPeriod === 'FY';
+  document.getElementById('kpi-kpis').innerHTML = [
+    { lbl:'Gold Produced', val: isFY ? fmt(goldProd_p/1000,1)+'koz' : fmt(goldProd_p)+'oz', sub:'vs Bud: '+(goldProd_b?(goldProd_p>goldProd_b?'+':'')+fmt(goldProd_p-goldProd_b):'—'), cls:'gold' },
+    { lbl:'AISC',          val: goldProd_p?'A$'+fmt(aisc_p,0)+'/oz':'—', sub:'Budget: A$'+fmt(aisc_b,0)+'/oz', cls: aisc_p<=aisc_b?'green':'red' },
+    { lbl:'Au Recovery',   val: recov_p ? recov_p.toFixed(1)+'%' : '—', sub:'Total Kalgara', cls:'blue' },
+    { lbl:'Ore Milled',    val: isFY ? fmt(oreMill_p)+'kt' : fmt(oreMill_p)+'kt', sub:isFY?'Full Year FY26':selPeriod, cls:'teal' },
+  ].map(k => `<div class="kpi ${k.cls}"><div class="lbl">${k.lbl}</div><div class="val">${k.val}</div><div class="sub">${k.sub}</div></div>`).join('');
+
+  // KPI table
+  const kpiDefs = [
+    { group:'Processing', kpis:[
+      ['Ore Milled','Total Kalgara',0],
+      ['Mill Head Grade — Au','Total Kalgara',2],
+      ['Au Recovery','Total Kalgara',1],
+      ['Cu Recovery','Total Kalgara',1],
+      ['Mill Availability','Total Kalgara',1],
+    ]},
+    { group:'Production', kpis:[
+      ['Gold Produced','Total Kalgara',0],
+      ['Copper Produced','Total Kalgara',0],
+      ['Gold Sold','Total Kalgara',0],
+      ['Copper Sold','Total Kalgara',0],
+    ]},
+    { group:'Prices & Costs', kpis:[
+      ['Avg Realised Gold Price','Total Kalgara',0],
+      ['Avg Realised Copper Price','Total Kalgara',0],
+      ['AISC','Total Kalgara',0],
+      ['C1 Cash Cost','Total Kalgara',0],
+    ]},
+    { group:'Open Pit', kpis:[
+      ['OP Total Material Mined','Open Pit',0],
+      ['OP Ore Mined (Mill Feed)','Open Pit',0],
+      ['OP Au Grade Mined','Open Pit',2],
+      ['OP Strip Ratio','Open Pit',2],
+    ]},
+    { group:'Underground', kpis:[
+      ['UG Ore Mined','Underground',0],
+      ['UG Au Grade Mined','Underground',2],
+      ['UG Development Metres','Underground',0],
+    ]},
+  ];
+
+  const costKPIs = new Set(['AISC','C1 Cash Cost','OP Strip Ratio']);
+
+  let html = `<tr><th>KPI</th><th>Unit</th><th>${esc(pl)}</th><th>Budget</th><th>Var</th><th>Var %</th></tr>`;
+  for (const grp of kpiDefs) {
+    html += `<tr class="tr-group"><td colspan="6">${grp.group}</td></tr>`;
+    for (const [kpi, src, dec] of grp.kpis) {
+      const p = kpiGetFull('primary', selPeriod, src, kpi);
+      const b = kpiGetFull('Budget',  selPeriod, src, kpi);
+      const unit = selPeriod === 'FY' ? (kpiMap['Actual']?.['FY26-Q1']?.[src]?.[kpi]?.unit ?? '') : kpiUnit(selPeriod, src, kpi);
+      const v = (p != null && b != null) ? p - b : null;
+      const vp = (v != null && b) ? v / Math.abs(b) * 100 : null;
+      const isCost = costKPIs.has(kpi);
+      const vc = v != null ? vClass(v, isCost) : 'neut';
+      const isFYRate = selPeriod === 'FY' && !KPI_VOL.has(kpi) && !KPI_WAVG_BY_GOLD_SOLD.has(kpi);
+      html += `<tr class="tr-row">
+        <td>${esc(kpi)}</td>
+        <td style="color:var(--muted);font-size:11px">${esc(unit)}${isFYRate?' <span style="color:var(--muted);font-size:10px">(Q4 ind.)</span>':''}</td>
+        <td>${p != null ? fmt(p, dec) : '—'}</td>
+        <td>${b != null ? fmt(b, dec) : '—'}</td>
+        <td class="${vc}">${v != null ? fmt(v, dec) : '—'}</td>
+        <td class="${vc}">${vp != null ? fmtPct(vp) : '—'}</td>
+      </tr>`;
+    }
+  }
+  document.getElementById('kpi-table').innerHTML = html;
+
+  // Charts
+  const actGold  = QUARTERS.map((q,i) => kpiGet(qVer(i), q, 'Total Kalgara', 'Gold Produced') / 1000);
+  const budGold  = QUARTERS.map((q,i) => kpiGet('Budget', q, 'Total Kalgara', 'Gold Produced') / 1000);
+  mkChart('chartGoldProd', {
+    type:'bar',
+    data:{ labels:QLABELS, datasets:[
+      { label:'Budget', data:budGold, backgroundColor:C_BUD, borderRadius:3 },
+      { label:'Actual / LF', data:actGold, backgroundColor:QLABELS.map((_,i)=>qBarColor(i)), borderRadius:3 },
+    ]},
+    options:CHART_DEFAULTS
+  });
+
+  const actAISC  = QUARTERS.map((q,i) => kpiGet(qVer(i), q, 'Total Kalgara', 'AISC'));
+  const budAISC  = QUARTERS.map((q,i) => kpiGet('Budget', q, 'Total Kalgara', 'AISC'));
+  mkChart('chartAISC', {
+    type:'line',
+    data:{ labels:QLABELS, datasets:[
+      { label:'Budget', data:budAISC, borderColor:C_BUD, backgroundColor:'transparent', borderDash:[4,4], tension:.3, pointRadius:4 },
+      { label:'Actual / LF', data:actAISC, borderColor:C_ACTUAL, backgroundColor:'transparent', tension:.3, pointRadius:4,
+        segment:{ borderColor: ctx => ctx.p0DataIndex < 2 ? C_ACTUAL : C_LF } },
+    ]},
+    options:CHART_DEFAULTS
+  });
+}
+
+// ── Render: CapEx ─────────────────────────────────────────────────────────────
+function renderCapex() {
+  const pl = primaryLabel();
+  document.getElementById('capex-col-lbl').textContent = `${pl} vs Budget — A$000 (over budget = unfavourable)`;
+
+  const totP = PROJECTS.reduce((s,p) => s + capexProjTotal('primary', selPeriod, p), 0);
+  const totB = PROJECTS.reduce((s,p) => s + capexProjTotal('Budget',  selPeriod, p), 0);
+  const totV = totP - totB;
+
+  // Sustaining vs Growth split for Kalgara Mine
+  function sustaining(ver, period) {
+    return capexCats('Kalgara Mine').filter(c => c.includes('Sustaining'))
+      .reduce((s,c) => s + capexCatVal(ver, period, 'Kalgara Mine', c), 0);
+  }
+  function growth(ver, period) {
+    return PROJECTS.reduce((s,p) => {
+      const cats = capexCats(p).filter(c => !c.includes('Sustaining'));
+      return s + cats.reduce((ss,c) => ss + capexCatVal(ver, period, p, c), 0);
+    }, 0);
+  }
+
+  const sustP = sustaining('primary', selPeriod);
+  const growP = growth('primary', selPeriod);
+
+  document.getElementById('capex-kpis').innerHTML = [
+    { lbl:'Total CapEx',  val:'A$'+fmtM(totP)+'m', sub:'vs Bud A$'+fmtM(totB)+'m', cls: totV <= 0 ? 'green' : 'red' },
+    { lbl:'Sustaining',   val:'A$'+fmtM(sustP)+'m', sub:'Kalgara Mine only', cls:'teal' },
+    { lbl:'Growth',       val:'A$'+fmtM(growP)+'m', sub:'All projects', cls:'gold' },
+    { lbl:'Var vs Budget', val: (totV>=0?'+':'')+fmtM(totV)+'m', sub:fmtPct(totB?totV/Math.abs(totB)*100:null), cls: totV <= 0 ? 'green' : 'red' },
+  ].map(k => `<div class="kpi ${k.cls}"><div class="lbl">${k.lbl}</div><div class="val">${k.val}</div><div class="sub">${k.sub}</div></div>`).join('');
+
+  // Table
+  let html = `<tr><th>Project / Category</th><th>${esc(pl)}</th><th>Budget</th><th>Var A$000</th><th>Var %</th></tr>`;
+  let grandP = 0, grandB = 0;
+  for (const proj of PROJECTS) {
+    html += `<tr class="tr-group"><td colspan="5">${esc(proj)}</td></tr>`;
+    const cats = capexCats(proj);
+    let projP = 0, projB = 0;
+    for (const cat of cats) {
+      const p = capexCatVal('primary', selPeriod, proj, cat);
+      const b = capexCatVal('Budget',  selPeriod, proj, cat);
+      const v = p - b;
+      const vp = b ? v / Math.abs(b) * 100 : null;
+      const vc = vClass(v, true); // invert: spending over budget = unfav
+      projP += p; projB += b;
+      html += `<tr class="tr-row"><td>${esc(cat)}</td><td>${fmt(p)}</td><td>${fmt(b)}</td><td class="${vc}">${fmt(v)}</td><td class="${vc}">${fmtPct(vp)}</td></tr>`;
+    }
+    const pv = projP - projB;
+    const pvp = projB ? pv / Math.abs(projB) * 100 : null;
+    const pvc = vClass(pv, true);
+    html += `<tr class="tr-subtotal"><td>Total ${esc(proj)}</td><td>${fmt(projP)}</td><td>${fmt(projB)}</td><td class="${pvc}">${fmt(pv)}</td><td class="${pvc}">${fmtPct(pvp)}</td></tr>`;
+    grandP += projP; grandB += projB;
+  }
+  const gv = grandP - grandB;
+  const gvp = grandB ? gv / Math.abs(grandB) * 100 : null;
+  const gvc = vClass(gv, true);
+  html += `<tr class="tr-total"><td>TOTAL CAPITAL EXPENDITURE</td><td>${fmt(grandP)}</td><td>${fmt(grandB)}</td><td class="${gvc}">${fmt(gv)}</td><td class="${gvc}">${fmtPct(gvp)}</td></tr>`;
+  document.getElementById('capex-table').innerHTML = html;
+
+  // Charts
+  const projColors = ['rgba(245,166,35,0.8)','rgba(74,158,245,0.8)','rgba(74,207,232,0.8)'];
+  const budTotals = QUARTERS.map((q,i) => PROJECTS.reduce((s,p) => s + capexProjTotal('Budget',q,p), 0) / 1000);
+  const actProj = PROJECTS.map((proj,pi) => ({
+    label: proj,
+    data: QUARTERS.map((q,i) => capexProjTotal(qVer(i), q, proj) / 1000),
+    backgroundColor: projColors[pi],
+    borderRadius: 2,
+  }));
+  mkChart('chartCapexProj', {
+    type:'bar',
+    data:{ labels:QLABELS, datasets:actProj },
+    options:{ ...CHART_DEFAULTS, scales:{
+      x:{...CHART_DEFAULTS.scales.x,stacked:true},
+      y:{...CHART_DEFAULTS.scales.y,stacked:true}
+    }}
+  });
+
+  const actSust = QUARTERS.map((q,i) => sustaining(qVer(i), q) / 1000);
+  const actGrow = QUARTERS.map((q,i) => growth(qVer(i), q) / 1000);
+  const budSust = QUARTERS.map((q,i) => sustaining('Budget', q) / 1000);
+  const budGrow = QUARTERS.map((q,i) => growth('Budget', q) / 1000);
+  mkChart('chartCapexType', {
+    type:'bar',
+    data:{ labels:QLABELS, datasets:[
+      { label:'Sust. Actual/LF', data:actSust, backgroundColor:'rgba(74,207,232,0.8)', borderRadius:2, stack:'act' },
+      { label:'Growth Actual/LF', data:actGrow, backgroundColor:'rgba(245,166,35,0.8)', borderRadius:2, stack:'act' },
+      { label:'Sust. Budget', data:budSust, backgroundColor:'rgba(74,207,232,0.35)', borderRadius:2, stack:'bud' },
+      { label:'Growth Budget', data:budGrow, backgroundColor:'rgba(245,166,35,0.35)', borderRadius:2, stack:'bud' },
+    ]},
+    options:{ ...CHART_DEFAULTS, scales:{
+      x:{...CHART_DEFAULTS.scales.x,stacked:true},
+      y:{...CHART_DEFAULTS.scales.y,stacked:true}
+    }}
+  });
+}
+
+// ── Render: CF ────────────────────────────────────────────────────────────────
+function renderCF() {
+  const pl = primaryLabel();
+  document.getElementById('cf-col-lbl').textContent = `${pl} vs Budget — A$000`;
+
+  const ocfP  = cfGet('primary', selPeriod, 'Operating Cash Flow');
+  const ocfB  = cfGet('Budget',  selPeriod, 'Operating Cash Flow');
+  const icfP  = cfGet('primary', selPeriod, 'Total Investing Cash Flow');
+  const closP = cfGet('primary', selPeriod, 'Closing Cash Balance');
+  const closB = cfGet('Budget',  selPeriod, 'Closing Cash Balance');
+  const fcfP  = (ocfP ?? 0) + (icfP ?? 0);
+
+  document.getElementById('cf-kpis').innerHTML = [
+    { lbl:'Operating Cash Flow', val:'A$'+fmtM(ocfP)+'m', sub:'Budget: A$'+fmtM(ocfB)+'m', cls: ocfP >= ocfB ? 'green':'red' },
+    { lbl:'Investing Cash Flow',  val:'A$'+fmtM(icfP)+'m', sub:'(CapEx outflows)', cls:'teal' },
+    { lbl:'Free Cash Flow',       val:'A$'+fmtM(fcfP)+'m', sub:'OCF + Investing', cls: fcfP >= 0 ? 'green':'red' },
+    { lbl:'Closing Balance',      val:'A$'+fmtM(closP)+'m', sub:'Budget: A$'+fmtM(closB)+'m', cls:'gold' },
+  ].map(k => `<div class="kpi ${k.cls}"><div class="lbl">${k.lbl}</div><div class="val">${k.val}</div><div class="sub">${k.sub}</div></div>`).join('');
+
+  // CF structure
+  const cfStructure = [
+    { type:'balance', item:'Opening Cash Balance' },
+    { type:'group',   label:'Operating Activities' },
+    { type:'row',     item:'Receipts from Customers' },
+    { type:'row',     item:'Payments to Suppliers and Employees' },
+    { type:'row',     item:'Royalties Paid' },
+    { type:'row',     item:'Interest Received' },
+    { type:'row',     item:'Interest and Financing Costs Paid' },
+    { type:'row',     item:'Income Tax Paid' },
+    { type:'subtotal',item:'Operating Cash Flow', cls:'tr-ocf' },
+    { type:'group',   label:'Investing Activities' },
+    { type:'row',     item:'Sustaining Capex' },
+    { type:'row',     item:'Growth Capex — Kalgara' },
+    { type:'row',     item:'Growth Capex — Creston' },
+    { type:'row',     item:'Resource Development Capex' },
+    { type:'subtotal',item:'Total Investing Cash Flow', cls:'tr-icf' },
+    { type:'group',   label:'Financing Activities' },
+    { type:'row',     item:'Proceeds from Borrowings' },
+    { type:'row',     item:'Repayment of Borrowings' },
+    { type:'row',     item:'Lease Payments' },
+    { type:'row',     item:'Dividends Paid' },
+    { type:'subtotal',item:'Total Financing Cash Flow', cls:'tr-fcf' },
+    { type:'computed',item:'Net Change in Cash', cls:'tr-netchg' },
+    { type:'balance', item:'Closing Cash Balance', cls:'tr-closing' },
+  ];
+
+  let html = `<tr><th>Line Item</th><th>${esc(pl)}</th><th>Budget</th><th>Var A$000</th><th>Var %</th></tr>`;
+  for (const def of cfStructure) {
+    if (def.type === 'group') {
+      html += `<tr class="tr-group"><td colspan="5">${def.label}</td></tr>`;
+      continue;
+    }
+    const p = cfGet('primary', selPeriod, def.item);
+    const b = cfGet('Budget',  selPeriod, def.item);
+    const v = (p != null && b != null) ? p - b : null;
+    const vp = (v != null && b) ? v / Math.abs(b) * 100 : null;
+    const isBalance = CF_BALANCE_ITEMS.has(def.item);
+    const vc = (v != null && !isBalance) ? vClass(v) : 'neut';
+    const trCls = def.cls || (def.type === 'row' ? 'tr-row' : 'tr-subtotal');
+    html += `<tr class="${trCls}">
+      <td>${esc(def.item)}</td>
+      <td>${p != null ? fmt(p) : '—'}</td>
+      <td>${b != null ? fmt(b) : '—'}</td>
+      <td class="${vc}">${(v != null && !isBalance) ? fmt(v) : '—'}</td>
+      <td class="${vc}">${(vp != null && !isBalance) ? fmtPct(vp) : '—'}</td>
+    </tr>`;
+  }
+  document.getElementById('cf-table').innerHTML = html;
+
+  // Charts
+  const closingBal_act = QUARTERS.map((q,i) => cfGet(qVer(i), q, 'Closing Cash Balance') / 1000);
+  const closingBal_bud = QUARTERS.map((q,i) => cfGet('Budget', q, 'Closing Cash Balance') / 1000);
+  mkChart('chartCashBal', {
+    type:'line',
+    data:{ labels:QLABELS, datasets:[
+      { label:'Budget', data:closingBal_bud, borderColor:C_BUD, backgroundColor:'transparent', borderDash:[4,4], tension:.3, pointRadius:4 },
+      { label:'Actual / LF', data:closingBal_act, borderColor:C_TEAL, backgroundColor:'rgba(74,207,232,0.1)', fill:true, tension:.3, pointRadius:4 },
+    ]},
+    options:CHART_DEFAULTS
+  });
+
+  const ocfQtr  = QUARTERS.map((q,i) => cfGet(qVer(i), q, 'Operating Cash Flow') / 1000);
+  const icfQtr  = QUARTERS.map((q,i) => cfGet(qVer(i), q, 'Total Investing Cash Flow') / 1000);
+  const fcfQtr  = QUARTERS.map((q,i) => cfGet(qVer(i), q, 'Total Financing Cash Flow') / 1000);
+  mkChart('chartCFComp', {
+    type:'bar',
+    data:{ labels:QLABELS, datasets:[
+      { label:'Operating CF',  data:ocfQtr, backgroundColor:'rgba(52,199,123,0.8)', borderRadius:3 },
+      { label:'Investing CF',  data:icfQtr, backgroundColor:'rgba(224,85,85,0.7)',  borderRadius:3 },
+      { label:'Financing CF',  data:fcfQtr, backgroundColor:'rgba(74,158,245,0.7)', borderRadius:3 },
+    ]},
+    options:CHART_DEFAULTS
+  });
+}
+
+// ── Tab/period switching ──────────────────────────────────────────────────────
+function renderAll() {
+  if (selTab === 'fp')    renderFP();
+  if (selTab === 'kpi')   renderKPI();
+  if (selTab === 'capex') renderCapex();
+  if (selTab === 'cf')    renderCF();
+}
+
+function setPeriod(btn) {
+  document.querySelectorAll('.pbtn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  selPeriod = btn.dataset.p;
+  const labels = {
+    'FY26-Q1': 'Q1 FY26 — Actual vs Budget',
+    'FY26-Q2': 'Q2 FY26 — Actual vs Budget',
+    'FY26-Q3': 'Q3 FY26 — Latest Forecast vs Budget',
+    'FY26-Q4': 'Q4 FY26 — Latest Forecast vs Budget',
+    'FY':      'Full Year FY26 — Actual (Q1–Q2) + Latest Forecast (Q3–Q4) vs Budget',
+  };
+  document.getElementById('period-label').textContent = labels[selPeriod] || selPeriod;
+  renderAll();
+}
+
+function showTab(tab, btn) {
+  selTab = tab;
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-'+tab).classList.add('active');
+  if (btn) btn.classList.add('active');
+  renderAll();
+}
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+buildMaps();
+renderAll();
+</script>
+</body>
+</html>

@@ -1,0 +1,603 @@
+openapi: 3.0.3
+
+info:
+  title: Ironfield Resources Market Data API
+  description: >
+    Commodity and input price data for Ironfield Resources FY26 planning.
+    Exposes historical/forecast prices, sensitivity analysis, scenario modelling,
+    and a summary rollup. Deployed as an IBM Code Engine / OpenWhisk serverless function.
+  version: "1.0.0"
+
+servers:
+  - url: https://market-data.2ab4n3slxkg7.us-east.codeengine.appdomain.cloud/api/market
+    description: IBM Code Engine deployed function
+
+paths:
+
+  /prices:
+    get:
+      operationId: getCommodityPrices
+      summary: Retrieve monthly commodity and input prices
+      description: >
+        Returns monthly market price data for Jul-24 through Jun-26 (24 months).
+        Results can be filtered by fiscal year or quarter and narrowed to a single
+        commodity column. Optionally returns data as CSV.
+      parameters:
+        - $ref: '#/components/parameters/commodity'
+        - $ref: '#/components/parameters/fyQuarter'
+        - $ref: '#/components/parameters/fyYear'
+        - name: format
+          in: query
+          description: Response format. "csv" triggers a file download.
+          schema:
+            type: string
+            enum: [json, csv]
+            default: json
+      responses:
+        "200":
+          description: Price records matching the filter
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PricesResponse'
+              example:
+                total: 12
+                commodity: all
+                filter: "FY26"
+                columns:
+                  - month
+                  - fyYear
+                  - fyQuarter
+                  - goldUsdOz
+                  - goldAudOz
+                  - copperLmeUsdT
+                  - copperAudTNet
+                  - audUsd
+                  - dieselAudL
+                  - electricityAudMwh
+                  - anfoAudT
+                  - cyanideAudT
+                  - steelBallsAudT
+                  - brentUsdBbl
+                items:
+                  - month: "Jul-25"
+                    fyYear: "FY26"
+                    fyQuarter: "FY26-Q1"
+                    goldUsdOz: 3350
+                    goldAudOz: 5210
+                    copperLmeUsdT: 9140
+                    copperAudTNet: 11780
+                    audUsd: 0.643
+                    dieselAudL: 1.75
+                    electricityAudMwh: 145
+                    anfoAudT: 620
+                    cyanideAudT: 1870
+                    steelBallsAudT: 1118
+                    brentUsdBbl: 71.4
+            text/csv:
+              schema:
+                type: string
+                description: CSV file with header row
+        "400":
+          $ref: '#/components/responses/BadRequest'
+
+  /prices/latest:
+    get:
+      operationId: getLatestPrices
+      summary: Most recent month's prices as a flat snapshot
+      responses:
+        "200":
+          description: Latest month snapshot
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LatestPricesResponse'
+              example:
+                asOf: "Jun-26"
+                fyYear: "FY26"
+                fyQuarter: "FY26-Q4"
+                prices:
+                  month: "Jun-26"
+                  fyYear: "FY26"
+                  fyQuarter: "FY26-Q4"
+                  goldUsdOz: 3410
+                  goldAudOz: 5344
+                  copperLmeUsdT: 9020
+                  copperAudTNet: 11750
+                  audUsd: 0.638
+                  dieselAudL: 1.75
+                  electricityAudMwh: 148
+                  anfoAudT: 618
+                  cyanideAudT: 1886
+                  steelBallsAudT: 1122
+                  brentUsdBbl: 63.8
+
+  /sensitivity:
+    get:
+      operationId: getPriceSensitivity
+      summary: NPAT and AISC sensitivity to unit price moves
+      description: >
+        Returns per-driver sensitivity entries showing the NPAT (A$000) and
+        AISC (A$/oz) impact of a defined unit price change. Results can be filtered
+        by driver name (partial, case-insensitive) and/or direction.
+      parameters:
+        - name: driver
+          in: query
+          description: >
+            Filter by driver name — partial, case-insensitive.
+            e.g. "Gold", "Diesel", "Electricity", "Copper", "Cyanide", "Brent".
+          schema:
+            type: string
+        - name: direction
+          in: query
+          description: Filter to favourable or unfavourable movements only.
+          schema:
+            type: string
+            enum: [favourable, unfavourable]
+      responses:
+        "200":
+          description: Sensitivity entries matching the filter
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SensitivityResponse'
+              example:
+                basis:
+                  note: "Sensitivities calculated at FY26 H1 actual operating rates. All monetary impacts in A$000 per quarter unless noted."
+                  goldSoldOzQtr: 41000
+                  copperSoldTQtr: 1200
+                  dieselConsumptionMlQtr: 6.8
+                  electricityMwhQtr: 44000
+                  oreMilledKtQtr: 2130
+                  baseGoldPriceAudOz: 5368
+                  baseCopperPriceAudT: 11924
+                  baseDieselAudL: 1.83
+                  baseElectricityAudMwh: 158
+                  baseAiscAudOz: 2344
+                  baseRevenueAud000Qtr: 232000
+                  baseNpatAud000Qtr: 96000
+                  taxRate: 0.30
+                driverFilter: "Gold"
+                directionFilter: "all"
+                total: 2
+                items:
+                  - driver: "Gold Price"
+                    unit: "A$/oz"
+                    change: "+A$100/oz"
+                    changeValue: 100
+                    direction: "favourable"
+                    impacts:
+                      revenueAud000Qtr: 4100
+                      ebitdaAud000Qtr: 4100
+                      npatAud000Qtr: 2870
+                      npatAud000FullYear: 11480
+                      aiscAudOzChange: 0
+        "400":
+          $ref: '#/components/responses/BadRequest'
+
+  /scenarios:
+    get:
+      operationId: getScenarioPresets
+      summary: Pre-built combined price scenarios
+      description: >
+        Returns four named combined scenarios (Bull Case, Bear Case, Fuel Shock,
+        Energy Transition Pressure) with their price delta assumptions and estimated
+        total P&L impact.
+      responses:
+        "200":
+          description: Preset scenario list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScenariosResponse'
+              example:
+                basis:
+                  baseGoldPriceAudOz: 5368
+                  baseAiscAudOz: 2344
+                  baseNpatAud000Qtr: 96000
+                total: 4
+                items:
+                  - name: "Bull Case"
+                    description: "High gold/copper, weak AUD, stable input costs"
+                    assumptions:
+                      goldDeltaAudOz: 300
+                      copperDeltaUsdT: 1000
+                      audUsdDelta: -0.02
+                      dieselDeltaAudL: -0.05
+                      electricityDeltaAudMwh: 0
+                    npatImpactAud000Qtr: 18490
+                    npatImpactAud000FullYear: 73960
+                    aiscChangeAudOz: -57
+
+  /scenario/run:
+    get:
+      operationId: runScenarioAnalysis
+      summary: Calculate P&L impact of simultaneous price moves
+      description: >
+        Applies user-defined deltas to the FY26 planning base case and returns
+        the combined quarterly and full-year NPAT impact (A$000) and AISC change
+        (A$/oz), with a per-driver breakdown. All inputs are changes from the
+        planning base case; omitted parameters default to 0.
+      parameters:
+        - name: goldDeltaAudOz
+          in: query
+          description: Gold price change in A$/oz (e.g. +200 or -150)
+          schema:
+            type: number
+            default: 0
+        - name: copperDeltaUsdT
+          in: query
+          description: LME copper price change in US$/t (e.g. +500 or -800)
+          schema:
+            type: number
+            default: 0
+        - name: audUsdDelta
+          in: query
+          description: AUD/USD rate change (e.g. +0.02 means AUD strengthens)
+          schema:
+            type: number
+            default: 0
+        - name: dieselDeltaAudL
+          in: query
+          description: Diesel price change in A$/litre (e.g. +0.15 or -0.10)
+          schema:
+            type: number
+            default: 0
+        - name: electricityDeltaAudMwh
+          in: query
+          description: Electricity price change in A$/MWh (e.g. +20 or -10)
+          schema:
+            type: number
+            default: 0
+      responses:
+        "200":
+          description: Scenario result with total and per-driver breakdown
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScenarioRunResponse'
+              example:
+                inputs:
+                  goldDeltaAudOz: 200
+                  copperDeltaUsdT: 0
+                  audUsdDelta: 0
+                  dieselDeltaAudL: 0.15
+                  electricityDeltaAudMwh: 0
+                baseCase:
+                  goldPriceAudOz: 5368
+                  aiscAudOz: 2344
+                  npatAud000Qtr: 96000
+                scenario:
+                  impliedGoldPriceAudOz: 5568
+                  impliedAiscAudOz: 2370
+                  impliedNpatAud000Qtr: 96882
+                impact:
+                  totalNpatAud000Qtr: 882.0
+                  totalNpatAud000FullYear: 3528.0
+                  totalAiscChangeAudOz: 25.5
+                  breakdown:
+                    goldPrice:
+                      npatQtr: 5740.0
+                      aisc: 0.0
+                    copperPrice:
+                      npatQtr: 0.0
+                      aisc: 0.0
+                    audUsd:
+                      npatQtr: 0.0
+                      aisc: 0.0
+                    diesel:
+                      npatQtr: -7140.0
+                      aisc: 25.5
+                    electricity:
+                      npatQtr: 0.0
+                      aisc: 0.0
+        "400":
+          $ref: '#/components/responses/BadRequest'
+
+  /summary:
+    get:
+      operationId: getMarketSummary
+      summary: Dashboard rollup — latest prices, FY averages, and planning base case
+      description: >
+        Returns a single response combining the most recent month's key prices,
+        FY26 and FY25 full-year averages, and the FY26 planning base case used
+        for sensitivity calculations.
+      responses:
+        "200":
+          description: Summary rollup
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SummaryResponse'
+              example:
+                asOf: "Jun-26"
+                fyYear: "FY26"
+                fyQuarter: "FY26-Q4"
+                latestPrices:
+                  goldAudOz: 5344
+                  goldUsdOz: 3410
+                  copperLmeUsdT: 9020
+                  audUsd: 0.638
+                  dieselAudL: 1.75
+                  electricityAudMwh: 148
+                  brentUsdBbl: 63.8
+                fy26Averages:
+                  goldAudOz: 5430.17
+                  goldUsdOz: 3465.0
+                  copperLmeUsdT: 9248.33
+                  audUsd: 0.638
+                  dieselAudL: 1.81
+                  electricityAudMwh: 155.42
+                fy25Averages:
+                  goldAudOz: 4197.0
+                  goldUsdOz: 2762.58
+                  copperLmeUsdT: 9360.0
+                  audUsd: 0.658
+                  dieselAudL: 1.77
+                  electricityAudMwh: 148.75
+                planningBaseCase:
+                  goldPriceAudOz: 5368
+                  aiscAudOz: 2344
+                  npatAud000Qtr: 96000
+
+components:
+
+  parameters:
+    commodity:
+      name: commodity
+      in: query
+      description: >
+        Commodity column to return. Accepts either the original CSV name
+        (e.g. `Gold_AUD_oz`) or camelCase alias (e.g. `goldAudOz`).
+        Returns all columns when omitted.
+        Valid values: Gold_USD_oz, Gold_AUD_oz, Copper_LME_USD_t, Copper_AUD_t_net,
+        AUDUSD, Diesel_AUD_L, Electricity_AUD_MWh, ANFO_AUD_t, Cyanide_AUD_t,
+        SteelBalls_AUD_t, Brent_USD_bbl (and camelCase equivalents).
+      schema:
+        type: string
+    fyQuarter:
+      name: fyQuarter
+      in: query
+      description: >
+        Filter to a single fiscal quarter, e.g. "FY26-Q1".
+        Takes precedence over fyYear when both are supplied.
+      schema:
+        type: string
+        pattern: '^FY\d{2}-Q[1-4]$'
+        example: "FY26-Q1"
+    fyYear:
+      name: fyYear
+      in: query
+      description: Filter to a full fiscal year, e.g. "FY26". Ignored if fyQuarter is set.
+      schema:
+        type: string
+        pattern: '^FY\d{2}$'
+        example: "FY26"
+
+  responses:
+    BadRequest:
+      description: Invalid query parameter
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+  schemas:
+
+    Error:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: string
+
+    PriceRecord:
+      type: object
+      required: [month, fyYear, fyQuarter]
+      properties:
+        month:              { type: string, example: "Jul-25" }
+        fyYear:             { type: string, example: "FY26" }
+        fyQuarter:          { type: string, example: "FY26-Q1" }
+        goldUsdOz:          { type: number, description: "Gold spot (US$/oz)" }
+        goldAudOz:          { type: number, description: "Gold spot (A$/oz)" }
+        copperLmeUsdT:      { type: number, description: "LME copper (US$/t)" }
+        copperAudTNet:      { type: number, description: "Net realised copper (A$/t after TC/RC)" }
+        audUsd:             { type: number, description: "AUD/USD exchange rate" }
+        dieselAudL:         { type: number, description: "Wholesale diesel (A$/litre)" }
+        electricityAudMwh:  { type: number, description: "WA industrial electricity (A$/MWh)" }
+        anfoAudT:           { type: number, description: "ANFO explosives (A$/t)" }
+        cyanideAudT:        { type: number, description: "Sodium cyanide (A$/t)" }
+        steelBallsAudT:     { type: number, description: "Grinding media steel balls (A$/t)" }
+        brentUsdBbl:        { type: number, description: "Brent crude (US$/barrel)" }
+
+    PricesResponse:
+      type: object
+      required: [total, commodity, filter, columns, items]
+      properties:
+        total:     { type: integer }
+        commodity: { type: string }
+        filter:    { type: string }
+        columns:
+          type: array
+          items: { type: string }
+        items:
+          type: array
+          items: { $ref: '#/components/schemas/PriceRecord' }
+
+    LatestPricesResponse:
+      type: object
+      required: [asOf, fyYear, fyQuarter, prices]
+      properties:
+        asOf:      { type: string, example: "Jun-26" }
+        fyYear:    { type: string, example: "FY26" }
+        fyQuarter: { type: string, example: "FY26-Q4" }
+        prices:    { $ref: '#/components/schemas/PriceRecord' }
+
+    SensitivityBasis:
+      type: object
+      properties:
+        note:                    { type: string }
+        goldSoldOzQtr:           { type: number }
+        copperSoldTQtr:          { type: number }
+        dieselConsumptionMlQtr:  { type: number }
+        electricityMwhQtr:       { type: number }
+        oreMilledKtQtr:          { type: number }
+        baseGoldPriceAudOz:      { type: number }
+        baseCopperPriceAudT:     { type: number }
+        baseDieselAudL:          { type: number }
+        baseElectricityAudMwh:   { type: number }
+        baseAiscAudOz:           { type: number }
+        baseRevenueAud000Qtr:    { type: number }
+        baseNpatAud000Qtr:       { type: number }
+        taxRate:                 { type: number }
+
+    SensitivityImpacts:
+      type: object
+      properties:
+        revenueAud000Qtr:   { type: number, description: "Revenue impact (A$000/qtr)" }
+        ebitdaAud000Qtr:    { type: number, description: "EBITDA impact (A$000/qtr)" }
+        npatAud000Qtr:      { type: number, description: "NPAT impact (A$000/qtr)" }
+        npatAud000FullYear: { type: number, description: "NPAT impact (A$000/full year)" }
+        aiscAudOzChange:    { type: number, description: "AISC change (A$/oz)" }
+
+    SensitivityEntry:
+      type: object
+      required: [driver, unit, change, changeValue, direction, impacts]
+      properties:
+        driver:      { type: string, example: "Diesel / Fuel" }
+        unit:        { type: string, example: "A$/litre" }
+        change:      { type: string, example: "+A$0.10/L" }
+        changeValue: { type: number, example: 0.10 }
+        direction:
+          type: string
+          enum: [favourable, unfavourable]
+        impacts:     { $ref: '#/components/schemas/SensitivityImpacts' }
+
+    SensitivityResponse:
+      type: object
+      required: [basis, driverFilter, directionFilter, total, items]
+      properties:
+        basis:           { $ref: '#/components/schemas/SensitivityBasis' }
+        driverFilter:    { type: string }
+        directionFilter: { type: string }
+        total:           { type: integer }
+        items:
+          type: array
+          items: { $ref: '#/components/schemas/SensitivityEntry' }
+
+    ScenarioAssumptions:
+      type: object
+      properties:
+        goldDeltaAudOz:          { type: number }
+        copperDeltaUsdT:         { type: number }
+        audUsdDelta:             { type: number }
+        dieselDeltaAudL:         { type: number }
+        electricityDeltaAudMwh:  { type: number }
+
+    ScenarioPreset:
+      type: object
+      required: [name, description, assumptions, npatImpactAud000Qtr, npatImpactAud000FullYear, aiscChangeAudOz]
+      properties:
+        name:                     { type: string, example: "Bull Case" }
+        description:              { type: string }
+        assumptions:              { $ref: '#/components/schemas/ScenarioAssumptions' }
+        npatImpactAud000Qtr:      { type: number }
+        npatImpactAud000FullYear: { type: number }
+        aiscChangeAudOz:          { type: number }
+
+    ScenariosResponse:
+      type: object
+      required: [basis, total, items]
+      properties:
+        basis:  { $ref: '#/components/schemas/SensitivityBasis' }
+        total:  { type: integer }
+        items:
+          type: array
+          items: { $ref: '#/components/schemas/ScenarioPreset' }
+
+    DriverImpact:
+      type: object
+      properties:
+        npatQtr: { type: number, description: "NPAT impact this quarter (A$000)" }
+        aisc:    { type: number, description: "AISC change (A$/oz)" }
+
+    ScenarioRunResponse:
+      type: object
+      required: [inputs, baseCase, scenario, impact]
+      properties:
+        inputs:
+          type: object
+          properties:
+            goldDeltaAudOz:          { type: number }
+            copperDeltaUsdT:         { type: number }
+            audUsdDelta:             { type: number }
+            dieselDeltaAudL:         { type: number }
+            electricityDeltaAudMwh:  { type: number }
+        baseCase:
+          type: object
+          properties:
+            goldPriceAudOz: { type: number }
+            aiscAudOz:      { type: number }
+            npatAud000Qtr:  { type: number }
+        scenario:
+          type: object
+          properties:
+            impliedGoldPriceAudOz: { type: number }
+            impliedAiscAudOz:      { type: number }
+            impliedNpatAud000Qtr:  { type: number }
+        impact:
+          type: object
+          properties:
+            totalNpatAud000Qtr:      { type: number }
+            totalNpatAud000FullYear: { type: number }
+            totalAiscChangeAudOz:    { type: number }
+            breakdown:
+              type: object
+              properties:
+                goldPrice:   { $ref: '#/components/schemas/DriverImpact' }
+                copperPrice: { $ref: '#/components/schemas/DriverImpact' }
+                audUsd:      { $ref: '#/components/schemas/DriverImpact' }
+                diesel:      { $ref: '#/components/schemas/DriverImpact' }
+                electricity: { $ref: '#/components/schemas/DriverImpact' }
+
+    SummaryResponse:
+      type: object
+      required: [asOf, fyYear, fyQuarter, latestPrices, fy26Averages, fy25Averages, planningBaseCase]
+      properties:
+        asOf:      { type: string }
+        fyYear:    { type: string }
+        fyQuarter: { type: string }
+        latestPrices:
+          type: object
+          properties:
+            goldAudOz:         { type: number }
+            goldUsdOz:         { type: number }
+            copperLmeUsdT:     { type: number }
+            audUsd:            { type: number }
+            dieselAudL:        { type: number }
+            electricityAudMwh: { type: number }
+            brentUsdBbl:       { type: number }
+        fy26Averages:
+          type: object
+          properties:
+            goldAudOz:         { type: number }
+            goldUsdOz:         { type: number }
+            copperLmeUsdT:     { type: number }
+            audUsd:            { type: number }
+            dieselAudL:        { type: number }
+            electricityAudMwh: { type: number }
+        fy25Averages:
+          type: object
+          properties:
+            goldAudOz:         { type: number }
+            goldUsdOz:         { type: number }
+            copperLmeUsdT:     { type: number }
+            audUsd:            { type: number }
+            dieselAudL:        { type: number }
+            electricityAudMwh: { type: number }
+        planningBaseCase:
+          type: object
+          properties:
+            goldPriceAudOz: { type: number }
+            aiscAudOz:      { type: number }
+            npatAud000Qtr:  { type: number }

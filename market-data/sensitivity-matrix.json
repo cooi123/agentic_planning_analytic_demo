@@ -1,0 +1,298 @@
+{
+  "description": "Ironfield Resources — price sensitivity analysis for FY26 planning",
+  "basis": {
+    "note": "Sensitivities calculated at FY26 H1 actual operating rates. All monetary impacts in A$000 per quarter unless noted.",
+    "gold_sold_oz_qtr":        41000,
+    "copper_sold_t_qtr":       1200,
+    "diesel_consumption_ML_qtr": 6.8,
+    "electricity_MWh_qtr":     44000,
+    "ore_milled_kt_qtr":       2130,
+    "base_gold_price_AUD_oz":  5368,
+    "base_copper_price_AUD_t": 11924,
+    "base_diesel_AUD_L":       1.83,
+    "base_electricity_AUD_MWh": 158,
+    "base_AISC_AUD_oz":        2344,
+    "base_revenue_AUD000_qtr": 232000,
+    "base_NPAT_AUD000_qtr":    96000,
+    "tax_rate":                0.30
+  },
+  "sensitivities": [
+    {
+      "driver": "Gold Price",
+      "unit": "A$/oz",
+      "change": "+A$100/oz",
+      "change_value": 100,
+      "direction": "favourable",
+      "impacts": {
+        "revenue_AUD000_qtr":    4100,
+        "EBITDA_AUD000_qtr":     4100,
+        "NPAT_AUD000_qtr":       2870,
+        "NPAT_AUD000_full_year": 11480,
+        "AISC_AUD_oz_change":    0,
+        "note": "Direct revenue uplift; no cost impact. Tax-effected at 30%."
+      }
+    },
+    {
+      "driver": "Gold Price",
+      "unit": "A$/oz",
+      "change": "-A$100/oz",
+      "change_value": -100,
+      "direction": "unfavourable",
+      "impacts": {
+        "revenue_AUD000_qtr":    -4100,
+        "EBITDA_AUD000_qtr":     -4100,
+        "NPAT_AUD000_qtr":       -2870,
+        "NPAT_AUD000_full_year": -11480,
+        "AISC_AUD_oz_change":    0,
+        "note": "Direct revenue reduction."
+      }
+    },
+    {
+      "driver": "Copper Price (LME)",
+      "unit": "US$/t",
+      "change": "+US$500/t",
+      "change_value": 500,
+      "direction": "favourable",
+      "impacts": {
+        "revenue_AUD000_qtr":    940,
+        "EBITDA_AUD000_qtr":     940,
+        "NPAT_AUD000_qtr":       658,
+        "NPAT_AUD000_full_year": 2632,
+        "AISC_AUD_oz_change":    -23,
+        "note": "Copper by-product credit increases, reducing net AISC. AUD/USD assumed at 0.638."
+      }
+    },
+    {
+      "driver": "Copper Price (LME)",
+      "unit": "US$/t",
+      "change": "-US$500/t",
+      "change_value": -500,
+      "direction": "unfavourable",
+      "impacts": {
+        "revenue_AUD000_qtr":    -940,
+        "EBITDA_AUD000_qtr":     -940,
+        "NPAT_AUD000_qtr":       -658,
+        "NPAT_AUD000_full_year": -2632,
+        "AISC_AUD_oz_change":    23,
+        "note": "Reduced by-product credit; AISC increases."
+      }
+    },
+    {
+      "driver": "AUD/USD Exchange Rate",
+      "unit": "rate",
+      "change": "+0.01 AUD (AUD strengthens)",
+      "change_value": 0.01,
+      "direction": "unfavourable",
+      "impacts": {
+        "revenue_AUD000_qtr":    -3380,
+        "EBITDA_AUD000_qtr":     -3380,
+        "NPAT_AUD000_qtr":       -2366,
+        "NPAT_AUD000_full_year": -9464,
+        "AISC_AUD_oz_change":    0,
+        "note": "Higher AUD reduces A$ gold and copper receipts. Partially offset by lower AUD input cost for imported consumables."
+      }
+    },
+    {
+      "driver": "AUD/USD Exchange Rate",
+      "unit": "rate",
+      "change": "-0.01 AUD (AUD weakens)",
+      "change_value": -0.01,
+      "direction": "favourable",
+      "impacts": {
+        "revenue_AUD000_qtr":    3380,
+        "EBITDA_AUD000_qtr":     3380,
+        "NPAT_AUD000_qtr":       2366,
+        "NPAT_AUD000_full_year": 9464,
+        "AISC_AUD_oz_change":    0,
+        "note": "Lower AUD boosts A$ commodity receipts."
+      }
+    },
+    {
+      "driver": "Diesel / Fuel Price",
+      "unit": "A$/litre",
+      "change": "+A$0.10/L",
+      "change_value": 0.10,
+      "direction": "unfavourable",
+      "impacts": {
+        "revenue_AUD000_qtr":    0,
+        "mining_cost_AUD000_qtr": 680,
+        "EBITDA_AUD000_qtr":     -680,
+        "NPAT_AUD000_qtr":       -476,
+        "NPAT_AUD000_full_year": -1904,
+        "AISC_AUD_oz_change":    17,
+        "note": "6.8M litres consumed/quarter across open pit fleet and site. Partially hedged via diesel fixed-price contracts for ~40% of volume."
+      }
+    },
+    {
+      "driver": "Diesel / Fuel Price",
+      "unit": "A$/litre",
+      "change": "-A$0.10/L",
+      "change_value": -0.10,
+      "direction": "favourable",
+      "impacts": {
+        "revenue_AUD000_qtr":    0,
+        "mining_cost_AUD000_qtr": -680,
+        "EBITDA_AUD000_qtr":     680,
+        "NPAT_AUD000_qtr":       476,
+        "NPAT_AUD000_full_year": 1904,
+        "AISC_AUD_oz_change":    -17,
+        "note": "Fuel price decline reduces mining and site services costs."
+      }
+    },
+    {
+      "driver": "Electricity Price",
+      "unit": "A$/MWh",
+      "change": "+A$10/MWh",
+      "change_value": 10,
+      "direction": "unfavourable",
+      "impacts": {
+        "revenue_AUD000_qtr":    0,
+        "processing_cost_AUD000_qtr": 440,
+        "EBITDA_AUD000_qtr":     -440,
+        "NPAT_AUD000_qtr":       -308,
+        "NPAT_AUD000_full_year": -1232,
+        "AISC_AUD_oz_change":    11,
+        "note": "44,000 MWh/quarter consumed in processing plant. Kalgara is on a fixed network tariff — spot exposure is limited to ~30% of volume."
+      }
+    },
+    {
+      "driver": "Electricity Price",
+      "unit": "A$/MWh",
+      "change": "-A$10/MWh",
+      "change_value": -10,
+      "direction": "favourable",
+      "impacts": {
+        "revenue_AUD000_qtr":    0,
+        "processing_cost_AUD000_qtr": -440,
+        "EBITDA_AUD000_qtr":     440,
+        "NPAT_AUD000_qtr":       308,
+        "NPAT_AUD000_full_year": 1232,
+        "AISC_AUD_oz_change":    -11,
+        "note": "Processing energy cost reduction flows through to AISC."
+      }
+    },
+    {
+      "driver": "Cyanide Price",
+      "unit": "A$/t",
+      "change": "+A$200/t",
+      "change_value": 200,
+      "direction": "unfavourable",
+      "impacts": {
+        "revenue_AUD000_qtr":    0,
+        "processing_cost_AUD000_qtr": 170,
+        "EBITDA_AUD000_qtr":     -170,
+        "NPAT_AUD000_qtr":       -119,
+        "NPAT_AUD000_full_year": -476,
+        "AISC_AUD_oz_change":    4,
+        "note": "CIL circuit consumes ~850t NaCN/quarter. Supply is contracted annually — price spikes typically absorbed at next renewal."
+      }
+    },
+    {
+      "driver": "Steel Grinding Media",
+      "unit": "A$/t",
+      "change": "+A$100/t",
+      "change_value": 100,
+      "direction": "unfavourable",
+      "impacts": {
+        "revenue_AUD000_qtr":    0,
+        "processing_cost_AUD000_qtr": 90,
+        "EBITDA_AUD000_qtr":     -90,
+        "NPAT_AUD000_qtr":       -63,
+        "NPAT_AUD000_full_year": -252,
+        "AISC_AUD_oz_change":    2,
+        "note": "~900t grinding media/quarter. Ball mill throughput of 2,100kt/qtr at ~0.43kg/t consumption rate."
+      }
+    },
+    {
+      "driver": "ANFO Explosives",
+      "unit": "A$/t",
+      "change": "+A$50/t",
+      "change_value": 50,
+      "direction": "unfavourable",
+      "impacts": {
+        "revenue_AUD000_qtr":    0,
+        "mining_cost_AUD000_qtr": 60,
+        "EBITDA_AUD000_qtr":     -60,
+        "NPAT_AUD000_qtr":       -42,
+        "NPAT_AUD000_full_year": -168,
+        "AISC_AUD_oz_change":    1,
+        "note": "~1,200t ANFO equivalent/quarter for open pit blasting."
+      }
+    },
+    {
+      "driver": "Brent Crude Oil",
+      "unit": "US$/bbl",
+      "change": "+US$10/bbl",
+      "change_value": 10,
+      "direction": "unfavourable",
+      "impacts": {
+        "revenue_AUD000_qtr":    0,
+        "mining_cost_AUD000_qtr": 510,
+        "processing_cost_AUD000_qtr": 88,
+        "EBITDA_AUD000_qtr":     -598,
+        "NPAT_AUD000_qtr":       -419,
+        "NPAT_AUD000_full_year": -1676,
+        "AISC_AUD_oz_change":    15,
+        "note": "Brent drives diesel rack price with ~4-week lag. At A$0.10/L diesel sensitivity per A$6/bbl, +US$10/bbl ≈ +A$0.075/L at 0.638 AUD/USD."
+      }
+    }
+  ],
+  "combined_scenarios": [
+    {
+      "name": "Bull Case",
+      "description": "High gold/copper, weak AUD, stable input costs",
+      "assumptions": {
+        "gold_delta_AUD_oz": 300,
+        "copper_delta_USD_t": 1000,
+        "audusd_delta": -0.02,
+        "diesel_delta_AUD_L": -0.05,
+        "electricity_delta_AUD_MWh": 0
+      },
+      "NPAT_impact_AUD000_qtr":       18490,
+      "NPAT_impact_AUD000_full_year":  73960,
+      "AISC_change_AUD_oz":           -57
+    },
+    {
+      "name": "Bear Case",
+      "description": "Lower gold, higher input costs, strong AUD",
+      "assumptions": {
+        "gold_delta_AUD_oz": -400,
+        "copper_delta_USD_t": -1000,
+        "audusd_delta": 0.02,
+        "diesel_delta_AUD_L": 0.20,
+        "electricity_delta_AUD_MWh": 20
+      },
+      "NPAT_impact_AUD000_qtr":       -25692,
+      "NPAT_impact_AUD000_full_year": -102768,
+      "AISC_change_AUD_oz":           61
+    },
+    {
+      "name": "Fuel Shock",
+      "description": "Oil price spike (+US$30/bbl) with AUD weakening — partial offset",
+      "assumptions": {
+        "gold_delta_AUD_oz": 120,
+        "copper_delta_USD_t": 0,
+        "audusd_delta": -0.01,
+        "diesel_delta_AUD_L": 0.22,
+        "electricity_delta_AUD_MWh": 15
+      },
+      "NPAT_impact_AUD000_qtr":       1040,
+      "NPAT_impact_AUD000_full_year":  4160,
+      "AISC_change_AUD_oz":           -9
+    },
+    {
+      "name": "Energy Transition Pressure",
+      "description": "Rising electricity, carbon cost uplift, stable commodities",
+      "assumptions": {
+        "gold_delta_AUD_oz": 0,
+        "copper_delta_USD_t": 0,
+        "audusd_delta": 0,
+        "diesel_delta_AUD_L": 0.15,
+        "electricity_delta_AUD_MWh": 30
+      },
+      "NPAT_impact_AUD000_qtr":       -2950,
+      "NPAT_impact_AUD000_full_year": -11800,
+      "AISC_change_AUD_oz":           38
+    }
+  ]
+}

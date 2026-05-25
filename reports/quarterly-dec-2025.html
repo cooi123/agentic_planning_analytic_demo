@@ -1,0 +1,448 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ironfield Resources — December Quarter 2025 Activities Report</title>
+  <style>
+    :root {
+      --brand: #1a3a5c;
+      --brand-mid: #2e5984;
+      --gold: #b8892e;
+      --text: #1a1a1a;
+      --muted: #4a5568;
+      --line: #d1d5db;
+      --bg: #f9fafb;
+      --surface: #ffffff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      font-size: 10pt;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.5;
+    }
+    .page {
+      max-width: 900px;
+      margin: 0 auto;
+      background: var(--surface);
+      padding: 48px 56px;
+    }
+    .doc-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding-bottom: 16px;
+      border-bottom: 3px solid var(--brand);
+      margin-bottom: 24px;
+    }
+    .asx-badge {
+      font-size: 9pt;
+      font-weight: 700;
+      color: var(--brand);
+      letter-spacing: 0.05em;
+      border: 2px solid var(--brand);
+      border-radius: 4px;
+      padding: 3px 8px;
+      display: inline-block;
+      margin-bottom: 6px;
+    }
+    .company-name {
+      font-size: 18pt;
+      font-weight: 700;
+      color: var(--brand);
+      line-height: 1.1;
+    }
+    .company-sub { font-size: 9pt; color: var(--muted); margin-top: 4px; }
+    .doc-date { text-align: right; font-size: 9pt; color: var(--muted); }
+    .report-banner {
+      background: linear-gradient(120deg, var(--brand), var(--brand-mid));
+      color: #fff;
+      padding: 14px 20px;
+      border-radius: 6px;
+      margin-bottom: 24px;
+    }
+    .report-banner h1 { font-size: 13pt; font-weight: 700; letter-spacing: 0.01em; }
+    .report-banner p { font-size: 9pt; color: #c8d9ea; margin-top: 4px; }
+    .highlights {
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 16px 20px;
+      margin-bottom: 24px;
+      background: #f0f5fb;
+    }
+    .highlights h2 {
+      font-size: 10pt; font-weight: 700; color: var(--brand);
+      text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px;
+    }
+    .highlights ul { padding-left: 18px; }
+    .highlights li { font-size: 9.5pt; line-height: 1.55; margin-bottom: 5px; }
+    .highlights li strong { color: var(--brand); }
+    h2.section {
+      font-size: 11pt; font-weight: 700; color: var(--brand);
+      border-bottom: 2px solid var(--gold); padding-bottom: 4px;
+      margin: 24px 0 12px; text-transform: uppercase; letter-spacing: 0.05em;
+    }
+    h3.sub { font-size: 10pt; font-weight: 700; color: var(--brand); margin: 14px 0 6px; }
+    p.body { font-size: 9.5pt; color: var(--text); line-height: 1.6; margin-bottom: 8px; }
+    .tbl-wrap {
+      border: 1px solid var(--line); border-radius: 6px;
+      overflow: hidden; margin-bottom: 16px;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 9pt; }
+    thead tr { background: var(--brand); color: #fff; }
+    thead th { padding: 8px 10px; text-align: left; font-weight: 600; white-space: nowrap; }
+    thead th.r { text-align: right; }
+    tbody tr:nth-child(even) { background: #f4f7fb; }
+    tbody tr:hover { background: #e8f0f9; }
+    tbody td { padding: 7px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+    tbody tr:last-child td { border-bottom: none; }
+    td.r { text-align: right; }
+    td.total { font-weight: 700; color: var(--brand); }
+    .section-row td {
+      background: #e6eef5 !important; font-weight: 700; color: var(--brand);
+      font-size: 8.5pt; text-transform: uppercase; letter-spacing: 0.04em;
+    }
+    .quote-box {
+      border-left: 4px solid var(--gold); padding: 12px 16px;
+      background: #fffbf0; margin: 16px 0; border-radius: 0 6px 6px 0;
+    }
+    .quote-box p { font-size: 9.5pt; font-style: italic; color: var(--text); line-height: 1.6; margin-bottom: 6px; }
+    .quote-box cite { font-size: 8.5pt; font-weight: 700; color: var(--brand); font-style: normal; }
+    .kpi-row {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px;
+    }
+    .kpi-card {
+      background: var(--brand); color: #fff; border-radius: 8px; padding: 14px 12px; text-align: center;
+    }
+    .kpi-card .val { font-size: 15pt; font-weight: 700; line-height: 1; margin-bottom: 4px; }
+    .kpi-card .lbl { font-size: 7.5pt; color: #b8cfe0; text-transform: uppercase; letter-spacing: 0.05em; }
+    .callout {
+      background: #e8f5ee; border: 1px solid #5a9e78; border-radius: 6px;
+      padding: 12px 16px; margin-bottom: 16px;
+    }
+    .callout p { font-size: 9.5pt; color: #1a4a2e; line-height: 1.55; }
+    .callout strong { color: #0e3a22; }
+    .doc-footer {
+      margin-top: 36px; padding-top: 16px; border-top: 1px solid var(--line);
+      font-size: 8pt; color: var(--muted);
+    }
+    @media print {
+      body { background: #fff; }
+      .page { max-width: 100%; padding: 24px; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Header -->
+  <div class="doc-header">
+    <div>
+      <div class="company-name">Ironfield Resources Limited</div>
+      <div class="company-sub">Murchison Province, Western Australia</div>
+    </div>
+    <div class="doc-date">
+      28 January 2026<br>
+      <strong>Market Announcement</strong>
+    </div>
+  </div>
+
+  <!-- Banner -->
+  <div class="report-banner">
+    <h1>Quarterly Activities Report — December Quarter 2025</h1>
+    <p>Three months ended 31 December 2025 &nbsp;|&nbsp; Kalgara Gold-Copper Mine, Murchison Province WA</p>
+  </div>
+
+  <!-- KPIs -->
+  <div class="kpi-row">
+    <div class="kpi-card">
+      <div class="val">44,273oz</div>
+      <div class="lbl">Gold Produced</div>
+    </div>
+    <div class="kpi-card">
+      <div class="val">A$2,296/oz</div>
+      <div class="lbl">AISC</div>
+    </div>
+    <div class="kpi-card">
+      <div class="val">A$178m</div>
+      <div class="lbl">Operating Cash Flow</div>
+    </div>
+    <div class="kpi-card">
+      <div class="val">A$422m</div>
+      <div class="lbl">Closing Cash</div>
+    </div>
+  </div>
+
+  <!-- Highlights -->
+  <div class="highlights">
+    <h2>Highlights</h2>
+    <ul>
+      <li><strong>Operations:</strong> Record quarterly gold production of <strong>44,273oz Au</strong> and <strong>1,763t Cu</strong> at an AISC of <strong>A$2,296/oz Au</strong> — the lowest quarterly AISC in the Company's history. Gold recovery of 87.5% maintained.</li>
+      <li><strong>Safety:</strong> One lost time injury occurred during the quarter, resulting in a 12-month moving average LTIFR of 0.3. Total Recordable Injury Frequency Rate (TRIFR) improved to 4.4.</li>
+      <li><strong>Financial:</strong> Sales of 38,400oz Au at an average realised price of A$6,208/oz and 1,642t Cu at A$14,280/t, generating net revenue of A$246.8 million. Cash flow from operations of A$178.3 million with a cash build of A$112.6 million, closing at <strong>A$421.8 million</strong>, debt free.</li>
+      <li><strong>FY26 Guidance:</strong> Based on H1 performance of 83,417oz at A$2,341/oz AISC, full-year production is expected to trend towards the <strong>upper end</strong> of guidance (130,000–155,000oz) and AISC towards the <strong>lower end</strong> (A$2,200–A$2,600/oz).</li>
+      <li><strong>Growth — Creston FS:</strong> Creston Feasibility Study results announced 3 October 2025. Post-tax NPV<sub>5%</sub> of A$1.42 billion, IRR of 24.2% and 12-year mine life confirmed. Creston is Australia's fifth-largest undeveloped underground gold reserve.</li>
+      <li><strong>Creston Development:</strong> A$18.2 million invested in Creston early works during the quarter. Decline tunnelling advanced a further 372m (cumulative 712m). FID targeted H1 FY27, subject to environmental approvals (EPA outcome targeted H2 FY26).</li>
+      <li><strong>Resource Development:</strong> 54,204 metres of resource development drilling completed in the quarter from 10 active rigs. Lower Kalgara Underground project delivered the highest grade intercept to date: <strong>48.6m @ 6.2g/t Au &amp; 0.38% Cu</strong> from 412m (drill hole LKU4450092).</li>
+    </ul>
+  </div>
+
+  <!-- MD Quote -->
+  <div class="quote-box">
+    <p>"The December quarter was a landmark period for Ridgecrest, delivering a record 44,273 ounces of gold at an AISC of A$2,296 — our lowest ever — while generating A$178 million in operating cash flow and building our cash balance to A$422 million. At the same time, we achieved a transformational milestone with the Creston Feasibility Study confirming a world-class underground gold-copper project with a post-tax IRR of 24% and NPV of A$1.4 billion. Creston's development is expected to be fully funded from our cash reserves together with the A$150 million committed debt facility, and we look forward to taking a Final Investment Decision in the first half of FY27."</p>
+    <cite>— Thomas Hargreaves, Managing Director, Ironfield Resources Limited</cite>
+  </div>
+
+  <!-- Operations -->
+  <h2 class="section">Operations</h2>
+  <p class="body">Ironfield Resources Limited is pleased to report operating (unaudited) results for the three months ended 31 December 2025 (December quarter). FY26 H1 production totals are shown for reference.</p>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Operations</th>
+          <th>Unit</th>
+          <th class="r">Dec Q 2025</th>
+          <th class="r">Sep Q 2025</th>
+          <th class="r">Jun Q 2025</th>
+          <th class="r">Mar Q 2025</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="section-row"><td colspan="6">Mill Production</td></tr>
+        <tr><td>Ore milled</td><td>kt</td><td class="r">2,480</td><td class="r">2,340</td><td class="r">2,280</td><td class="r">2,190</td></tr>
+        <tr><td>Head grade — Au</td><td>g/t Au</td><td class="r">0.64</td><td class="r">0.60</td><td class="r">0.61</td><td class="r">0.63</td></tr>
+        <tr><td>Head grade — Cu</td><td>% Cu</td><td class="r">0.09%</td><td class="r">0.08%</td><td class="r">0.07%</td><td class="r">0.08%</td></tr>
+        <tr><td>Recovery — Au</td><td>%</td><td class="r">87.5%</td><td class="r">87.0%</td><td class="r">86.4%</td><td class="r">85.8%</td></tr>
+        <tr><td>Recovery — Cu</td><td>%</td><td class="r">79.2%</td><td class="r">78.8%</td><td class="r">77.6%</td><td class="r">78.2%</td></tr>
+        <tr class="section-row"><td colspan="6">Metal Produced</td></tr>
+        <tr><td>Gold produced</td><td>oz</td><td class="r total">44,273</td><td class="r">39,144</td><td class="r">38,009</td><td class="r">37,284</td></tr>
+        <tr><td>Copper produced</td><td>t</td><td class="r total">1,763</td><td class="r">1,274</td><td class="r">1,206</td><td class="r">1,188</td></tr>
+        <tr class="section-row"><td colspan="6">Sales</td></tr>
+        <tr><td>Gold sold</td><td>oz</td><td class="r">38,400</td><td class="r">38,400</td><td class="r">37,800</td><td class="r">36,900</td></tr>
+        <tr><td>Copper sold</td><td>t</td><td class="r">1,642</td><td class="r">1,635</td><td class="r">1,198</td><td class="r">1,192</td></tr>
+        <tr><td>Avg realised gold price</td><td>A$/oz</td><td class="r">6,208</td><td class="r">5,292</td><td class="r">4,976</td><td class="r">4,624</td></tr>
+        <tr><td>Avg realised copper price</td><td>A$/t</td><td class="r">14,280</td><td class="r">12,450</td><td class="r">12,180</td><td class="r">11,920</td></tr>
+        <tr><td>Net revenue — Au</td><td>A$m</td><td class="r">238.4</td><td class="r">203.2</td><td class="r">188.1</td><td class="r">170.6</td></tr>
+        <tr><td>Net revenue — Cu</td><td>A$m</td><td class="r">8.4 ¹</td><td class="r">17.5</td><td class="r">12.5</td><td class="r">12.2</td></tr>
+        <tr><td class="total">Total net revenue</td><td>A$m</td><td class="r total">246.8</td><td class="r total">220.7</td><td class="r total">200.6</td><td class="r total">182.8</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="body" style="font-size:8pt;color:var(--muted)">¹ December quarter copper net revenue reflects a recognised shipment timing difference; a concentrate shipment of 842t Cu and 16,204oz Au commenced loading in December 2025 but completed in January 2026. Cash of A$22.4 million was received in December 2025; revenue will be recognised in the March 2026 quarter. Refer to 'Financial Overview' section.</p>
+
+  <!-- Costs table -->
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Costs</th>
+          <th>Unit</th>
+          <th class="r">Dec Q 2025</th>
+          <th class="r">Sep Q 2025</th>
+          <th class="r">Jun Q 2025</th>
+          <th class="r">Mar Q 2025</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Mining</td><td>A$m</td><td class="r">38.4</td><td class="r">32.8</td><td class="r">30.4</td><td class="r">28.6</td></tr>
+        <tr><td>Processing</td><td>A$m</td><td class="r">45.2</td><td class="r">42.4</td><td class="r">40.8</td><td class="r">38.4</td></tr>
+        <tr><td>Site services</td><td>A$m</td><td class="r">12.1</td><td class="r">11.4</td><td class="r">10.8</td><td class="r">10.2</td></tr>
+        <tr><td>TC/RC and freight</td><td>A$m</td><td class="r">3.6</td><td class="r">3.2</td><td class="r">2.8</td><td class="r">2.6</td></tr>
+        <tr><td>Royalties</td><td>A$m</td><td class="r">8.6</td><td class="r">7.4</td><td class="r">6.8</td><td class="r">6.2</td></tr>
+        <tr><td>Sustaining capex</td><td>A$m</td><td class="r">12.3</td><td class="r">10.3</td><td class="r">11.8</td><td class="r">12.4</td></tr>
+        <tr><td>Rehabilitation</td><td>A$m</td><td class="r">0.8</td><td class="r">0.6</td><td class="r">0.8</td><td class="r">0.4</td></tr>
+        <tr><td>By-product credits (Cu)</td><td>A$m</td><td class="r">(16.2)</td><td class="r">(10.7)</td><td class="r">(9.8)</td><td class="r">(9.4)</td></tr>
+        <tr><td class="total">AISC</td><td>A$m</td><td class="r total">104.8</td><td class="r total">97.4</td><td class="r total">93.6</td><td class="r total">89.4</td></tr>
+        <tr><td class="total">AISC/oz Au produced</td><td>A$/oz</td><td class="r total">2,296 ²</td><td class="r total">2,392</td><td class="r total">2,462</td><td class="r total">2,398</td></tr>
+        <tr><td>Growth capex</td><td>A$m</td><td class="r">42.8</td><td class="r">39.6</td><td class="r">35.2</td><td class="r">22.4</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="body" style="font-size:8pt;color:var(--muted)">² AISC is stated per ounce of gold produced, net of by-product copper credits. AISC excludes inventory movements related to stockpile utilisation (net credit of A$3.8 million for the quarter).</p>
+
+  <!-- Mining -->
+  <h2 class="section">Mining</h2>
+  <h3 class="sub">Open Pit</h3>
+  <p class="body">Open pit ore mined during the December quarter was from West Pit Stage 4 and North Pit Stage 1 (refer Figure 1), totalling 2.09Mt at 0.62g/t Au and 0.08% Cu. Dump leach ore mined was 0.38Mt.</p>
+  <p class="body">Total material mined (TMM) was 6.18Mt, including approximately 3.71Mt of waste — the fourth consecutive quarter of TMM growth, reflecting a 17% increase over the September quarter. North Pit Stage 2 waste stripping continued, with 3.4Mt of waste mined cumulatively to 31 December 2025. The overall North Pit Stage 2 design strip ratio of approximately 1.4 positions it as baseload ore feed from FY28.</p>
+  <p class="body">The open pit fleet renewal program delivered the first three of a planned eight Caterpillar 789 dump truck rebuilds during the quarter. Orders for two additional Liebherr T 284 haul trucks were placed and are expected to deliver in Q2 FY27, further supporting open pit productivity growth.</p>
+  <p class="body">Improved grade control via RC drilling continued to be rolled out across West Pit Stage 4. Open pit grades reconciled in line with expectations for the second consecutive quarter.</p>
+
+  <h3 class="sub">Underground</h3>
+  <p class="body">Ore mined from the Lower Kalgara Underground (LKU) was predominantly from C-Lode, Eastern Corridor and the newly developed Kylo target, totalling 0.26Mt at 1.74g/t Au and 0.62% Cu. Underground development metres totalled 1,382m for the quarter, with 792m of growth capital development extending the C-Lode system north and targeting the high-grade Kylo extension.</p>
+
+  <!-- Processing -->
+  <h2 class="section">Processing</h2>
+  <p class="body">The December quarter delivered processed tonnes of 2.48Mt with average head grade of 0.64g/t Au and 0.09% Cu, the highest quarterly throughput and head grade in Ridgecrest's operating history. Gold recovery of 87.5% and copper recovery of 79.2% were maintained. Gold production of 44,273oz represented a 13% increase on the September quarter.</p>
+  <p class="body">A scheduled 36-hour maintenance shutdown was completed in November 2025. Processing of West Pit Stage 4 material, which has a higher clay content requiring increased reagent usage, was partially offset by improved mill throughput. Mill availability was 92.4% for the quarter.</p>
+  <p class="body">The TSF6 Stage 2 lift construction commenced during the quarter and is tracking on schedule, providing tailings capacity through to Q2 FY28. TSF6 Stage 3 is planned to commence in FY27.</p>
+
+  <!-- Stockpiles -->
+  <h2 class="section">Stockpiles</h2>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Stockpiles (estimated)</th>
+          <th>Unit</th>
+          <th class="r">Dec Q 2025</th>
+          <th class="r">Sep Q 2025</th>
+          <th class="r">Jun Q 2025</th>
+          <th class="r">Mar Q 2025</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="section-row"><td colspan="6">Run-of-Mine (ROM) Stockpile</td></tr>
+        <tr><td>Ore</td><td>Mt</td><td class="r">1.4</td><td class="r">2.1</td><td class="r">2.8</td><td class="r">3.4</td></tr>
+        <tr><td>Average grade — Au</td><td>g/t Au</td><td class="r">0.64</td><td class="r">0.62</td><td class="r">0.60</td><td class="r">0.61</td></tr>
+        <tr><td>Average grade — Cu</td><td>% Cu</td><td class="r">0.09</td><td class="r">0.08</td><td class="r">0.07</td><td class="r">0.07</td></tr>
+        <tr><td>Contained metal — Au</td><td>koz</td><td class="r">29</td><td class="r">42</td><td class="r">54</td><td class="r">67</td></tr>
+        <tr><td>Contained metal — Cu</td><td>kt</td><td class="r">1.3</td><td class="r">1.7</td><td class="r">2.0</td><td class="r">2.4</td></tr>
+        <tr class="section-row"><td colspan="6">Low-Grade Stockpile</td></tr>
+        <tr><td>Ore</td><td>Mt</td><td class="r">8.6</td><td class="r">8.4</td><td class="r">8.4</td><td class="r">8.3</td></tr>
+        <tr><td>Average grade — Au</td><td>g/t Au</td><td class="r">0.28</td><td class="r">0.28</td><td class="r">0.28</td><td class="r">0.28</td></tr>
+        <tr><td>Contained metal — Au</td><td>koz</td><td class="r">77</td><td class="r">76</td><td class="r">76</td><td class="r">75</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="body">Closing ROM stockpile grade increased relative to the September quarter due to a higher proportion of underground ore. A greater proportion of West Pit Stage 4 ex-pit low-grade ore is now being fed directly to the plant rather than stockpiled, reducing rehandling costs and ROM stockpile drawdown.</p>
+
+  <!-- Growth -->
+  <h2 class="section">Growth</h2>
+  <p class="body">A total of A$42.8 million was invested in growth capital during the December quarter, comprising:</p>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Growth Capital</th>
+          <th>Description</th>
+          <th class="r">Dec Q 2025 (A$m)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Kalgara — TSF6 Stage 2 construction</td><td>Tailings storage lift (commencement)</td><td class="r">8.6</td></tr>
+        <tr><td>Kalgara — North Pit Stage 2 pre-strip</td><td>Continued waste stripping for FY28 access</td><td class="r">8.8</td></tr>
+        <tr><td>Kalgara — LKU growth development</td><td>C-Lode North and Kylo target development</td><td class="r">7.2</td></tr>
+        <tr><td>Creston — Decline tunnelling &amp; early works</td><td>372m advance (cumulative 712m); boxcut civil works; blind bore procurement</td><td class="r">18.2</td></tr>
+        <tr><td class="total">Total growth capital</td><td></td><td class="r total">42.8</td></tr>
+        <tr><td>Resource development (capitalised)</td><td>54,204m resource drilling, 10 rigs</td><td class="r">8.8</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Resource Development -->
+  <h2 class="section">Resource Development</h2>
+  <p class="body">A total of 54,204 metres of resource development drilling was completed during the December quarter from 10 active drill rigs, consistent with the September quarter (53,543 metres). The FY26 annual program of 220,000 metres remains on track, with 107,747 metres completed in H1 FY26.</p>
+
+  <h3 class="sub">Lower Kalgara Underground (LKU)</h3>
+  <p class="body">LKU resource growth drilling delivered the highest grade intercepts to date during the December quarter, with exceptional results including:</p>
+  <ul style="padding-left:20px;margin-bottom:10px;">
+    <li class="body"><strong>48.6m @ 6.2g/t Au &amp; 0.38% Cu</strong> (302gm Au) from 412m (LKU4450092)</li>
+    <li class="body"><strong>24.2m @ 8.8g/t Au &amp; 0.14% Cu</strong> (213gm Au) from 468m (LKU4450092)</li>
+    <li class="body"><strong>42.4m @ 2.6g/t Au &amp; 0.34% Cu</strong> (110gm Au) from 284m (LKU4450094)</li>
+    <li class="body"><strong>38.8m @ 3.1g/t Au &amp; 0.28% Cu</strong> (120gm Au) from 318m (LKU4450086)</li>
+  </ul>
+  <p class="body">A maiden Mineral Resource Estimate for the LKU western extension is targeted in the March 2026 quarter. A third drill rig has been allocated to the LKU for the remainder of FY26.</p>
+
+  <h3 class="sub">West Pit Open Pit Extension</h3>
+  <p class="body">Stage 4 Extension drilling was completed during the period, with drill capacity shifting to the southern Stage 3 Extension which remains a priority target for Q3 FY26. Results support multi-year extension of open pit mine life beyond FY27.</p>
+
+  <!-- Creston Project -->
+  <h2 class="section">Creston Underground Project</h2>
+
+  <h3 class="sub">Feasibility Study Results</h3>
+  <div class="callout">
+    <p>The Creston Feasibility Study (FS) was completed and announced on <strong>3 October 2025</strong>, confirming the pathway to a world-class, long-life, lowest quartile cost Australian gold-copper mine leveraging existing Kalgara infrastructure.</p>
+  </div>
+  <p class="body">Key highlights of the FS:</p>
+  <ul style="padding-left:20px;margin-bottom:10px;">
+    <li class="body"><strong>Undiscounted free cash flow</strong> of A$3.8 billion pre-tax and A$2.6 billion post-tax at base case metal prices (A$4,500/oz long-term gold)</li>
+    <li class="body"><strong>NPV<sub>5%</sub></strong> of A$2.0 billion pre-tax and <strong>A$1.42 billion post-tax</strong> at base case pricing; NPV<sub>5%</sub> increases to A$3.4 billion pre-tax and A$2.4 billion post-tax at spot gold (A$6,250/oz)</li>
+    <li class="body"><strong>IRR post-tax of 24.2%</strong> at A$4,500/oz gold (34.8% at A$6,250/oz)</li>
+    <li class="body"><strong>Life-of-Mine Plan:</strong> 12.8Mt mined at 3.1g/t Au &amp; 0.28% Cu for 1.27Moz gold and 36kt copper contained</li>
+    <li class="body"><strong>First gold expected ~2.5 years</strong> from Final Investment Decision (FID), targeted H1 FY27</li>
+    <li class="body"><strong>Pre-production capital expenditure of A$420 million</strong> (including 10% contingency and 3% growth allowance)</li>
+    <li class="body"><strong>Steady-state production</strong> of 120,000oz Au and 4kt Cu per annum at AISC of A$1,580/oz</li>
+    <li class="body">Initial mine life of <strong>12 years</strong>; ore reserve of 12.8Mt at 3.1g/t Au &amp; 0.28% Cu (1.27Moz Au, 36kt Cu)</li>
+    <li class="body">Creston is <strong>Australia's fifth-largest undeveloped underground gold reserve</strong></li>
+  </ul>
+
+  <h3 class="sub">Permitting &amp; Approvals</h3>
+  <p class="body">EPA assessment of the Environmental Impact Statement (EIS) submitted in September 2025 is ongoing. EPA approval is targeted in H2 FY26 and is required prior to FID. Commonwealth EPBC Act assessment is progressing in parallel.</p>
+
+  <h3 class="sub">Early Works</h3>
+  <p class="body">Decline tunnelling advanced 372m during the December quarter, for a cumulative 712m. Reinforced concrete arch sections and footings delivery commenced, with portal installation ongoing. Preliminary works for blind bores progressed with drill cutter head fabrication completed. A$18.2 million of early works were invested during the quarter, funding critical path activities ahead of FID.</p>
+
+  <!-- Corporate -->
+  <h2 class="section">Corporate</h2>
+
+  <h3 class="sub">Capital Adequacy &amp; Financing</h3>
+  <p class="body">Ridgecrest closed the December quarter with A$421.8 million in cash, debt free. The A$150 million committed corporate debt facility (ANZ, CBA, Westpac) entered into in September 2025 remains available but undrawn, providing additional liquidity for Creston construction alongside Ridgecrest's substantial cash reserves. The A$30 million working capital facility (ANZ/CBA) remains undrawn and available to 30 June 2026.</p>
+  <p class="body">Ridgecrest expects Creston's development to be fully funded from cash together with the A$150 million binding debt commitment, without the need for equity issuance.</p>
+
+  <h3 class="sub">Hedging — Gold Put Options</h3>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Quarter End Date</th>
+          <th class="r">Gold Volumes (oz)</th>
+          <th class="r">Strike Price (A$/oz)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>31-Mar-2026</td><td class="r">15,000</td><td class="r">4,200</td></tr>
+        <tr><td>30-Jun-2026</td><td class="r">15,000</td><td class="r">4,200</td></tr>
+        <tr><td>30-Sep-2026</td><td class="r">15,000</td><td class="r">4,200</td></tr>
+        <tr><td>31-Dec-2026</td><td class="r">14,998</td><td class="r">4,200</td></tr>
+        <tr><td>31-Mar-2027</td><td class="r">15,000</td><td class="r">4,800</td></tr>
+        <tr><td>30-Jun-2027</td><td class="r">15,000</td><td class="r">5,000</td></tr>
+        <tr><td class="total">Total</td><td class="r total">89,998</td><td class="r total">4,433 (wtd avg)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Financial Overview -->
+  <h2 class="section">Financial Overview</h2>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Cash Flow Summary</th>
+          <th>Unit</th>
+          <th class="r">Dec Q 2025</th>
+          <th class="r">Sep Q 2025</th>
+          <th class="r">H1 FY26 Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Cash — opening balance</td><td>A$m</td><td class="r">309.2</td><td class="r">228.6</td><td class="r">228.6</td></tr>
+        <tr><td>Cash flow from operations</td><td>A$m</td><td class="r">178.3</td><td class="r">139.9</td><td class="r">318.2</td></tr>
+        <tr><td>Sustaining capex</td><td>A$m</td><td class="r">(12.3)</td><td class="r">(10.3)</td><td class="r">(22.6)</td></tr>
+        <tr><td>Growth capex (Kalgara)</td><td>A$m</td><td class="r">(24.6)</td><td class="r">(19.6)</td><td class="r">(44.2)</td></tr>
+        <tr><td>Growth capex (Creston)</td><td>A$m</td><td class="r">(18.2)</td><td class="r">(20.0)</td><td class="r">(38.2)</td></tr>
+        <tr><td>Resource development (cap.)</td><td>A$m</td><td class="r">(8.8)</td><td class="r">(7.4)</td><td class="r">(16.2)</td></tr>
+        <tr><td>Financing and other</td><td>A$m</td><td class="r">(1.8)</td><td class="r">(2.0)</td><td class="r">(3.8)</td></tr>
+        <tr><td class="total">Net cash increase</td><td>A$m</td><td class="r total">112.6</td><td class="r total">80.6</td><td class="r total">193.2</td></tr>
+        <tr><td class="total">Cash — closing balance</td><td>A$m</td><td class="r total">421.8</td><td class="r total">309.2</td><td class="r total">421.8</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="body">Operating cash flow of A$178.3 million for the December quarter includes A$22.4 million received for a copper-gold concentrate shipment that commenced loading in December 2025 but completed in January 2026. Revenue for this shipment will be recognised in the March 2026 quarter; accordingly, a contract liability has been recognised at 31 December 2025.</p>
+
+  <!-- About -->
+  <h2 class="section">About Ironfield Resources</h2>
+  <p class="body">Ironfield Resources Limited (ASX: RMC) is an Australian gold and copper producer operating the <strong>Kalgara Gold-Copper Mine</strong> in the Murchison Province of Western Australia. Kalgara is a fly-in fly-out mine with open pit and underground operations, a 10Mtpa processing plant producing gold doré and copper-gold concentrate, and an established workforce and infrastructure base. Ridgecrest also owns 100% of the <strong>Creston Underground Project</strong>, a high-grade gold-copper development 25km south of Kalgara, underpinned by a Feasibility Study confirming post-tax NPV<sub>5%</sub> of A$1.42 billion and IRR of 24.2%.</p>
+
+  <div class="doc-footer">
+    <p>This report is authorised for release by the Board of Ironfield Resources Limited. This document contains forward-looking statements. Actual results may differ materially from those expressed or implied. The Creston FS Mine Plan is a production target underpinned by approximately 78% Probable Ore Reserves, 4% Indicated Mineral Resources, 12% Inferred Mineral Resources and 6% Exploration Target (on a contained gold basis over the LOM). Refer to ASX announcement dated 3 October 2025 for cautionary statements and key assumptions.</p>
+    <p style="margin-top:8px;"><strong>Contact:</strong> Investor Relations &nbsp;|&nbsp; Ironfield Resources Limited, Level 8, 140 St Georges Terrace, Perth WA 6000</p>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,87 @@
+{
+  "dimension": "ProductionKPI",
+  "description": "Operational KPIs across mining, processing, and cost performance",
+  "cube": "ProductionKPI",
+  "measures": [
+    {
+      "group": "Mining — Open Pit",
+      "members": [
+        { "name": "OP Total Material Mined",    "unit": "kt",     "driver": "Blast, load, haul — open pit" },
+        { "name": "OP Ore Mined (Mill Feed)",   "unit": "kt",     "driver": "Mill-feed grade ore mined from open pit" },
+        { "name": "OP Au Grade Mined",          "unit": "g/t Au", "driver": "Grade of mill-feed ore; from grade control model" },
+        { "name": "OP Cu Grade Mined",          "unit": "% Cu",   "driver": "Copper grade of open pit mill feed" },
+        { "name": "OP Strip Ratio",             "unit": "waste:ore", "driver": "Total waste / total mill-feed ore" },
+        { "name": "OP Au Contained",            "unit": "oz",     "driver": "Ore Mined × Grade / 31.1035" },
+        { "name": "OP Dump Leach Ore",          "unit": "kt",     "driver": "Lower-grade ore directed to dump leach pad" }
+      ]
+    },
+    {
+      "group": "Mining — Underground",
+      "members": [
+        { "name": "UG Ore Mined",               "unit": "kt",     "driver": "Long-hole open stoping + paste fill; LKU and C-Lode" },
+        { "name": "UG Au Grade Mined",          "unit": "g/t Au", "driver": "High-grade underground ore grade" },
+        { "name": "UG Cu Grade Mined",          "unit": "% Cu",   "driver": "Copper grade of underground ore" },
+        { "name": "UG Au Contained",            "unit": "oz",     "driver": "UG Ore × Grade / 31.1035" },
+        { "name": "UG Development Metres",      "unit": "m",      "driver": "Total development advance; growth + sustaining" }
+      ]
+    },
+    {
+      "group": "Processing",
+      "members": [
+        { "name": "Ore Milled",                 "unit": "kt",     "driver": "Total feed to processing plant" },
+        { "name": "Mill Head Grade — Au",       "unit": "g/t Au", "driver": "Blended mill feed grade" },
+        { "name": "Mill Head Grade — Cu",       "unit": "% Cu",   "driver": "Blended copper head grade" },
+        { "name": "Au Recovery",                "unit": "%",      "driver": "Gold recovery through CIL circuit" },
+        { "name": "Cu Recovery",                "unit": "%",      "driver": "Copper recovery to concentrate" },
+        { "name": "Mill Availability",          "unit": "%",      "driver": "Operating hours / scheduled hours" },
+        { "name": "Throughput Rate",            "unit": "ktpa",   "driver": "Annualised throughput rate" }
+      ]
+    },
+    {
+      "group": "Production Output",
+      "members": [
+        { "name": "Gold Produced",              "unit": "oz Au",  "driver": "Milled + dump leach gold recovery" },
+        { "name": "Copper Produced",            "unit": "t Cu",   "driver": "Copper to concentrate (payable)" },
+        { "name": "Gold Sold",                  "unit": "oz Au",  "driver": "Doré + concentrate gold dispatched to market" },
+        { "name": "Copper Sold",                "unit": "t Cu",   "driver": "Copper concentrate shipped" }
+      ]
+    },
+    {
+      "group": "Commodity Prices",
+      "members": [
+        { "name": "Avg Realised Gold Price",    "unit": "A$/oz",  "driver": "Spot less hedge cost; put option premiums" },
+        { "name": "Avg Realised Copper Price",  "unit": "A$/t",   "driver": "LME copper net of TC/RC and payability" },
+        { "name": "Gold Price Assumption",      "unit": "A$/oz",  "driver": "Budget/forecast price assumption" },
+        { "name": "AUD/USD Rate",               "unit": "rate",   "driver": "Exchange rate assumption for pricing" }
+      ]
+    },
+    {
+      "group": "Costs",
+      "members": [
+        { "name": "AISC",                       "unit": "A$/oz Au","driver": "All-In Sustaining Cost net of Cu by-product credits" },
+        { "name": "C1 Cash Cost",               "unit": "A$/oz Au","driver": "Direct cash costs net of by-product credits" },
+        { "name": "By-Product Cu Credit",       "unit": "A$m",    "driver": "Copper revenue credited against gold AISC" },
+        { "name": "Mining Unit Cost",           "unit": "A$/t moved","driver": "Mining cost per total tonne mined (ore+waste)" },
+        { "name": "Processing Unit Cost",       "unit": "A$/t milled","driver": "Processing cost per tonne of ore milled" }
+      ]
+    },
+    {
+      "group": "Revenue",
+      "members": [
+        { "name": "Gold Revenue",               "unit": "A$m",    "driver": "Gold Sold × Avg Realised Price" },
+        { "name": "Copper Revenue",             "unit": "A$m",    "driver": "Copper Sold × Net Realised Price" },
+        { "name": "Total Net Revenue",          "unit": "A$m",    "driver": "Gold + Copper + Silver + Freight" }
+      ]
+    },
+    {
+      "group": "Stockpiles",
+      "members": [
+        { "name": "ROM Stockpile Volume",       "unit": "Mt",     "driver": "Run-of-mine ore stockpile (est.)" },
+        { "name": "ROM Stockpile Grade — Au",   "unit": "g/t Au", "driver": "Average grade of ROM stockpile" },
+        { "name": "ROM Au Contained",           "unit": "koz",    "driver": "ROM Stockpile × Grade / 31.1035" },
+        { "name": "Low Grade Stockpile",        "unit": "Mt",     "driver": "Low-grade material stockpiled for future processing" }
+      ]
+    }
+  ],
+  "sources": ["Open Pit", "Underground", "Total Kalgara"]
+}

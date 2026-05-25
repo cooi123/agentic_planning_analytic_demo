@@ -1,0 +1,640 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ironfield Resources — Half Year Financial Report Dec 2025</title>
+  <style>
+    :root {
+      --brand: #1a3a5c;
+      --brand-mid: #2e5984;
+      --gold: #b8892e;
+      --text: #1a1a1a;
+      --muted: #4a5568;
+      --line: #d1d5db;
+      --bg: #f9fafb;
+      --surface: #ffffff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      font-size: 10pt;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.5;
+    }
+    .page {
+      max-width: 900px;
+      margin: 0 auto;
+      background: var(--surface);
+      padding: 48px 56px;
+    }
+    .doc-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding-bottom: 16px;
+      border-bottom: 3px solid var(--brand);
+      margin-bottom: 24px;
+    }
+    .company-name { font-size: 18pt; font-weight: 700; color: var(--brand); line-height: 1.1; }
+    .company-sub { font-size: 9pt; color: var(--muted); margin-top: 4px; }
+    .doc-date { text-align: right; font-size: 9pt; color: var(--muted); }
+    .report-banner {
+      background: linear-gradient(120deg, var(--brand), var(--brand-mid));
+      color: #fff;
+      padding: 16px 20px;
+      border-radius: 6px;
+      margin-bottom: 24px;
+    }
+    .report-banner h1 { font-size: 14pt; font-weight: 700; }
+    .report-banner p { font-size: 9pt; color: #c8d9ea; margin-top: 4px; }
+    /* Appendix 4D summary box */
+    .a4d-box {
+      border: 1.5px solid var(--brand);
+      border-radius: 6px;
+      margin-bottom: 28px;
+      overflow: hidden;
+    }
+    .a4d-box .a4d-head {
+      background: var(--brand);
+      color: #fff;
+      padding: 10px 14px;
+      font-size: 10pt;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .a4d-body { padding: 0; }
+    .a4d-row {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr 1fr 1fr 1fr;
+      border-bottom: 1px solid var(--line);
+      font-size: 9pt;
+    }
+    .a4d-row:last-child { border-bottom: none; }
+    .a4d-row.head {
+      background: #eef2f8;
+      font-weight: 700;
+      color: var(--brand);
+      font-size: 8.5pt;
+    }
+    .a4d-cell {
+      padding: 7px 10px;
+      border-right: 1px solid var(--line);
+    }
+    .a4d-cell:last-child { border-right: none; }
+    .a4d-cell.r { text-align: right; }
+    .a4d-cell.pos { color: #1a6e38; font-weight: 700; }
+    /* Section headings */
+    h2.section {
+      font-size: 11pt; font-weight: 700; color: var(--brand);
+      border-bottom: 2px solid var(--gold); padding-bottom: 4px;
+      margin: 28px 0 12px; text-transform: uppercase; letter-spacing: 0.05em;
+    }
+    h3.sub { font-size: 10pt; font-weight: 700; color: var(--brand); margin: 14px 0 6px; }
+    h4.sub2 { font-size: 9.5pt; font-weight: 700; color: var(--brand-mid); margin: 10px 0 4px; }
+    p.body { font-size: 9.5pt; color: var(--text); line-height: 1.6; margin-bottom: 8px; }
+    /* Tables */
+    .tbl-wrap {
+      border: 1px solid var(--line); border-radius: 6px;
+      overflow: hidden; margin-bottom: 16px;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 9pt; }
+    thead tr { background: var(--brand); color: #fff; }
+    thead th { padding: 8px 10px; text-align: left; font-weight: 600; white-space: nowrap; }
+    thead th.r { text-align: right; }
+    tbody tr:nth-child(even) { background: #f4f7fb; }
+    tbody td { padding: 7px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+    tbody tr:last-child td { border-bottom: none; }
+    td.r { text-align: right; }
+    td.total { font-weight: 700; color: var(--brand); }
+    td.subtotal { font-weight: 600; color: var(--brand); background: #eef2f8 !important; }
+    .section-row td {
+      background: #e6eef5 !important; font-weight: 700; color: var(--brand);
+      font-size: 8.5pt; text-transform: uppercase; letter-spacing: 0.04em;
+    }
+    /* Financial statements */
+    .fs-header {
+      background: var(--brand);
+      color: #fff;
+      padding: 10px 14px;
+      font-size: 10pt;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      margin-bottom: 0;
+      border-radius: 6px 6px 0 0;
+    }
+    .fs-wrap {
+      border: 1.5px solid var(--brand);
+      border-radius: 6px;
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+    .fs-wrap table thead tr { background: #2e5984; }
+    .fs-wrap table tfoot tr { background: var(--brand); color: #fff; font-weight: 700; }
+    .fs-wrap table tfoot td { padding: 8px 10px; }
+    /* Callout */
+    .callout {
+      background: #e8f5ee; border: 1px solid #5a9e78; border-radius: 6px;
+      padding: 12px 16px; margin-bottom: 16px;
+    }
+    .callout p { font-size: 9.5pt; color: #1a4a2e; line-height: 1.55; }
+    /* Page break hint for print */
+    .page-break { page-break-before: always; }
+    /* Footer */
+    .doc-footer {
+      margin-top: 36px; padding-top: 16px; border-top: 1px solid var(--line);
+      font-size: 8pt; color: var(--muted);
+    }
+    @media print {
+      body { background: #fff; }
+      .page { max-width: 100%; padding: 24px; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Header -->
+  <div class="doc-header">
+    <div>
+      <div class="company-name">Ironfield Resources Limited</div>
+      <div class="company-sub">Murchison Province, Western Australia &nbsp;|&nbsp; Gold &amp; Copper</div>
+    </div>
+    <div class="doc-date">
+      23 February 2026<br>
+      <strong>Half Year Financial Report</strong>
+    </div>
+  </div>
+
+  <!-- Banner -->
+  <div class="report-banner">
+    <h1>Appendix 4D — Half Year Report</h1>
+    <p>For the period ended 31 December 2025 &nbsp;|&nbsp; Ironfield Resources Limited</p>
+  </div>
+
+  <!-- Company Details -->
+  <p class="body"><strong>Name of entity:</strong> Ironfield Resources Limited</p>
+  <p class="body"><strong>Current reporting period:</strong> 6 months ended 31 December 2025</p>
+  <p class="body"><strong>Previous corresponding period:</strong> 6 months ended 31 December 2024</p>
+
+  <!-- Appendix 4D results table -->
+  <div class="a4d-box">
+    <div class="a4d-head">Results for Announcement to the Market</div>
+    <div class="a4d-body">
+      <div class="a4d-row head">
+        <div class="a4d-cell">Key Information</div>
+        <div class="a4d-cell r">31 Dec 2025 (A$'000)</div>
+        <div class="a4d-cell r">31 Dec 2024 (A$'000)</div>
+        <div class="a4d-cell r">Change (A$'000)</div>
+        <div class="a4d-cell r">Change (%)</div>
+      </div>
+      <div class="a4d-row">
+        <div class="a4d-cell">Revenue from ordinary activities</div>
+        <div class="a4d-cell r">460,842</div>
+        <div class="a4d-cell r">14,286</div>
+        <div class="a4d-cell r pos">446,556</div>
+        <div class="a4d-cell r pos">3,126%</div>
+      </div>
+      <div class="a4d-row">
+        <div class="a4d-cell">Profit from ordinary activities after tax</div>
+        <div class="a4d-cell r">155,506</div>
+        <div class="a4d-cell r">28,412</div>
+        <div class="a4d-cell r pos">127,094</div>
+        <div class="a4d-cell r pos">447%</div>
+      </div>
+      <div class="a4d-row">
+        <div class="a4d-cell">Net profit attributable to members</div>
+        <div class="a4d-cell r">155,506</div>
+        <div class="a4d-cell r">28,412</div>
+        <div class="a4d-cell r pos">127,094</div>
+        <div class="a4d-cell r pos">447%</div>
+      </div>
+      <div class="a4d-row">
+        <div class="a4d-cell">Net tangible assets per share</div>
+        <div class="a4d-cell r">A$1.56</div>
+        <div class="a4d-cell r">A$1.24</div>
+        <div class="a4d-cell r pos">A$0.32</div>
+        <div class="a4d-cell r pos">26%</div>
+      </div>
+    </div>
+  </div>
+
+  <p class="body"><strong>Dividends:</strong> No dividends have been paid or declared during or since the end of the half year ended 31 December 2025.</p>
+
+  <!-- Directors' Report -->
+  <h2 class="section">Directors' Report</h2>
+  <p class="body">The Directors present their report on the consolidated entity (referred to as the Group) consisting of Ironfield Resources Limited (the Company or Ironfield), and the entities it controlled, for the half year ended 31 December 2025.</p>
+
+  <h3 class="sub">Directors</h3>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Name</th><th>Title</th></tr></thead>
+      <tbody>
+        <tr><td>Margaret Ellison</td><td>Non-Executive Chair</td></tr>
+        <tr><td>Thomas Hargreaves</td><td>Managing Director</td></tr>
+        <tr><td>David Nguyen</td><td>Non-Executive Director</td></tr>
+        <tr><td>Sarah Paxton</td><td>Non-Executive Director</td></tr>
+        <tr><td>Robert Carmichael</td><td>Non-Executive Director</td></tr>
+        <tr><td>Fiona Whitmore</td><td>Non-Executive Director</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="sub">Principal Activities</h3>
+  <p class="body">The Group's principal activities during the period consisted of mining, production and sale of gold and copper at the Kalgara Gold-Copper Mine, development of the Creston Underground Project, and the exploration and evaluation of mineral tenements in Western Australia.</p>
+
+  <!-- Mine Operations Review -->
+  <h2 class="section">Mine Operation Review — H1 FY26</h2>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Operational Metric</th>
+          <th>Unit</th>
+          <th class="r">H1 FY26</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Total Material Milled</td><td>kt</td><td class="r">4,820</td></tr>
+        <tr><td>Head Grade — Au</td><td>g/t Au</td><td class="r">0.62</td></tr>
+        <tr><td>Head Grade — Cu</td><td>% Cu</td><td class="r">0.09%</td></tr>
+        <tr><td>Recovery — Au</td><td>%</td><td class="r">87.2%</td></tr>
+        <tr><td>Recovery — Cu</td><td>%</td><td class="r">78.8%</td></tr>
+        <tr><td>Gold Produced</td><td>oz</td><td class="r total">83,417</td></tr>
+        <tr><td>Copper Produced</td><td>t</td><td class="r total">3,037</td></tr>
+        <tr><td>Gold Sold</td><td>oz</td><td class="r">76,800</td></tr>
+        <tr><td>Average Realised Gold Price</td><td>A$/oz</td><td class="r">5,742</td></tr>
+        <tr><td>All-In Sustaining Cost</td><td>A$/oz</td><td class="r total">2,341</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="body" style="font-size:8.5pt;color:var(--muted)">Comparatives have not been provided in the table above as the prior period included only approximately one month of ownership of Kalgara by Ironfield, following completion of the acquisition on 6 December 2024.</p>
+
+  <p class="body">Ironfield owns 100% of the Kalgara Gold-Copper Mine, located in the Murchison Province of Western Australia, approximately 650km north of Perth. The mine is a fly-in fly-out operation with both open pit and underground mining, an established workforce and significant infrastructure. Gold and copper are produced by a 10Mtpa processing plant, which produces gold doré and a copper-gold concentrate.</p>
+
+  <p class="body">During H1 FY26, the Kalgara Mine produced <strong>83,417 ounces of gold</strong> and <strong>3,037 tonnes of copper</strong> at an All-In Sustaining Cost of <strong>A$2,341/oz</strong>. A key driver of the period's performance was consistently high recovery rates of approximately 87.2% for gold and 78.8% for copper. Total material mined increased by 28% relative to the previous six-month period driven by focus on increasing open pit productivities and opening up North Pit Stage 2 working areas.</p>
+
+  <p class="body">One lost time injury occurred during the period, resulting in a 12-month moving average LTIFR of 0.3. The TRIFR improved to 4.4 at 31 December 2025.</p>
+
+  <h3 class="sub">Mining</h3>
+  <p class="body">Open pit ore mined during H1 FY26 was from West Pit Stage 4 and North Pit Stage 1, totalling 3.87Mt at 0.61g/t Au and 0.08% Cu. Dump leach ore mined was 0.64Mt. Total material mined was 11.42Mt including approximately 6.89Mt of waste, a 28% increase on the previous six-month period. North Pit Stage 2 waste stripping commenced during the period, with 3.4Mt of waste mined cumulatively to December 2025; this cutback is expected to provide baseload ore feed from FY28.</p>
+  <p class="body">Lower Kalgara Underground (LKU) ore mined was predominantly from C-Lode and the Eastern Corridor, totalling 0.47Mt at 1.78g/t Au and 0.60% Cu. Underground development metres totalled 2,628m for the period, including 1,480m of growth capital development. Exceptional LKU drilling results, including 48.6m @ 6.2g/t Au from 412m, indicate ongoing system growth and support a maiden Mineral Resource Estimate targeted in the March 2026 quarter.</p>
+
+  <h3 class="sub">Processing</h3>
+  <p class="body">H1 FY26 delivered processed tonnes of 4.82Mt with average head grade of 0.62g/t Au and 0.09% Cu. Recoveries of approximately 87.2% for gold and 78.8% for copper were maintained throughout the period. Gold production of 83,417oz represented a strong H1 performance and positions Ironfield to trend towards the upper end of FY26 guidance of 130,000–155,000oz Au.</p>
+
+  <!-- Creston Review -->
+  <h2 class="section">Creston Underground Project — Development Review</h2>
+  <p class="body">The Creston Underground Project is Ironfield's high-grade gold-copper development project located 25km south of the Kalgara processing plant. The project represents the next major growth driver for Ironfield and is expected to leverage existing Kalgara processing infrastructure.</p>
+
+  <h3 class="sub">Feasibility Study</h3>
+  <p class="body">The Creston Feasibility Study (FS) was completed and announced on 3 October 2025, confirming the pathway to a world-class, long-life, lowest quartile cost Australian gold-copper mine. Key highlights of the FS:</p>
+  <ul style="padding-left:20px;margin-bottom:12px;">
+    <li class="body">Undiscounted free cash flow of A$3.8 billion pre-tax and A$2.6 billion post-tax at base case (A$4,500/oz long-term gold)</li>
+    <li class="body">NPV<sub>5%</sub> of A$2.0 billion pre-tax and <strong>A$1.42 billion post-tax</strong>; increases to A$3.4bn pre-tax at spot gold (A$6,250/oz)</li>
+    <li class="body">Post-tax IRR of <strong>24.2%</strong> at A$4,500/oz gold (34.8% at A$6,250/oz)</li>
+    <li class="body">Life-of-Mine Plan: 12.8Mt mined at 3.1g/t Au &amp; 0.28% Cu for 1.27Moz gold and 36kt copper</li>
+    <li class="body">Steady-state annual production of 120,000oz Au at AISC of A$1,580/oz</li>
+    <li class="body">Pre-production capex of <strong>A$420 million</strong> (including 10% contingency)</li>
+    <li class="body">Initial mine life of <strong>12 years</strong>; Updated Ore Reserve of 12.8Mt at 3.1g/t Au &amp; 0.28% Cu (1.27Moz Au, 36kt Cu)</li>
+  </ul>
+
+  <h3 class="sub">Early Works &amp; Permitting</h3>
+  <p class="body">Decline access tunnelling reached 712m cumulative by 31 December 2025. Environmental Impact Statement (EIS) submitted to the WA EPA in September 2025; EPA approval is targeted in H2 FY26 and is a prerequisite for the Final Investment Decision (FID), which is targeted in H1 FY27. A total of A$38.2 million was invested in Creston during H1 FY26 (FS completion and early works).</p>
+
+  <!-- Corporate -->
+  <h2 class="section">Corporate</h2>
+  <h3 class="sub">Debt Facilities</h3>
+  <p class="body">In September 2025, Ironfield entered into a binding commitment letter for <strong>A$150 million in corporate debt facilities</strong> with ANZ, CBA and Westpac, comprising two A$75 million revolving credit facilities. Financial close is subject to conditions precedent including finalisation of a facility agreement. A A$30 million working capital facility (ANZ/CBA) was extended to 30 June 2026 and remains undrawn.</p>
+
+  <h3 class="sub">Hedging</h3>
+  <p class="body">Ironfield maintains full upside exposure to the gold price with downside protection through gold put options:</p>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Quarter End Date</th>
+          <th class="r">Gold Volumes (oz)</th>
+          <th class="r">Strike Price (A$/oz)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>31-Mar-2026</td><td class="r">15,000</td><td class="r">4,200</td></tr>
+        <tr><td>30-Jun-2026</td><td class="r">15,000</td><td class="r">4,200</td></tr>
+        <tr><td>30-Sep-2026</td><td class="r">15,000</td><td class="r">4,200</td></tr>
+        <tr><td>31-Dec-2026</td><td class="r">14,998</td><td class="r">4,200</td></tr>
+        <tr><td>31-Mar-2027</td><td class="r">15,000</td><td class="r">4,800</td></tr>
+        <tr><td>30-Jun-2027</td><td class="r">15,000</td><td class="r">5,000</td></tr>
+        <tr><td class="total">Total</td><td class="r total">89,998</td><td class="r total">A$4,433 (wtd avg)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Financial Overview -->
+  <h2 class="section">Financial Overview</h2>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Financial Summary</th>
+          <th>Unit</th>
+          <th class="r">H1 FY26 (Dec 2025)</th>
+          <th class="r">H1 FY25 (Dec 2024)</th>
+          <th class="r">Change</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Revenue</td><td>A$m</td><td class="r">460.8</td><td class="r">14.3</td><td class="r">446.5</td></tr>
+        <tr><td>EBITDA</td><td>A$m</td><td class="r">254.2</td><td class="r">8.4</td><td class="r">245.8</td></tr>
+        <tr><td>Underlying EBITDA</td><td>A$m</td><td class="r">256.6</td><td class="r">8.4</td><td class="r">248.2</td></tr>
+        <tr><td>Net profit after tax</td><td>A$m</td><td class="r">155.5</td><td class="r">28.4</td><td class="r">127.1</td></tr>
+        <tr><td>Cash flow from operations</td><td>A$m</td><td class="r">318.2</td><td class="r">(8.2)</td><td class="r">326.4</td></tr>
+        <tr><td>Cash flow from investing</td><td>A$m</td><td class="r">(119.1)</td><td class="r">(218.4)</td><td class="r">99.3</td></tr>
+        <tr><td>Kalgara sustaining capital</td><td>A$m</td><td class="r">22.6</td><td class="r">3.2</td><td class="r">19.4</td></tr>
+        <tr><td>Growth capital (Kalgara)</td><td>A$m</td><td class="r">44.2</td><td class="r">1.2</td><td class="r">43.0</td></tr>
+        <tr><td>Growth capital (Creston)</td><td>A$m</td><td class="r">38.2</td><td class="r">0.8</td><td class="r">37.4</td></tr>
+        <tr><td>Resource development (cap.)</td><td>A$m</td><td class="r">16.2</td><td class="r">3.6</td><td class="r">12.6</td></tr>
+        <tr><td>Free cash flow</td><td>A$m</td><td class="r total">193.2</td><td class="r total">(226.6)</td><td class="r total">419.8</td></tr>
+        <tr><td>Basic earnings per share</td><td>cents</td><td class="r">28.9</td><td class="r">6.8</td><td class="r">22.1</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- EBITDA Reconciliation -->
+  <h3 class="sub">NPAT to EBITDA Reconciliation</h3>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Unit</th>
+          <th class="r">H1 FY26</th>
+          <th class="r">H1 FY25</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Net profit after tax</td><td>A$m</td><td class="r">155.5</td><td class="r">28.4</td></tr>
+        <tr><td>Income tax expense / (benefit)</td><td>A$m</td><td class="r">66.6</td><td class="r">(36.8)</td></tr>
+        <tr><td>Depreciation and amortisation</td><td>A$m</td><td class="r">20.6</td><td class="r">4.2</td></tr>
+        <tr><td>Corporate and other expenses</td><td>A$m</td><td class="r">9.2</td><td class="r">11.2</td></tr>
+        <tr><td>Exploration expense</td><td>A$m</td><td class="r">5.4</td><td class="r">3.8</td></tr>
+        <tr><td>Other (losses) / gains</td><td>A$m</td><td class="r">1.8</td><td class="r">—</td></tr>
+        <tr><td>Net finance (income) / costs</td><td>A$m</td><td class="r">(4.9)</td><td class="r">(3.4)</td></tr>
+        <tr><td class="total">EBITDA</td><td>A$m</td><td class="r total">254.2</td><td class="r total">7.4</td></tr>
+        <tr><td>Hedge (gains) / losses</td><td>A$m</td><td class="r">2.4</td><td class="r">—</td></tr>
+        <tr><td class="total">Underlying EBITDA</td><td>A$m</td><td class="r total">256.6</td><td class="r total">8.4</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="sub">Financial Performance</h3>
+  <p class="body">The Group recorded a net profit after tax of <strong>A$155.5 million</strong> for H1 FY26 (31 December 2025), compared to A$28.4 million in H1 FY25. The prior period included only approximately one month of Kalgara ownership, following completion of the acquisition on 6 December 2024.</p>
+  <p class="body">Revenue for H1 FY26 was A$460.8 million, primarily comprising gold revenue of A$440.4 million and copper revenue of A$20.4 million. Gold and copper sales benefited from full upside exposure to strong commodity prices. Sales comprised 76,800 ounces of gold at an average realised price of A$5,742/oz, and 3,277 tonnes of copper at an average realised copper price of A$13,362/t.</p>
+  <p class="body">Cost of sales was A$228.6 million, comprising site production costs of A$152.4 million, employee benefits of A$28.2 million, royalties of A$16.8 million, selling costs of A$6.4 million, changes in inventories of A$(8.6) million, and depreciation and amortisation of A$33.4 million. Processing costs were higher in the December quarter than the September quarter, due primarily to planned mill maintenance costs and increased reagent usage from processing higher-clay Stage 4 ore.</p>
+
+  <h3 class="sub">Balance Sheet</h3>
+  <p class="body">Total assets increased by A$268.5 million to A$1,380.5 million at 31 December 2025 (30 June 2025: A$1,112.0 million), primarily reflecting the cash build from Kalgara operations and capital expenditure on Kalgara and Creston. Total liabilities increased by A$114.6 million to A$545.0 million, including a A$22.4 million contract liability recognised for a copper-gold concentrate shipment where cash was received in December 2025 but loading completed in January 2026.</p>
+
+  <h3 class="sub">Cash Flow</h3>
+  <p class="body">Group cash flow from operations for H1 FY26 was A$318.2 million, with a cash build of A$193.2 million delivering a closing cash balance at 31 December 2025 of <strong>A$421.8 million</strong> (30 June 2025: A$228.6 million), debt free. The Group invested A$119.1 million in capital expenditure and resource development, comprising A$22.6 million sustaining capital, A$44.2 million Kalgara growth capital, A$38.2 million Creston early works, and A$16.2 million resource development. Financing outflows of A$5.9 million related primarily to lease principal repayments.</p>
+
+  <!-- Page break for financial statements -->
+  <div class="page-break"></div>
+  <h2 class="section">Half Year Financial Report</h2>
+  <p class="body" style="color:var(--muted)">For the six months ended 31 December 2025</p>
+
+  <!-- Income Statement -->
+  <div class="fs-wrap">
+    <div class="fs-header">Consolidated Statement of Comprehensive Income — For the Half Year Ended 31 December 2025</div>
+    <table>
+      <thead>
+        <tr>
+          <th style="width:55%">Item</th>
+          <th>Note</th>
+          <th class="r">31 Dec 2025 (A$'000)</th>
+          <th class="r">31 Dec 2024 (A$'000)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Revenue</td><td>4</td><td class="r">460,842</td><td class="r">14,286</td></tr>
+        <tr><td>Cost of sales</td><td>5</td><td class="r">(228,618)</td><td class="r">(9,124)</td></tr>
+        <tr><td class="subtotal">Gross profit</td><td></td><td class="r subtotal">232,224</td><td class="r subtotal">5,162</td></tr>
+        <tr><td>Other income / (expenses)</td><td>7</td><td class="r">(1,842)</td><td class="r">—</td></tr>
+        <tr><td>Exploration and evaluation expenses</td><td></td><td class="r">(5,418)</td><td class="r">(3,824)</td></tr>
+        <tr><td>Corporate and other expenses</td><td>6</td><td class="r">(9,164)</td><td class="r">(11,246)</td></tr>
+        <tr><td class="subtotal">Profit / (loss) before finance items and tax</td><td></td><td class="r subtotal">215,800</td><td class="r subtotal">(9,908)</td></tr>
+        <tr><td>Finance income</td><td>15</td><td class="r">8,382</td><td class="r">15,264</td></tr>
+        <tr><td>Finance costs</td><td>15</td><td class="r">(2,145)</td><td class="r">(682)</td></tr>
+        <tr><td class="subtotal">Profit / (loss) before tax</td><td></td><td class="r subtotal">222,037</td><td class="r subtotal">4,674</td></tr>
+        <tr><td>Income tax expense / (benefit)</td><td>8</td><td class="r">(66,531)</td><td class="r">23,738</td></tr>
+        <tr><td class="total">Profit / (loss) for the period</td><td></td><td class="r total">155,506</td><td class="r total">28,412</td></tr>
+        <tr class="section-row"><td colspan="4">Other Comprehensive Income</td></tr>
+        <tr><td>Exchange differences on translation</td><td></td><td class="r">(428)</td><td class="r">4,816</td></tr>
+        <tr><td>Changes in fair value of cash flow hedges (net of tax)</td><td></td><td class="r">1,846</td><td class="r">(2,908)</td></tr>
+        <tr><td class="total">Total comprehensive income attributable to equity holders</td><td></td><td class="r total">156,924</td><td class="r total">30,320</td></tr>
+        <tr class="section-row"><td colspan="4">Earnings Per Share</td></tr>
+        <tr><td>Basic earnings per share (cents)</td><td>9</td><td class="r">28.9</td><td class="r">6.8</td></tr>
+        <tr><td>Diluted earnings per share (cents)</td><td>9</td><td class="r">28.3</td><td class="r">6.7</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Balance Sheet -->
+  <div class="fs-wrap">
+    <div class="fs-header">Consolidated Statement of Financial Position — As at 31 December 2025</div>
+    <table>
+      <thead>
+        <tr>
+          <th style="width:55%">Item</th>
+          <th>Note</th>
+          <th class="r">31 Dec 2025 (A$'000)</th>
+          <th class="r">30 Jun 2025 (A$'000)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="section-row"><td colspan="4">Assets</td></tr>
+        <tr><td>Cash and cash equivalents</td><td></td><td class="r">421,826</td><td class="r">228,648</td></tr>
+        <tr><td>Trade and other receivables</td><td></td><td class="r">28,412</td><td class="r">18,246</td></tr>
+        <tr><td>Inventories</td><td>10</td><td class="r">118,642</td><td class="r">108,184</td></tr>
+        <tr><td>Derivative financial instruments</td><td></td><td class="r">284</td><td class="r">516</td></tr>
+        <tr><td>Other current assets</td><td></td><td class="r">8,182</td><td class="r">6,406</td></tr>
+        <tr><td class="subtotal">Total current assets</td><td></td><td class="r subtotal">577,346</td><td class="r subtotal">362,000</td></tr>
+        <tr><td>Exploration and evaluation assets</td><td></td><td class="r">98,412</td><td class="r">82,248</td></tr>
+        <tr><td>Property, plant and equipment</td><td>11</td><td class="r">648,216</td><td class="r">615,404</td></tr>
+        <tr><td>Financial assets at fair value</td><td></td><td class="r">18,426</td><td class="r">22,048</td></tr>
+        <tr><td>Other non-current assets</td><td></td><td class="r">38,100</td><td class="r">30,300</td></tr>
+        <tr><td class="subtotal">Total non-current assets</td><td></td><td class="r subtotal">803,154</td><td class="r subtotal">750,000</td></tr>
+        <tr><td class="total">Total assets</td><td></td><td class="r total">1,380,500</td><td class="r total">1,112,000</td></tr>
+        <tr class="section-row"><td colspan="4">Liabilities</td></tr>
+        <tr><td>Trade and other payables</td><td>12</td><td class="r">78,314</td><td class="r">86,426</td></tr>
+        <tr><td>Contract liabilities</td><td>13</td><td class="r">22,418</td><td class="r">—</td></tr>
+        <tr><td>Lease liabilities (current)</td><td></td><td class="r">8,412</td><td class="r">7,624</td></tr>
+        <tr><td>Current tax liabilities</td><td></td><td class="r">89,424</td><td class="r">36,812</td></tr>
+        <tr><td>Provisions (current)</td><td>14</td><td class="r">11,246</td><td class="r">8,914</td></tr>
+        <tr><td class="subtotal">Total current liabilities</td><td></td><td class="r subtotal">209,814</td><td class="r subtotal">139,776</td></tr>
+        <tr><td>Deferred contingent consideration</td><td></td><td class="r">119,826</td><td class="r">122,348</td></tr>
+        <tr><td>Deferred tax liabilities</td><td></td><td class="r">29,612</td><td class="r">22,416</td></tr>
+        <tr><td>Lease liabilities (non-current)</td><td></td><td class="r">5,214</td><td class="r">6,824</td></tr>
+        <tr><td>Provisions (non-current)</td><td>14</td><td class="r">180,534</td><td class="r">18,636</td></tr>
+        <tr><td class="subtotal">Total non-current liabilities</td><td></td><td class="r subtotal">335,186</td><td class="r subtotal">170,224</td></tr>
+        <tr><td class="total">Total liabilities</td><td></td><td class="r total">545,000</td><td class="r total">310,000</td></tr>
+        <tr><td class="total">Net assets</td><td></td><td class="r total">835,500</td><td class="r total">802,000</td></tr>
+        <tr class="section-row"><td colspan="4">Equity</td></tr>
+        <tr><td>Share capital</td><td>17</td><td class="r">534,416</td><td class="r">524,316</td></tr>
+        <tr><td>Other reserves</td><td></td><td class="r">(21,916)</td><td class="r">(9,616)</td></tr>
+        <tr><td>Retained earnings</td><td></td><td class="r">323,000</td><td class="r">287,300</td></tr>
+        <tr><td class="total">Total equity</td><td></td><td class="r total">835,500</td><td class="r total">802,000 ¹</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="body" style="font-size:8pt;color:var(--muted)">¹ Prior period equity restated to reflect finalisation of acquisition purchase price allocation. See Note 2.</p>
+
+  <!-- Cash Flow Statement -->
+  <div class="fs-wrap">
+    <div class="fs-header">Consolidated Statement of Cash Flows — For the Half Year Ended 31 December 2025</div>
+    <table>
+      <thead>
+        <tr>
+          <th style="width:55%">Item</th>
+          <th>Note</th>
+          <th class="r">31 Dec 2025 (A$'000)</th>
+          <th class="r">31 Dec 2024 (A$'000)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="section-row"><td colspan="4">Cash Flows from Operating Activities</td></tr>
+        <tr><td>Profit / (loss) before tax</td><td></td><td class="r">222,037</td><td class="r">4,674</td></tr>
+        <tr><td>Adjustments:</td><td></td><td></td><td></td></tr>
+        <tr><td style="padding-left:24px">Share-based payment expense</td><td></td><td class="r">5,284</td><td class="r">3,512</td></tr>
+        <tr><td style="padding-left:24px">Depreciation and amortisation</td><td>11</td><td class="r">38,416</td><td class="r">4,284</td></tr>
+        <tr><td style="padding-left:24px">Finance costs</td><td></td><td class="r">2,145</td><td class="r">682</td></tr>
+        <tr><td style="padding-left:24px">Finance income</td><td></td><td class="r">(8,382)</td><td class="r">(15,264)</td></tr>
+        <tr><td style="padding-left:24px">Other non-cash items</td><td></td><td class="r">6,014</td><td class="r">(148)</td></tr>
+        <tr><td>Movements in working capital:</td><td></td><td></td><td></td></tr>
+        <tr><td style="padding-left:24px">Trade and other receivables</td><td></td><td class="r">(10,166)</td><td class="r">(9,284)</td></tr>
+        <tr><td style="padding-left:24px">Inventories</td><td></td><td class="r">(4,462)</td><td class="r">(34,246)</td></tr>
+        <tr><td style="padding-left:24px">Trade and other payables</td><td></td><td class="r">336</td><td class="r">45,128</td></tr>
+        <tr><td style="padding-left:24px">Contract liabilities</td><td>13</td><td class="r">22,418</td><td class="r">—</td></tr>
+        <tr><td style="padding-left:24px">Provisions and other liabilities</td><td></td><td class="r">7,412</td><td class="r">8,216</td></tr>
+        <tr><td>Interest received</td><td></td><td class="r">9,282</td><td class="r">3,042</td></tr>
+        <tr><td>Purchase of gold put premiums</td><td></td><td class="r">(8,046)</td><td class="r">—</td></tr>
+        <tr><td class="subtotal">Net cash flows from operating activities</td><td></td><td class="r subtotal">282,288</td><td class="r subtotal">10,596</td></tr>
+        <tr class="section-row"><td colspan="4">Cash Flows from Investing Activities</td></tr>
+        <tr><td>Payments for mine development and fixed assets</td><td>11</td><td class="r">(96,616)</td><td class="r">(12,284)</td></tr>
+        <tr><td>Exploration and resource dev. (capitalised)</td><td></td><td class="r">(16,236)</td><td class="r">—</td></tr>
+        <tr><td>Stamp duty — Kalgara acquisition</td><td></td><td class="r">(6,248)</td><td class="r">—</td></tr>
+        <tr><td>Cash consideration — Kalgara acquisition</td><td></td><td class="r">—</td><td class="r">(206,116)</td></tr>
+        <tr><td class="subtotal">Net cash flows from investing activities</td><td></td><td class="r subtotal">(119,100)</td><td class="r subtotal">(218,400)</td></tr>
+        <tr class="section-row"><td colspan="4">Cash Flows from Financing Activities</td></tr>
+        <tr><td>Proceeds from issue of shares</td><td></td><td class="r">—</td><td class="r">412,648</td></tr>
+        <tr><td>Transaction costs from issue of shares</td><td></td><td class="r">—</td><td class="r">(11,416)</td></tr>
+        <tr><td>Repayment of lease principal</td><td></td><td class="r">(4,026)</td><td class="r">(1,512)</td></tr>
+        <tr><td>Interest paid</td><td></td><td class="r">(1,864)</td><td class="r">—</td></tr>
+        <tr><td class="subtotal">Net cash flows from financing activities</td><td></td><td class="r subtotal">(5,890)</td><td class="r subtotal">399,720</td></tr>
+        <tr><td class="total">Net increase in cash and cash equivalents</td><td></td><td class="r total">157,298</td><td class="r total">191,916</td></tr>
+        <tr><td>Cash at beginning of period</td><td></td><td class="r">228,648</td><td class="r">8,412</td></tr>
+        <tr><td>Effect of exchange rate changes on cash</td><td></td><td class="r">(2,120)</td><td class="r">18,246</td></tr>
+        <tr><td class="total">Cash at end of period</td><td></td><td class="r total">421,826 ²</td><td class="r total">118,574</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="body" style="font-size:8pt;color:var(--muted)">² Closing cash of A$421.8 million includes A$22.4 million received for a copper-gold concentrate shipment that commenced loading in December 2025 but completed in January 2026; revenue will be recognised in the March 2026 quarter.</p>
+
+  <!-- Selected Notes -->
+  <h2 class="section">Notes to the Financial Statements (Selected)</h2>
+
+  <h3 class="sub">Note 4 — Revenue</h3>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Revenue Breakdown</th>
+          <th class="r">31 Dec 2025 (A$'000)</th>
+          <th class="r">31 Dec 2024 (A$'000)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="section-row"><td colspan="3">Gold Revenue</td></tr>
+        <tr><td>Doré</td><td class="r">56,416</td><td class="r">14,264</td></tr>
+        <tr><td>Concentrate</td><td class="r">383,984</td><td class="r">—</td></tr>
+        <tr><td class="subtotal">Total gold revenue</td><td class="r subtotal">440,400</td><td class="r subtotal">14,264</td></tr>
+        <tr class="section-row"><td colspan="3">Copper Revenue</td></tr>
+        <tr><td>Concentrate</td><td class="r">23,816</td><td class="r">—</td></tr>
+        <tr><td>Treatment &amp; refining deductions</td><td class="r">(3,412)</td><td class="r">—</td></tr>
+        <tr><td class="subtotal">Total copper revenue</td><td class="r subtotal">20,404</td><td class="r subtotal">—</td></tr>
+        <tr><td>Silver (minor)</td><td class="r">2,214</td><td class="r">22</td></tr>
+        <tr><td>Freight services</td><td class="r">3,812</td><td class="r">—</td></tr>
+        <tr><td class="subtotal">Revenue from contracts with customers</td><td class="r subtotal">466,830</td><td class="r subtotal">14,286</td></tr>
+        <tr><td>Hedge (losses) / gains</td><td class="r">(5,988)</td><td class="r">—</td></tr>
+        <tr><td class="total">Total revenue</td><td class="r total">460,842</td><td class="r total">14,286</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="sub">Note 5 — Cost of Sales</h3>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Cost of Sales Breakdown</th>
+          <th class="r">31 Dec 2025 (A$'000)</th>
+          <th class="r">31 Dec 2024 (A$'000)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Site production costs</td><td class="r">152,416</td><td class="r">32,846</td></tr>
+        <tr><td>Employee benefit expenses</td><td class="r">28,214</td><td class="r">6,424</td></tr>
+        <tr><td>Royalties</td><td class="r">16,824</td><td class="r">186</td></tr>
+        <tr><td>Selling costs</td><td class="r">6,412</td><td class="r">72</td></tr>
+        <tr><td>Change in inventories</td><td class="r">(8,662)</td><td class="r">(34,820)</td></tr>
+        <tr><td>Depreciation and amortisation</td><td class="r">33,414</td><td class="r">4,416</td></tr>
+        <tr><td class="total">Total cost of sales</td><td class="r total">228,618</td><td class="r total">9,124</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="sub">Note 10 — Inventories</h3>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Inventories</th>
+          <th class="r">31 Dec 2025 (A$'000)</th>
+          <th class="r">30 Jun 2025 (A$'000)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="section-row"><td colspan="3">Current</td></tr>
+        <tr><td>Ore stockpiles</td><td class="r">34,416</td><td class="r">38,246</td></tr>
+        <tr><td>Gold in circuit</td><td class="r">12,814</td><td class="r">8,416</td></tr>
+        <tr><td>Finished goods</td><td class="r">32,214</td><td class="r">18,926</td></tr>
+        <tr><td>Consumable stores and spare parts</td><td class="r">39,198</td><td class="r">42,596</td></tr>
+        <tr><td class="total">Total current inventories</td><td class="r total">118,642</td><td class="r total">108,184</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Auditor Independence -->
+  <h2 class="section">Auditor's Independence Declaration</h2>
+  <p class="body">As lead auditor of Ironfield Resources Limited's financial report for the half-year ended 31 December 2025, I declare that to the best of my knowledge and belief there have been no contraventions of the auditor independence requirements of the Corporations Act 2001 in relation to the review of the financial report, and no contraventions of any applicable code of professional conduct.</p>
+  <p class="body"><strong>Jennifer Liu</strong> &nbsp;|&nbsp; Partner, PricewaterhouseCoopers &nbsp;|&nbsp; Perth, 23 February 2026</p>
+
+  <!-- Directors' Resolution -->
+  <h2 class="section">Directors' Resolution</h2>
+  <p class="body">This Directors' Report and the attached half year financial report is made in accordance with a resolution of the Board of Directors.</p>
+  <p class="body" style="margin-top:16px;">
+    <strong>Margaret Ellison</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>Thomas Hargreaves</strong><br>
+    Non-Executive Chair &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Managing Director<br>
+    23 February 2026
+  </p>
+
+  <div class="doc-footer">
+    <p>This half year financial report has been prepared in accordance with AASB 134 Interim Financial Reporting and the Corporations Act 2001. It has been reviewed by PricewaterhouseCoopers (unqualified review opinion). Amounts rounded to nearest A$1,000 under ASIC Corporations (Rounding in Financial/Directors' Reports) Instrument 2016/191.</p>
+    <p style="margin-top:8px;"><strong>Contact:</strong> Investor Relations &nbsp;|&nbsp; Ironfield Resources Limited, Level 8, 140 St Georges Terrace, Perth WA 6000</p>
+  </div>
+
+</div>
+</body>
+</html>

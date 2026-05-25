@@ -1,0 +1,391 @@
+Version,Year,Period,Source,KPI,Value,Unit
+Actual,FY26,FY26-Q1,Open Pit,OP Total Material Mined,8420,kt
+Actual,FY26,FY26-Q1,Open Pit,OP Ore Mined (Mill Feed),1820,kt
+Actual,FY26,FY26-Q1,Open Pit,OP Au Grade Mined,2.84,g/t Au
+Actual,FY26,FY26-Q1,Open Pit,OP Cu Grade Mined,0.18,% Cu
+Actual,FY26,FY26-Q1,Open Pit,OP Strip Ratio,3.63,waste:ore
+Actual,FY26,FY26-Q1,Open Pit,OP Au Contained,166340,oz
+Actual,FY26,FY26-Q1,Open Pit,OP Dump Leach Ore,210,kt
+Actual,FY26,FY26-Q1,Underground,UG Ore Mined,186,kt
+Actual,FY26,FY26-Q1,Underground,UG Au Grade Mined,6.42,g/t Au
+Actual,FY26,FY26-Q1,Underground,UG Cu Grade Mined,0.31,% Cu
+Actual,FY26,FY26-Q1,Underground,UG Au Contained,38384,oz
+Actual,FY26,FY26-Q1,Underground,UG Development Metres,1840,m
+Actual,FY26,FY26-Q1,Total Kalgara,Ore Milled,1980,kt
+Actual,FY26,FY26-Q1,Total Kalgara,Mill Head Grade — Au,3.24,g/t Au
+Actual,FY26,FY26-Q1,Total Kalgara,Mill Head Grade — Cu,0.19,% Cu
+Actual,FY26,FY26-Q1,Total Kalgara,Au Recovery,91.2,%
+Actual,FY26,FY26-Q1,Total Kalgara,Cu Recovery,88.4,%
+Actual,FY26,FY26-Q1,Total Kalgara,Mill Availability,91.8,%
+Actual,FY26,FY26-Q1,Total Kalgara,Throughput Rate,7920,ktpa
+Actual,FY26,FY26-Q1,Total Kalgara,Gold Produced,39144,oz Au
+Actual,FY26,FY26-Q1,Total Kalgara,Copper Produced,1680,t Cu
+Actual,FY26,FY26-Q1,Total Kalgara,Gold Sold,38400,oz Au
+Actual,FY26,FY26-Q1,Total Kalgara,Copper Sold,1590,t Cu
+Actual,FY26,FY26-Q1,Total Kalgara,Avg Realised Gold Price,5292,A$/oz
+Actual,FY26,FY26-Q1,Total Kalgara,Avg Realised Copper Price,11016,A$/t
+Actual,FY26,FY26-Q1,Total Kalgara,Gold Price Assumption,5200,A$/oz
+Actual,FY26,FY26-Q1,Total Kalgara,AUD/USD Rate,0.643,rate
+Actual,FY26,FY26-Q1,Total Kalgara,AISC,2392,A$/oz Au
+Actual,FY26,FY26-Q1,Total Kalgara,C1 Cash Cost,1814,A$/oz Au
+Actual,FY26,FY26-Q1,Total Kalgara,By-Product Cu Credit,17.5,A$m
+Actual,FY26,FY26-Q1,Total Kalgara,Mining Unit Cost,4.28,A$/t moved
+Actual,FY26,FY26-Q1,Total Kalgara,Processing Unit Cost,21.42,A$/t milled
+Actual,FY26,FY26-Q1,Total Kalgara,Gold Revenue,203.2,A$m
+Actual,FY26,FY26-Q1,Total Kalgara,Copper Revenue,17.5,A$m
+Actual,FY26,FY26-Q1,Total Kalgara,Total Net Revenue,221.3,A$m
+Actual,FY26,FY26-Q1,Total Kalgara,ROM Stockpile Volume,0.84,Mt
+Actual,FY26,FY26-Q1,Total Kalgara,ROM Stockpile Grade — Au,1.92,g/t Au
+Actual,FY26,FY26-Q1,Total Kalgara,ROM Au Contained,51.8,koz
+Actual,FY26,FY26-Q1,Total Kalgara,Low Grade Stockpile,1.24,Mt
+Actual,FY26,FY26-Q2,Open Pit,OP Total Material Mined,9840,kt
+Actual,FY26,FY26-Q2,Open Pit,OP Ore Mined (Mill Feed),2120,kt
+Actual,FY26,FY26-Q2,Open Pit,OP Au Grade Mined,2.96,g/t Au
+Actual,FY26,FY26-Q2,Open Pit,OP Cu Grade Mined,0.14,% Cu
+Actual,FY26,FY26-Q2,Open Pit,OP Strip Ratio,3.64,waste:ore
+Actual,FY26,FY26-Q2,Open Pit,OP Au Contained,201820,oz
+Actual,FY26,FY26-Q2,Open Pit,OP Dump Leach Ore,240,kt
+Actual,FY26,FY26-Q2,Underground,UG Ore Mined,202,kt
+Actual,FY26,FY26-Q2,Underground,UG Au Grade Mined,6.81,g/t Au
+Actual,FY26,FY26-Q2,Underground,UG Cu Grade Mined,0.28,% Cu
+Actual,FY26,FY26-Q2,Underground,UG Au Contained,44260,oz
+Actual,FY26,FY26-Q2,Underground,UG Development Metres,1960,m
+Actual,FY26,FY26-Q2,Total Kalgara,Ore Milled,2280,kt
+Actual,FY26,FY26-Q2,Total Kalgara,Mill Head Grade — Au,3.42,g/t Au
+Actual,FY26,FY26-Q2,Total Kalgara,Mill Head Grade — Cu,0.16,% Cu
+Actual,FY26,FY26-Q2,Total Kalgara,Au Recovery,92.1,%
+Actual,FY26,FY26-Q2,Total Kalgara,Cu Recovery,87.6,%
+Actual,FY26,FY26-Q2,Total Kalgara,Mill Availability,93.4,%
+Actual,FY26,FY26-Q2,Total Kalgara,Throughput Rate,9120,ktpa
+Actual,FY26,FY26-Q2,Total Kalgara,Gold Produced,44273,oz Au
+Actual,FY26,FY26-Q2,Total Kalgara,Copper Produced,1620,t Cu
+Actual,FY26,FY26-Q2,Total Kalgara,Gold Sold,43800,oz Au
+Actual,FY26,FY26-Q2,Total Kalgara,Copper Sold,780,t Cu
+Actual,FY26,FY26-Q2,Total Kalgara,Avg Realised Gold Price,5443,A$/oz
+Actual,FY26,FY26-Q2,Total Kalgara,Avg Realised Copper Price,10828,A$/t
+Actual,FY26,FY26-Q2,Total Kalgara,Gold Price Assumption,5350,A$/oz
+Actual,FY26,FY26-Q2,Total Kalgara,AUD/USD Rate,0.638,rate
+Actual,FY26,FY26-Q2,Total Kalgara,AISC,2296,A$/oz Au
+Actual,FY26,FY26-Q2,Total Kalgara,C1 Cash Cost,1742,A$/oz Au
+Actual,FY26,FY26-Q2,Total Kalgara,By-Product Cu Credit,8.4,A$m
+Actual,FY26,FY26-Q2,Total Kalgara,Mining Unit Cost,3.91,A$/t moved
+Actual,FY26,FY26-Q2,Total Kalgara,Processing Unit Cost,19.82,A$/t milled
+Actual,FY26,FY26-Q2,Total Kalgara,Gold Revenue,238.4,A$m
+Actual,FY26,FY26-Q2,Total Kalgara,Copper Revenue,8.4,A$m
+Actual,FY26,FY26-Q2,Total Kalgara,Total Net Revenue,247.7,A$m
+Actual,FY26,FY26-Q2,Total Kalgara,ROM Stockpile Volume,0.91,Mt
+Actual,FY26,FY26-Q2,Total Kalgara,ROM Stockpile Grade — Au,1.88,g/t Au
+Actual,FY26,FY26-Q2,Total Kalgara,ROM Au Contained,55.0,koz
+Actual,FY26,FY26-Q2,Total Kalgara,Low Grade Stockpile,1.31,Mt
+Latest Forecast,FY26,FY26-Q3,Open Pit,OP Total Material Mined,8800,kt
+Latest Forecast,FY26,FY26-Q3,Open Pit,OP Ore Mined (Mill Feed),1960,kt
+Latest Forecast,FY26,FY26-Q3,Open Pit,OP Au Grade Mined,2.78,g/t Au
+Latest Forecast,FY26,FY26-Q3,Open Pit,OP Cu Grade Mined,0.19,% Cu
+Latest Forecast,FY26,FY26-Q3,Open Pit,OP Strip Ratio,3.49,waste:ore
+Latest Forecast,FY26,FY26-Q3,Open Pit,OP Au Contained,175000,oz
+Latest Forecast,FY26,FY26-Q3,Open Pit,OP Dump Leach Ore,200,kt
+Latest Forecast,FY26,FY26-Q3,Underground,UG Ore Mined,195,kt
+Latest Forecast,FY26,FY26-Q3,Underground,UG Au Grade Mined,6.20,g/t Au
+Latest Forecast,FY26,FY26-Q3,Underground,UG Cu Grade Mined,0.30,% Cu
+Latest Forecast,FY26,FY26-Q3,Underground,UG Au Contained,38960,oz
+Latest Forecast,FY26,FY26-Q3,Underground,UG Development Metres,1900,m
+Latest Forecast,FY26,FY26-Q3,Total Kalgara,Ore Milled,2100,kt
+Latest Forecast,FY26,FY26-Q3,Total Kalgara,Mill Head Grade — Au,3.12,g/t Au
+Latest Forecast,FY26,FY26-Q3,Total Kalgara,Mill Head Grade — Cu,0.21,% Cu
+Latest Forecast,FY26,FY26-Q3,Total Kalgara,Au Recovery,91.5,%
+Latest Forecast,FY26,FY26-Q3,Total Kalgara,Cu Recovery,88.0,%
+Latest Forecast,FY26,FY26-Q3,Total Kalgara,Mill Availability,92.0,%
+Latest Forecast,FY26,FY26-Q3,Total Kalgara,Throughput Rate,8400,ktpa
+Latest Forecast,FY26,FY26-Q3,Total Kalgara,Gold Produced,38400,oz Au
+Latest Forecast,FY26,FY26-Q3,Total Kalgara,Copper Produced,1750,t Cu
+Latest Forecast,FY26,FY26-Q3,Total Kalgara,Gold Sold,38400,oz Au
+Latest Forecast,FY26,FY26-Q3,Total Kalgara,Copper Sold,1750,t Cu
+Latest Forecast,FY26,FY26-Q3,Total Kalgara,Avg Realised Gold Price,5573,A$/oz
+Latest Forecast,FY26,FY26-Q3,Total Kalgara,Avg Realised Copper Price,10629,A$/t
+Latest Forecast,FY26,FY26-Q3,Total Kalgara,Gold Price Assumption,5500,A$/oz
+Latest Forecast,FY26,FY26-Q3,Total Kalgara,AUD/USD Rate,0.635,rate
+Latest Forecast,FY26,FY26-Q3,Total Kalgara,AISC,2480,A$/oz Au
+Latest Forecast,FY26,FY26-Q3,Total Kalgara,C1 Cash Cost,1890,A$/oz Au
+Latest Forecast,FY26,FY26-Q3,Total Kalgara,By-Product Cu Credit,18.6,A$m
+Latest Forecast,FY26,FY26-Q3,Total Kalgara,Mining Unit Cost,4.09,A$/t moved
+Latest Forecast,FY26,FY26-Q3,Total Kalgara,Processing Unit Cost,20.48,A$/t milled
+Latest Forecast,FY26,FY26-Q3,Total Kalgara,Gold Revenue,214.0,A$m
+Latest Forecast,FY26,FY26-Q3,Total Kalgara,Copper Revenue,18.6,A$m
+Latest Forecast,FY26,FY26-Q3,Total Kalgara,Total Net Revenue,234.4,A$m
+Latest Forecast,FY26,FY26-Q3,Total Kalgara,ROM Stockpile Volume,0.88,Mt
+Latest Forecast,FY26,FY26-Q3,Total Kalgara,ROM Stockpile Grade — Au,1.85,g/t Au
+Latest Forecast,FY26,FY26-Q3,Total Kalgara,ROM Au Contained,52.3,koz
+Latest Forecast,FY26,FY26-Q3,Total Kalgara,Low Grade Stockpile,1.28,Mt
+Latest Forecast,FY26,FY26-Q4,Open Pit,OP Total Material Mined,8200,kt
+Latest Forecast,FY26,FY26-Q4,Open Pit,OP Ore Mined (Mill Feed),1880,kt
+Latest Forecast,FY26,FY26-Q4,Open Pit,OP Au Grade Mined,2.62,g/t Au
+Latest Forecast,FY26,FY26-Q4,Open Pit,OP Cu Grade Mined,0.20,% Cu
+Latest Forecast,FY26,FY26-Q4,Open Pit,OP Strip Ratio,3.36,waste:ore
+Latest Forecast,FY26,FY26-Q4,Open Pit,OP Au Contained,158500,oz
+Latest Forecast,FY26,FY26-Q4,Open Pit,OP Dump Leach Ore,190,kt
+Latest Forecast,FY26,FY26-Q4,Underground,UG Ore Mined,188,kt
+Latest Forecast,FY26,FY26-Q4,Underground,UG Au Grade Mined,6.05,g/t Au
+Latest Forecast,FY26,FY26-Q4,Underground,UG Cu Grade Mined,0.29,% Cu
+Latest Forecast,FY26,FY26-Q4,Underground,UG Au Contained,36590,oz
+Latest Forecast,FY26,FY26-Q4,Underground,UG Development Metres,1820,m
+Latest Forecast,FY26,FY26-Q4,Total Kalgara,Ore Milled,2020,kt
+Latest Forecast,FY26,FY26-Q4,Total Kalgara,Mill Head Grade — Au,2.96,g/t Au
+Latest Forecast,FY26,FY26-Q4,Total Kalgara,Mill Head Grade — Cu,0.20,% Cu
+Latest Forecast,FY26,FY26-Q4,Total Kalgara,Au Recovery,91.0,%
+Latest Forecast,FY26,FY26-Q4,Total Kalgara,Cu Recovery,87.8,%
+Latest Forecast,FY26,FY26-Q4,Total Kalgara,Mill Availability,91.5,%
+Latest Forecast,FY26,FY26-Q4,Total Kalgara,Throughput Rate,8080,ktpa
+Latest Forecast,FY26,FY26-Q4,Total Kalgara,Gold Produced,36200,oz Au
+Latest Forecast,FY26,FY26-Q4,Total Kalgara,Copper Produced,1700,t Cu
+Latest Forecast,FY26,FY26-Q4,Total Kalgara,Gold Sold,36200,oz Au
+Latest Forecast,FY26,FY26-Q4,Total Kalgara,Copper Sold,1700,t Cu
+Latest Forecast,FY26,FY26-Q4,Total Kalgara,Avg Realised Gold Price,5414,A$/oz
+Latest Forecast,FY26,FY26-Q4,Total Kalgara,Avg Realised Copper Price,10588,A$/t
+Latest Forecast,FY26,FY26-Q4,Total Kalgara,Gold Price Assumption,5400,A$/oz
+Latest Forecast,FY26,FY26-Q4,Total Kalgara,AUD/USD Rate,0.638,rate
+Latest Forecast,FY26,FY26-Q4,Total Kalgara,AISC,2540,A$/oz Au
+Latest Forecast,FY26,FY26-Q4,Total Kalgara,C1 Cash Cost,1940,A$/oz Au
+Latest Forecast,FY26,FY26-Q4,Total Kalgara,By-Product Cu Credit,18.0,A$m
+Latest Forecast,FY26,FY26-Q4,Total Kalgara,Mining Unit Cost,4.15,A$/t moved
+Latest Forecast,FY26,FY26-Q4,Total Kalgara,Processing Unit Cost,20.79,A$/t milled
+Latest Forecast,FY26,FY26-Q4,Total Kalgara,Gold Revenue,196.0,A$m
+Latest Forecast,FY26,FY26-Q4,Total Kalgara,Copper Revenue,18.0,A$m
+Latest Forecast,FY26,FY26-Q4,Total Kalgara,Total Net Revenue,215.6,A$m
+Latest Forecast,FY26,FY26-Q4,Total Kalgara,ROM Stockpile Volume,0.86,Mt
+Latest Forecast,FY26,FY26-Q4,Total Kalgara,ROM Stockpile Grade — Au,1.82,g/t Au
+Latest Forecast,FY26,FY26-Q4,Total Kalgara,ROM Au Contained,50.3,koz
+Latest Forecast,FY26,FY26-Q4,Total Kalgara,Low Grade Stockpile,1.26,Mt
+Budget,FY26,FY26-Q1,Open Pit,OP Total Material Mined,8000,kt
+Budget,FY26,FY26-Q1,Open Pit,OP Ore Mined (Mill Feed),1800,kt
+Budget,FY26,FY26-Q1,Open Pit,OP Au Grade Mined,2.60,g/t Au
+Budget,FY26,FY26-Q1,Open Pit,OP Cu Grade Mined,0.17,% Cu
+Budget,FY26,FY26-Q1,Open Pit,OP Strip Ratio,3.44,waste:ore
+Budget,FY26,FY26-Q1,Open Pit,OP Au Contained,150440,oz
+Budget,FY26,FY26-Q1,Open Pit,OP Dump Leach Ore,200,kt
+Budget,FY26,FY26-Q1,Underground,UG Ore Mined,180,kt
+Budget,FY26,FY26-Q1,Underground,UG Au Grade Mined,6.00,g/t Au
+Budget,FY26,FY26-Q1,Underground,UG Cu Grade Mined,0.28,% Cu
+Budget,FY26,FY26-Q1,Underground,UG Au Contained,34710,oz
+Budget,FY26,FY26-Q1,Underground,UG Development Metres,1800,m
+Budget,FY26,FY26-Q1,Total Kalgara,Ore Milled,1960,kt
+Budget,FY26,FY26-Q1,Total Kalgara,Mill Head Grade — Au,2.82,g/t Au
+Budget,FY26,FY26-Q1,Total Kalgara,Mill Head Grade — Cu,0.18,% Cu
+Budget,FY26,FY26-Q1,Total Kalgara,Au Recovery,90.5,%
+Budget,FY26,FY26-Q1,Total Kalgara,Cu Recovery,87.5,%
+Budget,FY26,FY26-Q1,Total Kalgara,Mill Availability,91.0,%
+Budget,FY26,FY26-Q1,Total Kalgara,Throughput Rate,7840,ktpa
+Budget,FY26,FY26-Q1,Total Kalgara,Gold Produced,32000,oz Au
+Budget,FY26,FY26-Q1,Total Kalgara,Copper Produced,1560,t Cu
+Budget,FY26,FY26-Q1,Total Kalgara,Gold Sold,32000,oz Au
+Budget,FY26,FY26-Q1,Total Kalgara,Copper Sold,1560,t Cu
+Budget,FY26,FY26-Q1,Total Kalgara,Avg Realised Gold Price,5250,A$/oz
+Budget,FY26,FY26-Q1,Total Kalgara,Avg Realised Copper Price,8974,A$/t
+Budget,FY26,FY26-Q1,Total Kalgara,Gold Price Assumption,5200,A$/oz
+Budget,FY26,FY26-Q1,Total Kalgara,AUD/USD Rate,0.650,rate
+Budget,FY26,FY26-Q1,Total Kalgara,AISC,2580,A$/oz Au
+Budget,FY26,FY26-Q1,Total Kalgara,C1 Cash Cost,1960,A$/oz Au
+Budget,FY26,FY26-Q1,Total Kalgara,By-Product Cu Credit,14.0,A$m
+Budget,FY26,FY26-Q1,Total Kalgara,Mining Unit Cost,4.50,A$/t moved
+Budget,FY26,FY26-Q1,Total Kalgara,Processing Unit Cost,20.41,A$/t milled
+Budget,FY26,FY26-Q1,Total Kalgara,Gold Revenue,168.0,A$m
+Budget,FY26,FY26-Q1,Total Kalgara,Copper Revenue,14.0,A$m
+Budget,FY26,FY26-Q1,Total Kalgara,Total Net Revenue,183.2,A$m
+Budget,FY26,FY26-Q1,Total Kalgara,ROM Stockpile Volume,0.80,Mt
+Budget,FY26,FY26-Q1,Total Kalgara,ROM Stockpile Grade — Au,1.90,g/t Au
+Budget,FY26,FY26-Q1,Total Kalgara,ROM Au Contained,48.9,koz
+Budget,FY26,FY26-Q1,Total Kalgara,Low Grade Stockpile,1.20,Mt
+Budget,FY26,FY26-Q2,Open Pit,OP Total Material Mined,8400,kt
+Budget,FY26,FY26-Q2,Open Pit,OP Ore Mined (Mill Feed),1900,kt
+Budget,FY26,FY26-Q2,Open Pit,OP Au Grade Mined,2.72,g/t Au
+Budget,FY26,FY26-Q2,Open Pit,OP Cu Grade Mined,0.18,% Cu
+Budget,FY26,FY26-Q2,Open Pit,OP Strip Ratio,3.42,waste:ore
+Budget,FY26,FY26-Q2,Open Pit,OP Au Contained,166170,oz
+Budget,FY26,FY26-Q2,Open Pit,OP Dump Leach Ore,210,kt
+Budget,FY26,FY26-Q2,Underground,UG Ore Mined,190,kt
+Budget,FY26,FY26-Q2,Underground,UG Au Grade Mined,6.10,g/t Au
+Budget,FY26,FY26-Q2,Underground,UG Cu Grade Mined,0.29,% Cu
+Budget,FY26,FY26-Q2,Underground,UG Au Contained,37280,oz
+Budget,FY26,FY26-Q2,Underground,UG Development Metres,1850,m
+Budget,FY26,FY26-Q2,Total Kalgara,Ore Milled,2060,kt
+Budget,FY26,FY26-Q2,Total Kalgara,Mill Head Grade — Au,2.98,g/t Au
+Budget,FY26,FY26-Q2,Total Kalgara,Mill Head Grade — Cu,0.19,% Cu
+Budget,FY26,FY26-Q2,Total Kalgara,Au Recovery,91.0,%
+Budget,FY26,FY26-Q2,Total Kalgara,Cu Recovery,87.8,%
+Budget,FY26,FY26-Q2,Total Kalgara,Mill Availability,91.5,%
+Budget,FY26,FY26-Q2,Total Kalgara,Throughput Rate,8240,ktpa
+Budget,FY26,FY26-Q2,Total Kalgara,Gold Produced,34500,oz Au
+Budget,FY26,FY26-Q2,Total Kalgara,Copper Produced,1640,t Cu
+Budget,FY26,FY26-Q2,Total Kalgara,Gold Sold,34500,oz Au
+Budget,FY26,FY26-Q2,Total Kalgara,Copper Sold,1640,t Cu
+Budget,FY26,FY26-Q2,Total Kalgara,Avg Realised Gold Price,5304,A$/oz
+Budget,FY26,FY26-Q2,Total Kalgara,Avg Realised Copper Price,10122,A$/t
+Budget,FY26,FY26-Q2,Total Kalgara,Gold Price Assumption,5250,A$/oz
+Budget,FY26,FY26-Q2,Total Kalgara,AUD/USD Rate,0.645,rate
+Budget,FY26,FY26-Q2,Total Kalgara,AISC,2520,A$/oz Au
+Budget,FY26,FY26-Q2,Total Kalgara,C1 Cash Cost,1920,A$/oz Au
+Budget,FY26,FY26-Q2,Total Kalgara,By-Product Cu Credit,16.6,A$m
+Budget,FY26,FY26-Q2,Total Kalgara,Mining Unit Cost,4.40,A$/t moved
+Budget,FY26,FY26-Q2,Total Kalgara,Processing Unit Cost,19.90,A$/t milled
+Budget,FY26,FY26-Q2,Total Kalgara,Gold Revenue,183.0,A$m
+Budget,FY26,FY26-Q2,Total Kalgara,Copper Revenue,16.6,A$m
+Budget,FY26,FY26-Q2,Total Kalgara,Total Net Revenue,201.0,A$m
+Budget,FY26,FY26-Q2,Total Kalgara,ROM Stockpile Volume,0.82,Mt
+Budget,FY26,FY26-Q2,Total Kalgara,ROM Stockpile Grade — Au,1.88,g/t Au
+Budget,FY26,FY26-Q2,Total Kalgara,ROM Au Contained,49.7,koz
+Budget,FY26,FY26-Q2,Total Kalgara,Low Grade Stockpile,1.22,Mt
+Budget,FY26,FY26-Q3,Open Pit,OP Total Material Mined,8200,kt
+Budget,FY26,FY26-Q3,Open Pit,OP Ore Mined (Mill Feed),1880,kt
+Budget,FY26,FY26-Q3,Open Pit,OP Au Grade Mined,2.68,g/t Au
+Budget,FY26,FY26-Q3,Open Pit,OP Cu Grade Mined,0.18,% Cu
+Budget,FY26,FY26-Q3,Open Pit,OP Strip Ratio,3.36,waste:ore
+Budget,FY26,FY26-Q3,Open Pit,OP Au Contained,161920,oz
+Budget,FY26,FY26-Q3,Open Pit,OP Dump Leach Ore,200,kt
+Budget,FY26,FY26-Q3,Underground,UG Ore Mined,185,kt
+Budget,FY26,FY26-Q3,Underground,UG Au Grade Mined,6.05,g/t Au
+Budget,FY26,FY26-Q3,Underground,UG Cu Grade Mined,0.29,% Cu
+Budget,FY26,FY26-Q3,Underground,UG Au Contained,35985,oz
+Budget,FY26,FY26-Q3,Underground,UG Development Metres,1820,m
+Budget,FY26,FY26-Q3,Total Kalgara,Ore Milled,2040,kt
+Budget,FY26,FY26-Q3,Total Kalgara,Mill Head Grade — Au,2.90,g/t Au
+Budget,FY26,FY26-Q3,Total Kalgara,Mill Head Grade — Cu,0.19,% Cu
+Budget,FY26,FY26-Q3,Total Kalgara,Au Recovery,91.0,%
+Budget,FY26,FY26-Q3,Total Kalgara,Cu Recovery,87.8,%
+Budget,FY26,FY26-Q3,Total Kalgara,Mill Availability,91.5,%
+Budget,FY26,FY26-Q3,Total Kalgara,Throughput Rate,8160,ktpa
+Budget,FY26,FY26-Q3,Total Kalgara,Gold Produced,33500,oz Au
+Budget,FY26,FY26-Q3,Total Kalgara,Copper Produced,1620,t Cu
+Budget,FY26,FY26-Q3,Total Kalgara,Gold Sold,33500,oz Au
+Budget,FY26,FY26-Q3,Total Kalgara,Copper Sold,1620,t Cu
+Budget,FY26,FY26-Q3,Total Kalgara,Avg Realised Gold Price,5373,A$/oz
+Budget,FY26,FY26-Q3,Total Kalgara,Avg Realised Copper Price,10123,A$/t
+Budget,FY26,FY26-Q3,Total Kalgara,Gold Price Assumption,5300,A$/oz
+Budget,FY26,FY26-Q3,Total Kalgara,AUD/USD Rate,0.640,rate
+Budget,FY26,FY26-Q3,Total Kalgara,AISC,2560,A$/oz Au
+Budget,FY26,FY26-Q3,Total Kalgara,C1 Cash Cost,1950,A$/oz Au
+Budget,FY26,FY26-Q3,Total Kalgara,By-Product Cu Credit,16.4,A$m
+Budget,FY26,FY26-Q3,Total Kalgara,Mining Unit Cost,4.45,A$/t moved
+Budget,FY26,FY26-Q3,Total Kalgara,Processing Unit Cost,20.10,A$/t milled
+Budget,FY26,FY26-Q3,Total Kalgara,Gold Revenue,180.0,A$m
+Budget,FY26,FY26-Q3,Total Kalgara,Copper Revenue,16.4,A$m
+Budget,FY26,FY26-Q3,Total Kalgara,Total Net Revenue,197.8,A$m
+Budget,FY26,FY26-Q3,Total Kalgara,ROM Stockpile Volume,0.81,Mt
+Budget,FY26,FY26-Q3,Total Kalgara,ROM Stockpile Grade — Au,1.87,g/t Au
+Budget,FY26,FY26-Q3,Total Kalgara,ROM Au Contained,48.6,koz
+Budget,FY26,FY26-Q3,Total Kalgara,Low Grade Stockpile,1.21,Mt
+Budget,FY26,FY26-Q4,Open Pit,OP Total Material Mined,7800,kt
+Budget,FY26,FY26-Q4,Open Pit,OP Ore Mined (Mill Feed),1840,kt
+Budget,FY26,FY26-Q4,Open Pit,OP Au Grade Mined,2.55,g/t Au
+Budget,FY26,FY26-Q4,Open Pit,OP Cu Grade Mined,0.17,% Cu
+Budget,FY26,FY26-Q4,Open Pit,OP Strip Ratio,3.24,waste:ore
+Budget,FY26,FY26-Q4,Open Pit,OP Au Contained,150780,oz
+Budget,FY26,FY26-Q4,Open Pit,OP Dump Leach Ore,190,kt
+Budget,FY26,FY26-Q4,Underground,UG Ore Mined,182,kt
+Budget,FY26,FY26-Q4,Underground,UG Au Grade Mined,5.95,g/t Au
+Budget,FY26,FY26-Q4,Underground,UG Cu Grade Mined,0.28,% Cu
+Budget,FY26,FY26-Q4,Underground,UG Au Contained,34850,oz
+Budget,FY26,FY26-Q4,Underground,UG Development Metres,1800,m
+Budget,FY26,FY26-Q4,Total Kalgara,Ore Milled,2000,kt
+Budget,FY26,FY26-Q4,Total Kalgara,Mill Head Grade — Au,2.76,g/t Au
+Budget,FY26,FY26-Q4,Total Kalgara,Mill Head Grade — Cu,0.18,% Cu
+Budget,FY26,FY26-Q4,Total Kalgara,Au Recovery,90.5,%
+Budget,FY26,FY26-Q4,Total Kalgara,Cu Recovery,87.5,%
+Budget,FY26,FY26-Q4,Total Kalgara,Mill Availability,91.0,%
+Budget,FY26,FY26-Q4,Total Kalgara,Throughput Rate,8000,ktpa
+Budget,FY26,FY26-Q4,Total Kalgara,Gold Produced,32000,oz Au
+Budget,FY26,FY26-Q4,Total Kalgara,Copper Produced,1600,t Cu
+Budget,FY26,FY26-Q4,Total Kalgara,Gold Sold,32000,oz Au
+Budget,FY26,FY26-Q4,Total Kalgara,Copper Sold,1600,t Cu
+Budget,FY26,FY26-Q4,Total Kalgara,Avg Realised Gold Price,5375,A$/oz
+Budget,FY26,FY26-Q4,Total Kalgara,Avg Realised Copper Price,10000,A$/t
+Budget,FY26,FY26-Q4,Total Kalgara,Gold Price Assumption,5300,A$/oz
+Budget,FY26,FY26-Q4,Total Kalgara,AUD/USD Rate,0.640,rate
+Budget,FY26,FY26-Q4,Total Kalgara,AISC,2580,A$/oz Au
+Budget,FY26,FY26-Q4,Total Kalgara,C1 Cash Cost,1970,A$/oz Au
+Budget,FY26,FY26-Q4,Total Kalgara,By-Product Cu Credit,16.0,A$m
+Budget,FY26,FY26-Q4,Total Kalgara,Mining Unit Cost,4.48,A$/t moved
+Budget,FY26,FY26-Q4,Total Kalgara,Processing Unit Cost,20.00,A$/t milled
+Budget,FY26,FY26-Q4,Total Kalgara,Gold Revenue,172.0,A$m
+Budget,FY26,FY26-Q4,Total Kalgara,Copper Revenue,16.0,A$m
+Budget,FY26,FY26-Q4,Total Kalgara,Total Net Revenue,189.2,A$m
+Budget,FY26,FY26-Q4,Total Kalgara,ROM Stockpile Volume,0.80,Mt
+Budget,FY26,FY26-Q4,Total Kalgara,ROM Stockpile Grade — Au,1.85,g/t Au
+Budget,FY26,FY26-Q4,Total Kalgara,ROM Au Contained,47.4,koz
+Budget,FY26,FY26-Q4,Total Kalgara,Low Grade Stockpile,1.20,Mt
+Last Year,FY25,FY25-Q3,Open Pit,OP Total Material Mined,7200,kt
+Last Year,FY25,FY25-Q3,Open Pit,OP Ore Mined (Mill Feed),1680,kt
+Last Year,FY25,FY25-Q3,Open Pit,OP Au Grade Mined,1.52,g/t Au
+Last Year,FY25,FY25-Q3,Open Pit,OP Cu Grade Mined,0.14,% Cu
+Last Year,FY25,FY25-Q3,Open Pit,OP Strip Ratio,3.29,waste:ore
+Last Year,FY25,FY25-Q3,Open Pit,OP Au Contained,82135,oz
+Last Year,FY25,FY25-Q3,Open Pit,OP Dump Leach Ore,180,kt
+Last Year,FY25,FY25-Q3,Underground,UG Ore Mined,160,kt
+Last Year,FY25,FY25-Q3,Underground,UG Au Grade Mined,5.22,g/t Au
+Last Year,FY25,FY25-Q3,Underground,UG Cu Grade Mined,0.25,% Cu
+Last Year,FY25,FY25-Q3,Underground,UG Au Contained,26889,oz
+Last Year,FY25,FY25-Q3,Underground,UG Development Metres,1620,m
+Last Year,FY25,FY25-Q3,Total Kalgara,Ore Milled,1820,kt
+Last Year,FY25,FY25-Q3,Total Kalgara,Mill Head Grade — Au,1.98,g/t Au
+Last Year,FY25,FY25-Q3,Total Kalgara,Mill Head Grade — Cu,0.16,% Cu
+Last Year,FY25,FY25-Q3,Total Kalgara,Au Recovery,88.8,%
+Last Year,FY25,FY25-Q3,Total Kalgara,Cu Recovery,86.2,%
+Last Year,FY25,FY25-Q3,Total Kalgara,Mill Availability,89.4,%
+Last Year,FY25,FY25-Q3,Total Kalgara,Throughput Rate,7280,ktpa
+Last Year,FY25,FY25-Q3,Total Kalgara,Gold Produced,25800,oz Au
+Last Year,FY25,FY25-Q3,Total Kalgara,Copper Produced,1420,t Cu
+Last Year,FY25,FY25-Q3,Total Kalgara,Gold Sold,25800,oz Au
+Last Year,FY25,FY25-Q3,Total Kalgara,Copper Sold,1420,t Cu
+Last Year,FY25,FY25-Q3,Total Kalgara,Avg Realised Gold Price,1577,A$/oz
+Last Year,FY25,FY25-Q3,Total Kalgara,Avg Realised Copper Price,6537,A$/t
+Last Year,FY25,FY25-Q3,Total Kalgara,Gold Price Assumption,1550,A$/oz
+Last Year,FY25,FY25-Q3,Total Kalgara,AUD/USD Rate,0.660,rate
+Last Year,FY25,FY25-Q3,Total Kalgara,AISC,3180,A$/oz Au
+Last Year,FY25,FY25-Q3,Total Kalgara,C1 Cash Cost,2480,A$/oz Au
+Last Year,FY25,FY25-Q3,Total Kalgara,By-Product Cu Credit,9.3,A$m
+Last Year,FY25,FY25-Q3,Total Kalgara,Mining Unit Cost,3.94,A$/t moved
+Last Year,FY25,FY25-Q3,Total Kalgara,Processing Unit Cost,21.10,A$/t milled
+Last Year,FY25,FY25-Q3,Total Kalgara,Gold Revenue,40.7,A$m
+Last Year,FY25,FY25-Q3,Total Kalgara,Copper Revenue,9.3,A$m
+Last Year,FY25,FY25-Q3,Total Kalgara,Total Net Revenue,50.4,A$m
+Last Year,FY25,FY25-Q3,Total Kalgara,ROM Stockpile Volume,0.72,Mt
+Last Year,FY25,FY25-Q3,Total Kalgara,ROM Stockpile Grade — Au,1.76,g/t Au
+Last Year,FY25,FY25-Q3,Total Kalgara,ROM Au Contained,40.8,koz
+Last Year,FY25,FY25-Q3,Total Kalgara,Low Grade Stockpile,1.08,Mt
+Last Year,FY25,FY25-Q4,Open Pit,OP Total Material Mined,7400,kt
+Last Year,FY25,FY25-Q4,Open Pit,OP Ore Mined (Mill Feed),1720,kt
+Last Year,FY25,FY25-Q4,Open Pit,OP Au Grade Mined,1.56,g/t Au
+Last Year,FY25,FY25-Q4,Open Pit,OP Cu Grade Mined,0.15,% Cu
+Last Year,FY25,FY25-Q4,Open Pit,OP Strip Ratio,3.30,waste:ore
+Last Year,FY25,FY25-Q4,Open Pit,OP Au Contained,86350,oz
+Last Year,FY25,FY25-Q4,Open Pit,OP Dump Leach Ore,185,kt
+Last Year,FY25,FY25-Q4,Underground,UG Ore Mined,165,kt
+Last Year,FY25,FY25-Q4,Underground,UG Au Grade Mined,5.35,g/t Au
+Last Year,FY25,FY25-Q4,Underground,UG Cu Grade Mined,0.26,% Cu
+Last Year,FY25,FY25-Q4,Underground,UG Au Contained,28430,oz
+Last Year,FY25,FY25-Q4,Underground,UG Development Metres,1660,m
+Last Year,FY25,FY25-Q4,Total Kalgara,Ore Milled,1860,kt
+Last Year,FY25,FY25-Q4,Total Kalgara,Mill Head Grade — Au,2.04,g/t Au
+Last Year,FY25,FY25-Q4,Total Kalgara,Mill Head Grade — Cu,0.17,% Cu
+Last Year,FY25,FY25-Q4,Total Kalgara,Au Recovery,89.2,%
+Last Year,FY25,FY25-Q4,Total Kalgara,Cu Recovery,86.5,%
+Last Year,FY25,FY25-Q4,Total Kalgara,Mill Availability,89.8,%
+Last Year,FY25,FY25-Q4,Total Kalgara,Throughput Rate,7440,ktpa
+Last Year,FY25,FY25-Q4,Total Kalgara,Gold Produced,27100,oz Au
+Last Year,FY25,FY25-Q4,Total Kalgara,Copper Produced,1460,t Cu
+Last Year,FY25,FY25-Q4,Total Kalgara,Gold Sold,27100,oz Au
+Last Year,FY25,FY25-Q4,Total Kalgara,Copper Sold,1460,t Cu
+Last Year,FY25,FY25-Q4,Total Kalgara,Avg Realised Gold Price,1580,A$/oz
+Last Year,FY25,FY25-Q4,Total Kalgara,Avg Realised Copper Price,6755,A$/t
+Last Year,FY25,FY25-Q4,Total Kalgara,Gold Price Assumption,1560,A$/oz
+Last Year,FY25,FY25-Q4,Total Kalgara,AUD/USD Rate,0.655,rate
+Last Year,FY25,FY25-Q4,Total Kalgara,AISC,3140,A$/oz Au
+Last Year,FY25,FY25-Q4,Total Kalgara,C1 Cash Cost,2420,A$/oz Au
+Last Year,FY25,FY25-Q4,Total Kalgara,By-Product Cu Credit,9.9,A$m
+Last Year,FY25,FY25-Q4,Total Kalgara,Mining Unit Cost,3.95,A$/t moved
+Last Year,FY25,FY25-Q4,Total Kalgara,Processing Unit Cost,21.29,A$/t milled
+Last Year,FY25,FY25-Q4,Total Kalgara,Gold Revenue,42.8,A$m
+Last Year,FY25,FY25-Q4,Total Kalgara,Copper Revenue,9.9,A$m
+Last Year,FY25,FY25-Q4,Total Kalgara,Total Net Revenue,53.1,A$m
+Last Year,FY25,FY25-Q4,Total Kalgara,ROM Stockpile Volume,0.74,Mt
+Last Year,FY25,FY25-Q4,Total Kalgara,ROM Stockpile Grade — Au,1.78,g/t Au
+Last Year,FY25,FY25-Q4,Total Kalgara,ROM Au Contained,42.3,koz
+Last Year,FY25,FY25-Q4,Total Kalgara,Low Grade Stockpile,1.10,Mt

@@ -1,0 +1,14 @@
+{
+  "dimension": "Version",
+  "description": "Planning versions for scenario and performance management",
+  "members": [
+    { "name": "Actual",          "alias": "ACT",  "type": "Actual",   "locked": true,  "description": "Confirmed financial and operational actuals" },
+    { "name": "Budget",          "alias": "BDG",  "type": "Budget",   "locked": true,  "description": "FY26 original budget approved by Board, July 2025" },
+    { "name": "Latest Forecast", "alias": "LF",   "type": "Forecast", "locked": false, "description": "Most recent rolling forecast, updated quarterly" },
+    { "name": "Prior Forecast",  "alias": "PF",   "type": "Forecast", "locked": true,  "description": "Previous quarter forecast for forecast-on-forecast variance" },
+    { "name": "Last Year",       "alias": "LY",   "type": "Actual",   "locked": true,  "description": "Prior corresponding period actuals (FY25 where applicable)" },
+    { "name": "Var Act vs Bgt",  "alias": "AVB",  "type": "Derived",  "locked": false, "description": "Actual minus Budget variance (favourable = positive for income, negative for costs)" },
+    { "name": "Var LF vs Bgt",   "alias": "FVB",  "type": "Derived",  "locked": false, "description": "Latest Forecast minus Budget" },
+    { "name": "Var Act vs LY",   "alias": "AVL",  "type": "Derived",  "locked": false, "description": "Actual vs Last Year movement" }
+  ]
+}

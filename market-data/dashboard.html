@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Market Data — Ironfield Resources FY26</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:       #0f1117;
+    --surface:  #1a1d27;
+    --border:   #2a2d3a;
+    --text:     #e4e6f0;
+    --muted:    #8b8fa8;
+    --gold:     #f5a623;
+    --copper:   #c0704a;
+    --blue:     #4a9ef5;
+    --green:    #34c77b;
+    --red:      #e05555;
+    --purple:   #9b6bf5;
+    --diesel:   #e8a130;
+    --elec:     #4acfe8;
+  }
+
+  body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-size: 14px; }
+
+  header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 16px 24px; display: flex; align-items: center; gap: 16px; }
+  header h1 { font-size: 18px; font-weight: 600; }
+  header span { color: var(--muted); font-size: 13px; }
+
+  nav { display: flex; gap: 4px; padding: 16px 24px 0; border-bottom: 1px solid var(--border); }
+  nav button { background: none; border: none; color: var(--muted); font-size: 13px; padding: 8px 16px; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; }
+  nav button.active { color: var(--text); border-bottom-color: var(--gold); }
+
+  .page { display: none; padding: 24px; }
+  .page.active { display: block; }
+
+  /* KPI cards */
+  .kpi-row { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; margin-bottom: 24px; }
+  .kpi { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 16px; }
+  .kpi .label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; margin-bottom: 6px; }
+  .kpi .value { font-size: 22px; font-weight: 700; }
+  .kpi .sub   { font-size: 11px; color: var(--muted); margin-top: 4px; }
+  .kpi.gold   .value { color: var(--gold); }
+  .kpi.copper .value { color: var(--copper); }
+  .kpi.diesel .value { color: var(--diesel); }
+  .kpi.elec   .value { color: var(--elec); }
+  .kpi.audusd .value { color: var(--blue); }
+  .kpi.brent  .value { color: var(--purple); }
+
+  /* Charts grid */
+  .charts-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+  .charts-1col { margin-bottom: 16px; }
+  .chart-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 16px; }
+  .chart-card h3 { font-size: 13px; color: var(--muted); margin-bottom: 12px; font-weight: 500; }
+  .chart-card canvas { max-height: 220px; }
+
+  /* Sensitivity table */
+  .sens-table { width: 100%; border-collapse: collapse; }
+  .sens-table th { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; padding: 8px 12px; text-align: left; border-bottom: 1px solid var(--border); font-weight: 500; }
+  .sens-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); font-size: 13px; }
+  .sens-table tr:last-child td { border-bottom: none; }
+  .fav  { color: var(--green); }
+  .unfav{ color: var(--red); }
+  .bar-cell { width: 140px; }
+  .bar-wrap { background: var(--border); border-radius: 2px; height: 6px; overflow: hidden; }
+  .bar-fill  { height: 100%; border-radius: 2px; }
+
+  /* Scenario builder */
+  .scenario-grid { display: grid; grid-template-columns: 340px 1fr; gap: 24px; align-items: start; }
+  .slider-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px; }
+  .slider-panel h3 { font-size: 14px; font-weight: 600; margin-bottom: 16px; }
+  .slider-group { margin-bottom: 18px; }
+  .slider-group label { font-size: 12px; color: var(--muted); display: flex; justify-content: space-between; margin-bottom: 6px; }
+  .slider-group label span { color: var(--text); font-weight: 600; }
+  input[type=range] { width: 100%; accent-color: var(--gold); }
+  .run-btn { width: 100%; margin-top: 8px; padding: 10px; background: var(--gold); color: #000; border: none; border-radius: 6px; font-weight: 700; font-size: 14px; cursor: pointer; }
+  .run-btn:hover { opacity: .9; }
+  .preset-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+  .preset-btn { padding: 5px 12px; border: 1px solid var(--border); background: var(--surface); color: var(--muted); border-radius: 4px; font-size: 12px; cursor: pointer; }
+  .preset-btn:hover { border-color: var(--gold); color: var(--text); }
+
+  .result-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px; }
+  .result-panel h3 { font-size: 14px; font-weight: 600; margin-bottom: 16px; }
+  .result-kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
+  .result-kpi { background: var(--bg); border-radius: 6px; padding: 14px; text-align: center; }
+  .result-kpi .lbl { font-size: 11px; color: var(--muted); margin-bottom: 6px; }
+  .result-kpi .val { font-size: 20px; font-weight: 700; }
+  .waterfall-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; font-size: 13px; }
+  .waterfall-row .name { width: 120px; color: var(--muted); font-size: 12px; }
+  .waterfall-row .bar-outer { flex: 1; background: var(--border); border-radius: 3px; height: 8px; overflow: hidden; }
+  .waterfall-row .bar-inner { height: 100%; border-radius: 3px; transition: width .3s; }
+  .waterfall-row .amt { width: 70px; text-align: right; font-size: 12px; }
+
+  @media (max-width: 900px) {
+    .charts-2col { grid-template-columns: 1fr; }
+    .scenario-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>Market Data Dashboard</h1>
+    <span>Ironfield Resources — FY25–FY26 commodity &amp; input price tracker</span>
+  </div>
+</header>
+
+<nav>
+  <button class="active" onclick="showPage('prices')">Prices</button>
+  <button onclick="showPage('sensitivity')">Sensitivity</button>
+  <button onclick="showPage('scenario')">Scenario Builder</button>
+</nav>
+
+<!-- ══════════════ PAGE 1: PRICES ══════════════ -->
+<div id="page-prices" class="page active">
+
+  <div class="kpi-row" id="kpi-row"></div>
+
+  <div class="charts-2col">
+    <div class="chart-card">
+      <h3>Gold Price — A$/oz &amp; US$/oz</h3>
+      <canvas id="chartGold"></canvas>
+    </div>
+    <div class="chart-card">
+      <h3>Copper LME — US$/t</h3>
+      <canvas id="chartCopper"></canvas>
+    </div>
+    <div class="chart-card">
+      <h3>Diesel (A$/L) &amp; Brent Crude (US$/bbl)</h3>
+      <canvas id="chartFuel"></canvas>
+    </div>
+    <div class="chart-card">
+      <h3>Electricity — A$/MWh</h3>
+      <canvas id="chartElec"></canvas>
+    </div>
+  </div>
+
+  <div class="chart-card charts-1col">
+    <h3>AUD/USD Exchange Rate</h3>
+    <canvas id="chartFX"></canvas>
+  </div>
+</div>
+
+<!-- ══════════════ PAGE 2: SENSITIVITY ══════════════ -->
+<div id="page-sensitivity" class="page">
+  <div class="chart-card" style="margin-bottom:20px;">
+    <h3>NPAT Impact — Full Year A$000 per unit price move</h3>
+    <canvas id="chartSens" style="max-height:280px;"></canvas>
+  </div>
+  <div class="chart-card">
+    <h3>Unit Price Sensitivity Detail</h3>
+    <table class="sens-table" id="sensTable"></table>
+  </div>
+</div>
+
+<!-- ══════════════ PAGE 3: SCENARIO ══════════════ -->
+<div id="page-scenario" class="page">
+  <div class="scenario-grid">
+    <div>
+      <div class="slider-panel">
+        <h3>Price Assumptions</h3>
+        <p style="font-size:12px;color:var(--muted);margin-bottom:16px;">Enter changes from FY26 base case. Positive = price increase.</p>
+
+        <div class="preset-row">
+          <button class="preset-btn" onclick="applyPreset('bull')">Bull Case</button>
+          <button class="preset-btn" onclick="applyPreset('bear')">Bear Case</button>
+          <button class="preset-btn" onclick="applyPreset('fuel')">Fuel Shock</button>
+          <button class="preset-btn" onclick="applyPreset('energy')">Energy Pressure</button>
+          <button class="preset-btn" onclick="applyPreset('reset')">Reset</button>
+        </div>
+
+        <div class="slider-group">
+          <label>Gold Price <span id="goldLbl">±0 A$/oz</span></label>
+          <input type="range" id="goldSlider" min="-600" max="600" step="25" value="0" oninput="updateLabel('goldLbl', this.value, 'A$/oz')">
+        </div>
+        <div class="slider-group">
+          <label>Copper LME <span id="copperLbl">±0 US$/t</span></label>
+          <input type="range" id="copperSlider" min="-2000" max="2000" step="100" value="0" oninput="updateLabel('copperLbl', this.value, 'US$/t')">
+        </div>
+        <div class="slider-group">
+          <label>AUD/USD Rate <span id="fxLbl">±0.000</span></label>
+          <input type="range" id="fxSlider" min="-0.06" max="0.06" step="0.005" value="0" oninput="updateFxLabel(this.value)">
+        </div>
+        <div class="slider-group">
+          <label>Diesel <span id="dieselLbl">±0.00 A$/L</span></label>
+          <input type="range" id="dieselSlider" min="-0.50" max="0.50" step="0.05" value="0" oninput="updateLabel('dieselLbl', this.value, 'A$/L', 2)">
+        </div>
+        <div class="slider-group">
+          <label>Electricity <span id="elecLbl">±0 A$/MWh</span></label>
+          <input type="range" id="elecSlider" min="-60" max="60" step="5" value="0" oninput="updateLabel('elecLbl', this.value, 'A$/MWh')">
+        </div>
+
+        <button class="run-btn" onclick="runScenario()">Calculate Impact</button>
+      </div>
+    </div>
+
+    <div class="result-panel">
+      <h3>Scenario Results</h3>
+      <div class="result-kpis">
+        <div class="result-kpi">
+          <div class="lbl">NPAT Impact (Qtr)</div>
+          <div class="val" id="res-npat-qtr" style="color:var(--muted)">—</div>
+        </div>
+        <div class="result-kpi">
+          <div class="lbl">NPAT Impact (Full Year)</div>
+          <div class="val" id="res-npat-yr" style="color:var(--muted)">—</div>
+        </div>
+        <div class="result-kpi">
+          <div class="lbl">AISC Change (A$/oz)</div>
+          <div class="val" id="res-aisc" style="color:var(--muted)">—</div>
+        </div>
+      </div>
+
+      <div style="margin-bottom:12px;">
+        <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">NPAT Quarterly Impact Breakdown (A$000)</div>
+        <div id="waterfall"></div>
+      </div>
+
+      <div style="font-size:12px;color:var(--muted);margin-top:16px;padding-top:12px;border-top:1px solid var(--border);">
+        Base case: Gold A$5,368/oz · AISC A$2,344/oz · NPAT A$96m/quarter
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── Data ────────────────────────────────────────────────────────────────────
+const DATA = [
+  {m:"Jul-24",fy:"FY25",q:"FY25-Q1",gU:2382,gA:3612,cuU:9180,cuA:11840,fx:0.660,ds:1.82,el:138,bn:84.2},
+  {m:"Aug-24",fy:"FY25",q:"FY25-Q1",gU:2448,gA:3724,cuU:9060,cuA:11700,fx:0.657,ds:1.78,el:142,bn:80.8},
+  {m:"Sep-24",fy:"FY25",q:"FY25-Q1",gU:2555,gA:3882,cuU:9380,cuA:12020,fx:0.658,ds:1.74,el:145,bn:74.1},
+  {m:"Oct-24",fy:"FY25",q:"FY25-Q2",gU:2680,gA:4085,cuU:9540,cuA:12260,fx:0.656,ds:1.71,el:148,bn:76.2},
+  {m:"Nov-24",fy:"FY25",q:"FY25-Q2",gU:2638,gA:4028,cuU:9320,cuA:12010,fx:0.655,ds:1.69,el:152,bn:72.8},
+  {m:"Dec-24",fy:"FY25",q:"FY25-Q2",gU:2617,gA:4002,cuU:9140,cuA:11820,fx:0.654,ds:1.72,el:155,bn:69.4},
+  {m:"Jan-25",fy:"FY25",q:"FY25-Q3",gU:2724,gA:4141,cuU:9020,cuA:11680,fx:0.657,ds:1.76,el:158,bn:78.3},
+  {m:"Feb-25",fy:"FY25",q:"FY25-Q3",gU:2882,gA:4384,cuU:9220,cuA:11940,fx:0.657,ds:1.79,el:155,bn:74.6},
+  {m:"Mar-25",fy:"FY25",q:"FY25-Q3",gU:3084,gA:4669,cuU:9560,cuA:12360,fx:0.661,ds:1.81,el:152,bn:71.2},
+  {m:"Apr-25",fy:"FY25",q:"FY25-Q4",gU:3102,gA:4706,cuU:9840,cuA:12680,fx:0.659,ds:1.83,el:148,bn:66.8},
+  {m:"May-25",fy:"FY25",q:"FY25-Q4",gU:3180,gA:4828,cuU:9520,cuA:12320,fx:0.659,ds:1.80,el:145,bn:62.4},
+  {m:"Jun-25",fy:"FY25",q:"FY25-Q4",gU:3246,gA:4920,cuU:9340,cuA:12120,fx:0.660,ds:1.77,el:142,bn:67.3},
+  {m:"Jul-25",fy:"FY26",q:"FY26-Q1",gU:3350,gA:5210,cuU:9140,cuA:11780,fx:0.643,ds:1.75,el:145,bn:71.4},
+  {m:"Aug-25",fy:"FY26",q:"FY26-Q1",gU:3380,gA:5256,cuU:9080,cuA:11720,fx:0.644,ds:1.78,el:148,bn:73.2},
+  {m:"Sep-25",fy:"FY26",q:"FY26-Q1",gU:3480,gA:5410,cuU:8960,cuA:11550,fx:0.643,ds:1.82,el:152,bn:70.8},
+  {m:"Oct-25",fy:"FY26",q:"FY26-Q2",gU:3450,gA:5408,cuU:9200,cuA:11900,fx:0.638,ds:1.84,el:155,bn:68.4},
+  {m:"Nov-25",fy:"FY26",q:"FY26-Q2",gU:3480,gA:5454,cuU:9360,cuA:12080,fx:0.638,ds:1.86,el:158,bn:65.2},
+  {m:"Dec-25",fy:"FY26",q:"FY26-Q2",gU:3490,gA:5468,cuU:9440,cuA:12190,fx:0.638,ds:1.88,el:162,bn:66.8},
+  {m:"Jan-26",fy:"FY26",q:"FY26-Q3",gU:3500,gA:5512,cuU:9560,cuA:12380,fx:0.635,ds:1.85,el:165,bn:69.4},
+  {m:"Feb-26",fy:"FY26",q:"FY26-Q3",gU:3560,gA:5606,cuU:9480,cuA:12280,fx:0.635,ds:1.82,el:162,bn:72.1},
+  {m:"Mar-26",fy:"FY26",q:"FY26-Q3",gU:3560,gA:5606,cuU:9380,cuA:12160,fx:0.635,ds:1.80,el:158,bn:70.8},
+  {m:"Apr-26",fy:"FY26",q:"FY26-Q4",gU:3500,gA:5486,cuU:9260,cuA:12010,fx:0.638,ds:1.78,el:155,bn:68.2},
+  {m:"May-26",fy:"FY26",q:"FY26-Q4",gU:3450,gA:5407,cuU:9140,cuA:11880,fx:0.638,ds:1.76,el:152,bn:65.4},
+  {m:"Jun-26",fy:"FY26",q:"FY26-Q4",gU:3410,gA:5344,cuU:9020,cuA:11750,fx:0.638,ds:1.75,el:148,bn:63.8},
+];
+
+const SENS = [
+  {driver:"Gold Price",     change:"+A$100/oz",    unit:"A$/oz",    npat_yr: 11480, aisc:   0, fav:true},
+  {driver:"Gold Price",     change:"-A$100/oz",    unit:"A$/oz",    npat_yr:-11480, aisc:   0, fav:false},
+  {driver:"Copper LME",     change:"+US$500/t",    unit:"US$/t",    npat_yr:  2632, aisc: -23, fav:true},
+  {driver:"Copper LME",     change:"-US$500/t",    unit:"US$/t",    npat_yr: -2632, aisc:  23, fav:false},
+  {driver:"AUD/USD",        change:"-0.01 (weaker)",unit:"rate",    npat_yr:  9464, aisc:   0, fav:true},
+  {driver:"AUD/USD",        change:"+0.01 (stronger)",unit:"rate",  npat_yr: -9464, aisc:   0, fav:false},
+  {driver:"Diesel",         change:"-A$0.10/L",    unit:"A$/L",     npat_yr:  1904, aisc: -17, fav:true},
+  {driver:"Diesel",         change:"+A$0.10/L",    unit:"A$/L",     npat_yr: -1904, aisc:  17, fav:false},
+  {driver:"Electricity",    change:"-A$10/MWh",    unit:"A$/MWh",   npat_yr:  1232, aisc: -11, fav:true},
+  {driver:"Electricity",    change:"+A$10/MWh",    unit:"A$/MWh",   npat_yr: -1232, aisc:  11, fav:false},
+];
+
+const PRESETS = {
+  bull:   {gold:300, copper:1000, fx:-0.02, diesel:-0.05, elec:0},
+  bear:   {gold:-400, copper:-1000, fx:0.02, diesel:0.20, elec:20},
+  fuel:   {gold:120, copper:0, fx:-0.01, diesel:0.22, elec:15},
+  energy: {gold:0, copper:0, fx:0, diesel:0.15, elec:30},
+  reset:  {gold:0, copper:0, fx:0, diesel:0, elec:0},
+};
+
+// ─── Chart defaults ───────────────────────────────────────────────────────────
+Chart.defaults.color = '#8b8fa8';
+Chart.defaults.borderColor = '#2a2d3a';
+const OPTS = {
+  responsive: true, maintainAspectRatio: true,
+  plugins: { legend: { labels: { boxWidth: 10, font: { size: 11 } } } },
+  scales: {
+    x: { ticks: { font: { size: 10 }, maxRotation: 45 } },
+    y: { ticks: { font: { size: 10 } } },
+  },
+};
+
+const labels = DATA.map(d => d.m);
+
+function lineDS(label, data, color, yAxisID) {
+  return {
+    label, data,
+    borderColor: color, backgroundColor: color + '22',
+    borderWidth: 2, pointRadius: 2, tension: 0.3,
+    fill: false, yAxisID,
+  };
+}
+
+// Gold chart
+new Chart(document.getElementById('chartGold'), {
+  type: 'line',
+  data: {
+    labels,
+    datasets: [
+      lineDS('A$/oz', DATA.map(d => d.gA), '#f5a623', 'yA'),
+      lineDS('US$/oz', DATA.map(d => d.gU), '#e0c060', 'yU'),
+    ],
+  },
+  options: { ...OPTS, scales: {
+    x: OPTS.scales.x,
+    yA: { position:'left',  ticks:{ font:{size:10} }, title:{display:true,text:'A$/oz',font:{size:10}} },
+    yU: { position:'right', ticks:{ font:{size:10} }, grid:{drawOnChartArea:false}, title:{display:true,text:'US$/oz',font:{size:10}} },
+  }},
+});
+
+// Copper chart
+new Chart(document.getElementById('chartCopper'), {
+  type: 'line',
+  data: {
+    labels,
+    datasets: [lineDS('LME US$/t', DATA.map(d => d.cuU), '#c0704a', 'y')],
+  },
+  options: OPTS,
+});
+
+// Fuel chart
+new Chart(document.getElementById('chartFuel'), {
+  type: 'line',
+  data: {
+    labels,
+    datasets: [
+      lineDS('Diesel A$/L', DATA.map(d => d.ds), '#e8a130', 'yD'),
+      lineDS('Brent US$/bbl', DATA.map(d => d.bn), '#9b6bf5', 'yB'),
+    ],
+  },
+  options: { ...OPTS, scales: {
+    x: OPTS.scales.x,
+    yD: { position:'left',  ticks:{font:{size:10}}, title:{display:true,text:'A$/L',font:{size:10}} },
+    yB: { position:'right', ticks:{font:{size:10}}, grid:{drawOnChartArea:false}, title:{display:true,text:'US$/bbl',font:{size:10}} },
+  }},
+});
+
+// Electricity chart
+new Chart(document.getElementById('chartElec'), {
+  type: 'line',
+  data: {
+    labels,
+    datasets: [lineDS('A$/MWh', DATA.map(d => d.el), '#4acfe8', 'y')],
+  },
+  options: OPTS,
+});
+
+// FX chart
+new Chart(document.getElementById('chartFX'), {
+  type: 'line',
+  data: {
+    labels,
+    datasets: [lineDS('AUD/USD', DATA.map(d => d.fx), '#4a9ef5', 'y')],
+  },
+  options: { ...OPTS, scales: {
+    x: OPTS.scales.x,
+    y: { min:0.60, max:0.70, ticks:{font:{size:10}} },
+  }},
+});
+
+// ─── KPI row (latest month) ──────────────────────────────────────────────────
+const latest = DATA[DATA.length - 1];
+const kpiData = [
+  { label:'Gold Price', value:`A$${latest.gA.toLocaleString()}`, sub:'per oz', cls:'gold' },
+  { label:'Gold (USD)',  value:`US$${latest.gU.toLocaleString()}`, sub:'per oz', cls:'gold' },
+  { label:'Copper LME', value:`US$${latest.cuU.toLocaleString()}`, sub:'per tonne', cls:'copper' },
+  { label:'AUD/USD',    value:latest.fx.toFixed(3), sub:'exchange rate', cls:'audusd' },
+  { label:'Diesel',     value:`A$${latest.ds.toFixed(2)}`, sub:'per litre', cls:'diesel' },
+  { label:'Electricity',value:`A$${latest.el}`, sub:'per MWh', cls:'elec' },
+  { label:'Brent Crude',value:`US$${latest.bn}`, sub:'per barrel', cls:'brent' },
+];
+const kpiRow = document.getElementById('kpi-row');
+kpiData.forEach(k => {
+  kpiRow.innerHTML += `<div class="kpi ${k.cls}">
+    <div class="label">${k.label}</div>
+    <div class="value">${k.value}</div>
+    <div class="sub">${k.sub} · ${latest.m}</div>
+  </div>`;
+});
+
+// ─── Sensitivity chart ───────────────────────────────────────────────────────
+const favSens  = SENS.filter(s => s.fav);
+new Chart(document.getElementById('chartSens'), {
+  type: 'bar',
+  data: {
+    labels: favSens.map(s => `${s.driver} (${s.change})`),
+    datasets: [{
+      label: 'Full-Year NPAT A$000',
+      data: favSens.map(s => s.npat_yr),
+      backgroundColor: favSens.map(s => s.npat_yr >= 0 ? '#34c77b88' : '#e0555588'),
+      borderColor:     favSens.map(s => s.npat_yr >= 0 ? '#34c77b' : '#e05555'),
+      borderWidth: 1,
+    }],
+  },
+  options: { ...OPTS, indexAxis:'y', scales: { x: { ticks:{font:{size:10}} }, y: { ticks:{font:{size:10}} } } },
+});
+
+// Sensitivity table
+const maxAbs = Math.max(...SENS.map(s => Math.abs(s.npat_yr)));
+const tbl = document.getElementById('sensTable');
+tbl.innerHTML = `<tr>
+  <th>Driver</th><th>Change</th>
+  <th>NPAT/yr (A$000)</th><th>AISC Change (A$/oz)</th>
+  <th class="bar-cell">Relative Impact</th>
+</tr>`;
+SENS.forEach(s => {
+  const pct = (Math.abs(s.npat_yr) / maxAbs * 100).toFixed(0);
+  const cls = s.fav ? 'fav' : 'unfav';
+  const barColor = s.fav ? '#34c77b' : '#e05555';
+  tbl.innerHTML += `<tr>
+    <td>${s.driver}</td>
+    <td>${s.change}</td>
+    <td class="${cls}">${s.npat_yr >= 0 ? '+' : ''}${s.npat_yr.toLocaleString()}</td>
+    <td class="${s.aisc <= 0 ? 'fav' : 'unfav'}">${s.aisc === 0 ? '—' : (s.aisc > 0 ? '+' : '') + s.aisc}</td>
+    <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill" style="width:${pct}%;background:${barColor};"></div></div></td>
+  </tr>`;
+});
+
+// ─── Navigation ──────────────────────────────────────────────────────────────
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// ─── Scenario builder ────────────────────────────────────────────────────────
+function updateLabel(id, val, unit, decimals = 0) {
+  const v = parseFloat(val);
+  const prefix = v >= 0 ? '+' : '';
+  document.getElementById(id).textContent = `${prefix}${v.toFixed(decimals)} ${unit}`;
+}
+function updateFxLabel(val) {
+  const v = parseFloat(val);
+  document.getElementById('fxLbl').textContent = (v >= 0 ? '+' : '') + v.toFixed(3);
+}
+
+function applyPreset(name) {
+  const p = PRESETS[name];
+  document.getElementById('goldSlider').value   = p.gold;   updateLabel('goldLbl',   p.gold,   'A$/oz');
+  document.getElementById('copperSlider').value = p.copper; updateLabel('copperLbl', p.copper, 'US$/t');
+  document.getElementById('fxSlider').value     = p.fx;     updateFxLabel(p.fx);
+  document.getElementById('dieselSlider').value = p.diesel; updateLabel('dieselLbl', p.diesel, 'A$/L', 2);
+  document.getElementById('elecSlider').value   = p.elec;   updateLabel('elecLbl',   p.elec,   'A$/MWh');
+  runScenario();
+}
+
+function runScenario() {
+  const gold   = parseFloat(document.getElementById('goldSlider').value);
+  const copper = parseFloat(document.getElementById('copperSlider').value);
+  const fx     = parseFloat(document.getElementById('fxSlider').value);
+  const diesel = parseFloat(document.getElementById('dieselSlider').value);
+  const elec   = parseFloat(document.getElementById('elecSlider').value);
+
+  // Unit sensitivities (NPAT A$000 per unit, AISC A$/oz per unit)
+  const goldNpat  = gold   * 28.70;
+  const cuNpat    = copper *  1.316;
+  const fxNpat    = (fx / 0.001) * -338.0;
+  const fuelNpat  = (diesel / 0.01) * -476.0;
+  const elecNpat  = elec  * -30.80;
+
+  const goldAisc  = 0;
+  const cuAisc    = copper * -0.046;
+  const fuelAisc  = (diesel / 0.01) * 1.70;
+  const elecAisc  = elec * 0.11;
+
+  const totalNpat = goldNpat + cuNpat + fxNpat + fuelNpat + elecNpat;
+  const totalAisc = goldAisc + cuAisc + fuelAisc + elecAisc;
+
+  const fmt = (v, pre='') => `${pre}${v >= 0 ? '+' : ''}${Math.round(v).toLocaleString()}`;
+  const color = v => v >= 0 ? 'var(--green)' : 'var(--red)';
+
+  document.getElementById('res-npat-qtr').textContent = fmt(totalNpat) + ' A$k';
+  document.getElementById('res-npat-qtr').style.color = color(totalNpat);
+  document.getElementById('res-npat-yr').textContent  = fmt(totalNpat * 4) + ' A$k';
+  document.getElementById('res-npat-yr').style.color  = color(totalNpat);
+  document.getElementById('res-aisc').textContent     = fmt(totalAisc) + ' A$/oz';
+  document.getElementById('res-aisc').style.color     = color(-totalAisc);
+
+  const breakdown = [
+    { name: 'Gold',        val: goldNpat },
+    { name: 'Copper',      val: cuNpat },
+    { name: 'AUD/USD',     val: fxNpat },
+    { name: 'Diesel',      val: fuelNpat },
+    { name: 'Electricity', val: elecNpat },
+  ];
+  const maxB = Math.max(...breakdown.map(b => Math.abs(b.val)), 1);
+
+  const wf = document.getElementById('waterfall');
+  wf.innerHTML = breakdown.map(b => {
+    const pct = (Math.abs(b.val) / maxB * 100).toFixed(0);
+    const bc  = b.val >= 0 ? 'var(--green)' : 'var(--red)';
+    return `<div class="waterfall-row">
+      <div class="name">${b.name}</div>
+      <div class="bar-outer"><div class="bar-inner" style="width:${pct}%;background:${bc};"></div></div>
+      <div class="amt" style="color:${bc}">${b.val >= 0 ? '+' : ''}${Math.round(b.val).toLocaleString()}</div>
+    </div>`;
+  }).join('');
+}
+
+// Run once on load to show zero-state
+runScenario();
+</script>
+</body>
+</html>

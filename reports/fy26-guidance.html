@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ironfield Resources — FY26 Production &amp; Cost Guidance</title>
+  <style>
+    :root {
+      --brand: #1a3a5c;
+      --brand-mid: #2e5984;
+      --gold: #b8892e;
+      --text: #1a1a1a;
+      --muted: #4a5568;
+      --line: #d1d5db;
+      --bg: #f9fafb;
+      --surface: #ffffff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: "Segoe UI", Arial, sans-serif; font-size: 10pt; color: var(--text); background: var(--bg); line-height: 1.5; }
+    .page { max-width: 900px; margin: 0 auto; background: var(--surface); padding: 48px 56px; }
+    .doc-header { display: flex; justify-content: space-between; align-items: flex-start; padding-bottom: 16px; border-bottom: 3px solid var(--brand); margin-bottom: 24px; }
+    .company-name { font-size: 18pt; font-weight: 700; color: var(--brand); line-height: 1.1; }
+    .company-sub { font-size: 9pt; color: var(--muted); margin-top: 4px; }
+    .doc-date { text-align: right; font-size: 9pt; color: var(--muted); }
+    .report-banner { background: linear-gradient(120deg, var(--brand), var(--brand-mid)); color: #fff; padding: 16px 20px; border-radius: 6px; margin-bottom: 24px; }
+    .report-banner h1 { font-size: 13pt; font-weight: 700; }
+    .report-banner p { font-size: 9pt; color: #c8d9ea; margin-top: 4px; }
+    /* Guidance band cards */
+    .guidance-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 24px; }
+    .guidance-card { border: 2px solid var(--brand); border-radius: 10px; padding: 20px; text-align: center; }
+    .guidance-card h3 { font-size: 9pt; font-weight: 700; color: var(--brand); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px; }
+    .guidance-card .range { font-size: 20pt; font-weight: 700; color: var(--brand); line-height: 1.1; }
+    .guidance-card .unit { font-size: 9pt; color: var(--muted); margin-top: 4px; }
+    .guidance-card .midpoint { font-size: 9pt; color: var(--gold); font-weight: 700; margin-top: 6px; }
+    /* Section headings */
+    h2.section { font-size: 11pt; font-weight: 700; color: var(--brand); border-bottom: 2px solid var(--gold); padding-bottom: 4px; margin: 24px 0 12px; text-transform: uppercase; letter-spacing: 0.05em; }
+    h3.sub { font-size: 10pt; font-weight: 700; color: var(--brand); margin: 14px 0 6px; }
+    p.body { font-size: 9.5pt; color: var(--text); line-height: 1.6; margin-bottom: 8px; }
+    /* Tables */
+    .tbl-wrap { border: 1px solid var(--line); border-radius: 6px; overflow: hidden; margin-bottom: 16px; }
+    table { width: 100%; border-collapse: collapse; font-size: 9pt; }
+    thead tr { background: var(--brand); color: #fff; }
+    thead th { padding: 8px 10px; text-align: left; font-weight: 600; white-space: nowrap; }
+    thead th.r { text-align: right; }
+    tbody tr:nth-child(even) { background: #f4f7fb; }
+    tbody td { padding: 7px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+    tbody tr:last-child td { border-bottom: none; }
+    td.r { text-align: right; }
+    td.total { font-weight: 700; color: var(--brand); }
+    .section-row td { background: #e6eef5 !important; font-weight: 700; color: var(--brand); font-size: 8.5pt; text-transform: uppercase; letter-spacing: 0.04em; }
+    /* Update boxes */
+    .update-box { border: 1px solid var(--line); border-radius: 6px; padding: 14px 16px; margin-bottom: 14px; }
+    .update-box.positive { background: #e8f5ee; border-color: #5a9e78; }
+    .update-box.neutral { background: #f0f5fb; border-color: var(--brand-mid); }
+    .update-box h4 { font-size: 9pt; font-weight: 700; color: var(--brand); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.04em; }
+    .update-box p { font-size: 9pt; line-height: 1.55; }
+    .update-box.positive p { color: #1a4a2e; }
+    .update-box.neutral p { color: #1a3a5c; }
+    /* Quote */
+    .quote-box { border-left: 4px solid var(--gold); padding: 12px 16px; background: #fffbf0; margin: 16px 0; border-radius: 0 6px 6px 0; }
+    .quote-box p { font-size: 9.5pt; font-style: italic; color: var(--text); line-height: 1.6; margin-bottom: 6px; }
+    .quote-box cite { font-size: 8.5pt; font-weight: 700; color: var(--brand); font-style: normal; }
+    .doc-footer { margin-top: 36px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 8pt; color: var(--muted); }
+    @media print { body { background: #fff; } .page { max-width: 100%; padding: 24px; } }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <div class="doc-header">
+    <div>
+      <div class="company-name">Ironfield Resources Limited</div>
+      <div class="company-sub">Kalgara Gold-Copper Mine, Murchison Province WA</div>
+    </div>
+    <div class="doc-date">22 July 2025<br><strong>Market Announcement</strong></div>
+  </div>
+
+  <div class="report-banner">
+    <h1>FY26 Production and Cost Guidance — Kalgara Gold-Copper Mine</h1>
+    <p>For the 12-month period from 1 July 2025 to 30 June 2026</p>
+  </div>
+
+  <!-- Guidance Cards -->
+  <div class="guidance-grid">
+    <div class="guidance-card">
+      <h3>Gold Production</h3>
+      <div class="range">130,000 – 155,000</div>
+      <div class="unit">ounces of gold (oz Au)</div>
+      <div class="midpoint">Midpoint: 142,500oz</div>
+    </div>
+    <div class="guidance-card">
+      <h3>All-In Sustaining Cost</h3>
+      <div class="range">A$2,200 – A$2,600</div>
+      <div class="unit">per ounce of gold (A$/oz Au)</div>
+      <div class="midpoint">Midpoint: A$2,400/oz</div>
+    </div>
+    <div class="guidance-card">
+      <h3>Sustaining Capital (Kalgara)</h3>
+      <div class="range">A$40m – A$50m</div>
+      <div class="unit">capital expenditure</div>
+      <div class="midpoint">Midpoint: A$45m</div>
+    </div>
+    <div class="guidance-card">
+      <h3>Growth Capital (Total)</h3>
+      <div class="range">A$155m – A$185m</div>
+      <div class="unit">Kalgara + Creston + Resource Dev.</div>
+      <div class="midpoint">Midpoint: A$170m</div>
+    </div>
+  </div>
+
+  <!-- Key Assumptions -->
+  <h2 class="section">Guidance Assumptions and Key Points</h2>
+
+  <div class="update-box neutral">
+    <h4>Production Profile</h4>
+    <p>FY26 production is expected to be <strong>slightly weighted towards H1</strong>, reflecting the higher-grade underground ore blend in the first half of the year and the planned November mill shutdown in Q2 FY26. Open pit production from West Pit Stage 4 remains the primary feed source, supplemented by Lower Kalgara Underground ore.</p>
+  </div>
+
+  <div class="update-box neutral">
+    <h4>AISC</h4>
+    <p>AISC guidance of A$2,200–A$2,600/oz reflects full-year costs at Kalgara, net of by-product copper credits. AISC is expected to be weighted towards the first half of FY26, with Q1 and Q2 benefiting from higher underground ore blend. Processing costs will be elevated in November 2025 due to the scheduled mill maintenance shutdown.</p>
+  </div>
+
+  <div class="update-box neutral">
+    <h4>Sustaining Capital</h4>
+    <p>Sustaining capital of A$40–50 million covers planned mill maintenance, underground development sustaining, village and site infrastructure maintenance, and rehabilitation provisions. The phased open pit fleet rebuild program (8 trucks over FY26) is included in sustaining capital.</p>
+  </div>
+
+  <div class="update-box neutral">
+    <h4>Growth Capital</h4>
+    <p>Total growth capital guidance of A$155–185 million includes: <strong>Kalgara growth</strong> (A$80–95m: TSF6 Stage 2 lift, North Pit Stage 2 pre-stripping, LKU growth development); <strong>Creston</strong> (A$58–72m: Feasibility Study completion, early works, decline tunnelling); and <strong>resource development</strong> (A$18–22m: 220,000m drill program, 10 rigs).</p>
+  </div>
+
+  <!-- Guidance Table -->
+  <h2 class="section">Detailed Guidance Summary</h2>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Metric</th>
+          <th>Unit</th>
+          <th class="r">FY26 Low</th>
+          <th class="r">FY26 High</th>
+          <th class="r">FY25 Actual</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="section-row"><td colspan="5">Production</td></tr>
+        <tr><td>Gold production</td><td>oz Au</td><td class="r">130,000</td><td class="r">155,000</td><td class="r">153,188 ¹</td></tr>
+        <tr><td>Copper production</td><td>t Cu</td><td class="r">5,400</td><td class="r">6,600</td><td class="r">5,950 ¹</td></tr>
+        <tr><td>Ore processed</td><td>ktpa</td><td class="r">9,000</td><td class="r">10,200</td><td class="r">9,586 ¹</td></tr>
+        <tr class="section-row"><td colspan="5">Costs</td></tr>
+        <tr><td>AISC (net of Cu by-product credits)</td><td>A$/oz Au</td><td class="r">2,200</td><td class="r">2,600</td><td class="r">2,382 ¹</td></tr>
+        <tr><td>C1 cash cost</td><td>A$/oz Au</td><td class="r">1,680</td><td class="r">1,980</td><td class="r">1,842 ¹</td></tr>
+        <tr class="section-row"><td colspan="5">Capital Expenditure</td></tr>
+        <tr><td>Sustaining capex — Kalgara</td><td>A$m</td><td class="r">40</td><td class="r">50</td><td class="r">45 ¹</td></tr>
+        <tr><td>Growth capex — Kalgara</td><td>A$m</td><td class="r">80</td><td class="r">95</td><td class="r">22 ¹</td></tr>
+        <tr><td>Growth capex — Creston</td><td>A$m</td><td class="r">58</td><td class="r">72</td><td class="r">4 ¹</td></tr>
+        <tr><td>Resource development (capitalised)</td><td>A$m</td><td class="r">18</td><td class="r">22</td><td class="r">12 ¹</td></tr>
+        <tr><td class="total">Total capital expenditure</td><td>A$m</td><td class="r total">196</td><td class="r total">239</td><td class="r total">83 ¹</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="body" style="font-size:8pt;color:var(--muted)">¹ FY25 represents the 7-month period from acquisition completion (6 December 2024) to 30 June 2025, annualised for comparison purposes only. FY25 actual production and cost figures are unaudited.</p>
+
+  <!-- H1 vs H2 Phasing -->
+  <h2 class="section">H1 / H2 Phasing</h2>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Metric</th>
+          <th class="r">H1 FY26 (Jul–Dec 2025)</th>
+          <th class="r">H2 FY26 (Jan–Jun 2026)</th>
+          <th class="r">FY26 Guidance (Full Year)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Gold production (oz)</td><td class="r">~75,000–85,000</td><td class="r">~55,000–70,000</td><td class="r total">130,000–155,000</td></tr>
+        <tr><td>AISC (A$/oz)</td><td class="r">~A$2,250–A$2,550</td><td class="r">~A$2,300–A$2,650</td><td class="r total">A$2,200–A$2,600</td></tr>
+        <tr><td>Sustaining capex (A$m)</td><td class="r">~A$18–A$24</td><td class="r">~A$22–A$26</td><td class="r total">A$40–A$50</td></tr>
+        <tr><td>Growth capex — Kalgara (A$m)</td><td class="r">~A$36–A$44</td><td class="r">~A$44–A$51</td><td class="r total">A$80–A$95</td></tr>
+        <tr><td>Growth capex — Creston (A$m)</td><td class="r">~A$38–A$44</td><td class="r">~A$20–A$28</td><td class="r total">A$58–A$72</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="body">Creston growth capex is expected to be higher in H1 FY26 due to Feasibility Study completion costs and early works investment, before tapering in H2 pending the FID. H2 FY26 Creston spend will depend on the timing of EPA approvals and the FID timeline.</p>
+
+  <!-- FY26 Priorities -->
+  <h2 class="section">FY26 Strategic Priorities</h2>
+
+  <h3 class="sub">1. Kalgara Operational Excellence</h3>
+  <p class="body">Continued focus on open pit productivity improvement in West Pit Stage 4 and North Pit Stage 2 waste stripping. Fleet renewal (8 truck rebuilds) and RC grade control roll-out are the key operational enablers for production trending towards the upper end of guidance.</p>
+
+  <h3 class="sub">2. Creston Feasibility Study and FID Preparation</h3>
+  <p class="body">Completion and release of the Creston Feasibility Study (October 2025), followed by FID preparation including finalisation of the A$150 million debt facility and contractor selection. Early works investment will continue throughout FY26 to advance critical-path activities ahead of FID (targeted H1 FY27).</p>
+
+  <h3 class="sub">3. Resource Growth — 220,000 Metre Drill Program</h3>
+  <p class="body">The largest resource development drill program in Ironfield's history is underway at Kalgara, with 10 active rigs targeting Stage 3/4 Extension (open pit mine life extension beyond FY27), Lower Kalgara Underground maiden Resource Estimate (Q3 FY26), and near-mine satellite deposits within trucking distance of the Kalgara processing plant.</p>
+
+  <h3 class="sub">4. Environmental Approvals — Creston</h3>
+  <p class="body">Active engagement with the WA EPA and Commonwealth EPBC Act assessment processes. Both approvals are targeted in H2 FY26 and are prerequisites for the Creston FID. Ironfield has engaged specialist environmental consultants to support the process.</p>
+
+  <div class="quote-box">
+    <p>"FY26 is a pivotal year for Ironfield. We are guiding to a strong production range of 130,000–155,000oz of gold at our Kalgara mine, while simultaneously advancing the Creston Feasibility Study and positioning for a Final Investment Decision that will transform Ironfield into a 250,000-ounce-per-year producer. Our balance sheet is in excellent shape, we are debt free, and we enter FY26 with significant cash reserves and a clear growth pathway."</p>
+    <cite>— Thomas Hargreaves, Managing Director, Ironfield Resources Limited</cite>
+  </div>
+
+  <!-- Key Risks -->
+  <h2 class="section">Key Risks to Guidance</h2>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Risk</th>
+          <th>Potential Impact</th>
+          <th>Mitigant</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Gold price decline below A$4,200/oz</td><td>Put option floor limits downside; hedging book provides partial protection</td><td>89,998oz Au protected via put options at A$4,200–A$5,000/oz through CY27</td></tr>
+        <tr><td>Mill availability below plan</td><td>Reduced throughput and gold ounces</td><td>Planned November shutdown; preventive maintenance programs; ROM stockpile buffer</td></tr>
+        <tr><td>Open pit grade reconciliation variance</td><td>Lower production, higher AISC</td><td>RC grade control program; enhanced geological modelling; stockpile management review</td></tr>
+        <tr><td>Cost inflation (labour, energy, consumables)</td><td>Higher operating costs and AISC</td><td>Multi-year labour agreements in place; fuel hedging; supply chain diversification</td></tr>
+        <tr><td>Creston environmental approvals delayed</td><td>FID delay; higher early-works sunk cost</td><td>Proactive EPA engagement; early works allow critical path advance regardless of timing</td></tr>
+        <tr><td>Exchange rate (A$:US$)</td><td>Realised gold price movement</td><td>Gold sold in A$; natural hedge via Australian cost base</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="doc-footer">
+    <p>This announcement has been authorised for release by the Board of Ironfield Resources Limited. This guidance is forward-looking and subject to material risks and assumptions, including commodity prices, exchange rates, operational performance, and regulatory timelines. Actual results may differ materially. Guidance is prepared on a 100% basis. All dollar amounts are Australian dollars (A$) unless otherwise stated.</p>
+    <p style="margin-top:8px;"><strong>Contact:</strong> Investor Relations &nbsp;|&nbsp; Ironfield Resources Limited, Level 8, 140 St Georges Terrace, Perth WA 6000</p>
+  </div>
+
+</div>
+</body>
+</html>

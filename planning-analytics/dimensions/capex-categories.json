@@ -1,0 +1,98 @@
+{
+  "dimension": "CapexCategory",
+  "description": "Capital expenditure breakdown by project and category for planning",
+  "cube": "CapexPlanning",
+  "unit": "A$000",
+  "hierarchy": [
+    {
+      "project": "Kalgara Mine",
+      "categories": [
+        {
+          "name": "Kalgara Sustaining — Maintenance",
+          "type": "Sustaining",
+          "description": "Planned and breakdown maintenance on processing plant, mobile fleet, and site infrastructure"
+        },
+        {
+          "name": "Kalgara Sustaining — Underground Dev.",
+          "type": "Sustaining",
+          "description": "Sustaining underground development to maintain existing ore access; excludes growth drives"
+        },
+        {
+          "name": "Kalgara Sustaining — Fleet Rebuild",
+          "type": "Sustaining",
+          "description": "Truck and loader component rebuilds to sustain operating fleet life (8 trucks FY26)"
+        },
+        {
+          "name": "Kalgara Growth — TSF Stage 2",
+          "type": "Growth",
+          "description": "TSF6 Stage 2 tailings storage facility lift; provides capacity to Q2 FY28"
+        },
+        {
+          "name": "Kalgara Growth — North Pit Pre-strip",
+          "type": "Growth",
+          "description": "North Pit Stage 2 waste stripping; unlocks baseload ore feed from FY28"
+        },
+        {
+          "name": "Kalgara Growth — UG Growth Dev.",
+          "type": "Growth",
+          "description": "C-Lode Extension, Eastern Corridor North drives; extending LKU mine life"
+        },
+        {
+          "name": "Kalgara Growth — Fleet Expansion",
+          "type": "Growth",
+          "description": "New haul trucks and loaders to support open pit TMM growth targets"
+        }
+      ]
+    },
+    {
+      "project": "Creston Project",
+      "categories": [
+        {
+          "name": "Creston — Feasibility Study",
+          "type": "Growth",
+          "description": "Final FS studies, engineering, specialist consultants; completed Oct 2025"
+        },
+        {
+          "name": "Creston — Decline Tunnelling",
+          "type": "Growth",
+          "description": "Main access decline advance; 712m cumulative at Dec 2025 (target 1,200m pre-FID)"
+        },
+        {
+          "name": "Creston — Civil & Portal Works",
+          "type": "Growth",
+          "description": "Boxcut, portal installation, reinforced concrete arch sections"
+        },
+        {
+          "name": "Creston — Blind Bore & Ventilation",
+          "type": "Growth",
+          "description": "Ventilation raise pre-commissioning, drill cutter head fabrication"
+        },
+        {
+          "name": "Creston — EPCM & Owner Costs",
+          "type": "Growth",
+          "description": "Engineering, procurement, construction management fees pre-FID"
+        }
+      ]
+    },
+    {
+      "project": "Resource Development",
+      "categories": [
+        {
+          "name": "Resource Dev — West Pit Drilling",
+          "type": "Resource Dev",
+          "description": "West Pit Stage 3/4 Extension RC and diamond drilling (capitalised)"
+        },
+        {
+          "name": "Resource Dev — LKU Drilling",
+          "type": "Resource Dev",
+          "description": "Lower Kalgara Underground resource growth and conversion drilling"
+        },
+        {
+          "name": "Resource Dev — Satellite Deposits",
+          "type": "Resource Dev",
+          "description": "Near-mine satellite target drilling within 30km of processing plant"
+        }
+      ]
+    }
+  ]
+}

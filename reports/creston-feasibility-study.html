@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ironfield Resources — Creston Underground Project Feasibility Study</title>
+  <style>
+    :root {
+      --brand: #1a3a5c;
+      --brand-mid: #2e5984;
+      --gold: #b8892e;
+      --green: #1a6e38;
+      --text: #1a1a1a;
+      --muted: #4a5568;
+      --line: #d1d5db;
+      --bg: #f9fafb;
+      --surface: #ffffff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: "Segoe UI", Arial, sans-serif; font-size: 10pt; color: var(--text); background: var(--bg); line-height: 1.5; }
+    .page { max-width: 900px; margin: 0 auto; background: var(--surface); padding: 48px 56px; }
+    .doc-header { display: flex; justify-content: space-between; align-items: flex-start; padding-bottom: 16px; border-bottom: 3px solid var(--brand); margin-bottom: 24px; }
+    .company-name { font-size: 18pt; font-weight: 700; color: var(--brand); line-height: 1.1; }
+    .company-sub { font-size: 9pt; color: var(--muted); margin-top: 4px; }
+    .doc-date { text-align: right; font-size: 9pt; color: var(--muted); }
+    .report-banner { background: linear-gradient(120deg, #0e3a22, #1a6e38); color: #fff; padding: 20px; border-radius: 6px; margin-bottom: 24px; }
+    .report-banner h1 { font-size: 15pt; font-weight: 700; }
+    .report-banner p { font-size: 10pt; color: #a8d8bc; margin-top: 6px; }
+    .report-banner .subtitle { font-size: 9pt; color: #c8e8d4; margin-top: 4px; }
+    /* KPI grid */
+    .kpi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; }
+    .kpi-card { border-radius: 8px; padding: 16px; text-align: center; }
+    .kpi-card.primary { background: var(--brand); color: #fff; }
+    .kpi-card.secondary { background: #0e3a22; color: #fff; }
+    .kpi-card .val { font-size: 17pt; font-weight: 700; line-height: 1; margin-bottom: 4px; }
+    .kpi-card .lbl { font-size: 7.5pt; opacity: 0.8; text-transform: uppercase; letter-spacing: 0.05em; }
+    .kpi-card .note { font-size: 7pt; opacity: 0.65; margin-top: 3px; }
+    /* Key highlights box */
+    .highlights { border: 1px solid var(--line); border-radius: 6px; padding: 16px 20px; margin-bottom: 24px; background: #f0f5fb; }
+    .highlights h2 { font-size: 10pt; font-weight: 700; color: var(--brand); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px; }
+    .highlights ul { padding-left: 18px; }
+    .highlights li { font-size: 9.5pt; line-height: 1.55; margin-bottom: 5px; }
+    .highlights li strong { color: var(--brand); }
+    /* Section headings */
+    h2.section { font-size: 11pt; font-weight: 700; color: var(--brand); border-bottom: 2px solid var(--gold); padding-bottom: 4px; margin: 24px 0 12px; text-transform: uppercase; letter-spacing: 0.05em; }
+    h3.sub { font-size: 10pt; font-weight: 700; color: var(--brand); margin: 14px 0 6px; }
+    p.body { font-size: 9.5pt; color: var(--text); line-height: 1.6; margin-bottom: 8px; }
+    /* Tables */
+    .tbl-wrap { border: 1px solid var(--line); border-radius: 6px; overflow: hidden; margin-bottom: 16px; }
+    table { width: 100%; border-collapse: collapse; font-size: 9pt; }
+    thead tr { background: var(--brand); color: #fff; }
+    thead th { padding: 8px 10px; text-align: left; font-weight: 600; white-space: nowrap; }
+    thead th.r { text-align: right; }
+    tbody tr:nth-child(even) { background: #f4f7fb; }
+    tbody td { padding: 7px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+    tbody tr:last-child td { border-bottom: none; }
+    td.r { text-align: right; }
+    td.total { font-weight: 700; color: var(--brand); }
+    td.subtotal { font-weight: 600; color: var(--brand); background: #eef2f8 !important; }
+    .section-row td { background: #e6eef5 !important; font-weight: 700; color: var(--brand); font-size: 8.5pt; text-transform: uppercase; letter-spacing: 0.04em; }
+    /* Sensitivity table */
+    .sensitivity thead tr { background: #1a6e38; }
+    /* Callout */
+    .callout-gold { background: #fff9e6; border: 1px solid var(--gold); border-radius: 6px; padding: 12px 16px; margin-bottom: 16px; }
+    .callout-gold p { font-size: 9pt; color: #5c4200; line-height: 1.55; }
+    .callout-gold strong { color: #3d2a00; }
+    /* Quote */
+    .quote-box { border-left: 4px solid var(--gold); padding: 12px 16px; background: #fffbf0; margin: 16px 0; border-radius: 0 6px 6px 0; }
+    .quote-box p { font-size: 9.5pt; font-style: italic; color: var(--text); line-height: 1.6; margin-bottom: 6px; }
+    .quote-box cite { font-size: 8.5pt; font-weight: 700; color: var(--brand); font-style: normal; }
+    .doc-footer { margin-top: 36px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 8pt; color: var(--muted); }
+    @media print { body { background: #fff; } .page { max-width: 100%; padding: 24px; } }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <div class="doc-header">
+    <div>
+      <div class="company-name">Ironfield Resources Limited</div>
+      <div class="company-sub">Murchison Province, Western Australia &nbsp;|&nbsp; Gold &amp; Copper</div>
+    </div>
+    <div class="doc-date">3 October 2025<br><strong>Market Announcement</strong></div>
+  </div>
+
+  <div class="report-banner">
+    <h1>Creston Underground Project — Feasibility Study</h1>
+    <p>World-class, long-life, lowest quartile cost Australian gold-copper mine confirmed</p>
+    <div class="subtitle">Post-tax NPV<sub>5%</sub> A$1.42bn &nbsp;|&nbsp; Post-tax IRR 24.2% &nbsp;|&nbsp; 12-year mine life &nbsp;|&nbsp; A$420m pre-production capex</div>
+  </div>
+
+  <!-- KPI Grid -->
+  <div class="kpi-grid">
+    <div class="kpi-card primary"><div class="val">A$1.42bn</div><div class="lbl">Post-tax NPV (5%)</div><div class="note">A$4,500/oz gold base case</div></div>
+    <div class="kpi-card primary"><div class="val">24.2%</div><div class="lbl">Post-tax IRR</div><div class="note">A$4,500/oz gold base case</div></div>
+    <div class="kpi-card primary"><div class="val">A$2.6bn</div><div class="lbl">Post-tax undiscounted FCF</div><div class="note">Base case</div></div>
+    <div class="kpi-card secondary"><div class="val">12 years</div><div class="lbl">Mine Life</div><div class="note">Initial LOM</div></div>
+    <div class="kpi-card secondary"><div class="val">120koz Au</div><div class="lbl">Steady-state Production</div><div class="note">Per annum + 4kt Cu</div></div>
+    <div class="kpi-card secondary"><div class="val">A$420m</div><div class="lbl">Pre-production Capex</div><div class="note">Incl. 10% contingency</div></div>
+  </div>
+
+  <div class="highlights">
+    <h2>Feasibility Study Highlights</h2>
+    <ul>
+      <li><strong>Financials (base case A$4,500/oz long-term gold):</strong> Post-tax NPV<sub>5%</sub> of <strong>A$1.42 billion</strong>; post-tax IRR of <strong>24.2%</strong>; undiscounted post-tax FCF of <strong>A$2.6 billion</strong>. At spot gold (A$6,250/oz): post-tax NPV<sub>5%</sub> A$2.4bn, IRR 34.8%.</li>
+      <li><strong>Production Profile:</strong> Steady-state average annual production of <strong>120,000oz Au</strong> and <strong>4,000t Cu</strong> at AISC of <strong>A$1,580/oz</strong> — in the lowest cost quartile of Australian gold producers.</li>
+      <li><strong>Life-of-Mine Plan:</strong> 12.8Mt mined at 3.1g/t Au &amp; 0.28% Cu for <strong>1.27Moz gold</strong> and <strong>36kt copper</strong> contained over 12-year mine life.</li>
+      <li><strong>Ore Reserve:</strong> 12.8Mt at 3.1g/t Au &amp; 0.28% Cu (1.27Moz Au, 36kt Cu) — a <strong>42% increase</strong> in contained gold from the previous estimate. Creston is <strong>Australia's fifth-largest undeveloped underground gold reserve.</strong></li>
+      <li><strong>Capital Costs:</strong> Pre-production capex of <strong>A$420 million</strong> (including 10% contingency and 3% growth allowance). Post-production expansion capex of A$85 million, largely self-funded from Creston cash flows.</li>
+      <li><strong>Timeline:</strong> First gold approximately <strong>2.5 years from FID</strong>. FID targeted H1 FY27, subject to receipt of environmental approvals (WA EPA outcome targeted H2 FY26).</li>
+      <li><strong>Funding:</strong> Development expected to be fully funded from Ironfield's cash reserves (A$309m at 30 September 2025) together with the <strong>A$150 million committed debt facility</strong> — without the need for equity issuance.</li>
+    </ul>
+  </div>
+
+  <div class="quote-box">
+    <p>"The Creston Feasibility Study results confirm what we have long believed — that Creston is a world-class, high-return underground gold-copper project with exceptional economics. A post-tax NPV of A$1.4 billion and IRR of 24% at conservative long-term gold pricing, combined with a fully funded development pathway from our cash and committed debt, gives us tremendous confidence as we move towards a Final Investment Decision in H1 FY27. Creston will transform Ironfield into a 200,000 ounce-per-year Australian gold producer with industry-leading costs."</p>
+    <cite>— Thomas Hargreaves, Managing Director, Ironfield Resources Limited</cite>
+  </div>
+
+  <!-- Overview -->
+  <h2 class="section">Overview</h2>
+  <p class="body">Ironfield Resources Limited is pleased to announce the results of the Creston Underground Project Feasibility Study (FS). The FS confirms Creston as a long-life, high-grade, lowest quartile cost underground gold-copper mine that leverages the existing Kalgara processing plant, located 25km north of the Creston orebody.</p>
+  <p class="body">The FS was completed by a team of leading technical specialists. All technical work has been completed in accordance with the JORC Code (2012 Edition). A complete list of Competent Persons is provided in Appendix 1 of this announcement.</p>
+
+  <!-- Financial Summary -->
+  <h2 class="section">Financial Results</h2>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Financial Metric</th>
+          <th class="r">Base Case (A$4,500/oz Au)</th>
+          <th class="r">Spot Gold (A$6,250/oz Au)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Undiscounted FCF (pre-tax)</td><td class="r">A$3.8 billion</td><td class="r">A$6.4 billion</td></tr>
+        <tr><td>Undiscounted FCF (post-tax)</td><td class="r">A$2.6 billion</td><td class="r">A$4.4 billion</td></tr>
+        <tr><td>NPV<sub>5%</sub> (pre-tax)</td><td class="r">A$2.0 billion</td><td class="r">A$3.4 billion</td></tr>
+        <tr><td class="total">NPV<sub>5%</sub> (post-tax)</td><td class="r total">A$1.42 billion</td><td class="r total">A$2.40 billion</td></tr>
+        <tr><td class="total">IRR (post-tax)</td><td class="r total">24.2%</td><td class="r total">34.8%</td></tr>
+        <tr><td>Payback period (post-tax, from first gold)</td><td class="r">3.2 years</td><td class="r">2.2 years</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="sub">Gold Price Sensitivity — Post-Tax NPV (A$bn)</h3>
+  <div class="tbl-wrap">
+    <table class="sensitivity">
+      <thead>
+        <tr>
+          <th>Gold Price (A$/oz)</th>
+          <th class="r">3,800</th>
+          <th class="r">4,200</th>
+          <th class="r">4,500 (Base)</th>
+          <th class="r">5,000</th>
+          <th class="r">5,500</th>
+          <th class="r">6,250 (Spot)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Post-tax NPV<sub>5%</sub> (A$bn)</td>
+          <td class="r">0.62</td>
+          <td class="r">1.02</td>
+          <td class="r total">1.42</td>
+          <td class="r">1.84</td>
+          <td class="r">2.12</td>
+          <td class="r">2.40</td>
+        </tr>
+        <tr>
+          <td>Post-tax IRR (%)</td>
+          <td class="r">14.8%</td>
+          <td class="r">20.2%</td>
+          <td class="r total">24.2%</td>
+          <td class="r">28.6%</td>
+          <td class="r">31.8%</td>
+          <td class="r">34.8%</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Physical Summary -->
+  <h2 class="section">Physical and Cost Summary</h2>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Operating Parameter</th>
+          <th class="r">Unit</th>
+          <th class="r">Life-of-Mine Total / Average</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="section-row"><td colspan="3">Production Target (Life-of-Mine)</td></tr>
+        <tr><td>Total ore mined</td><td class="r">Mt</td><td class="r">12.8</td></tr>
+        <tr><td>Head grade — Au</td><td class="r">g/t Au</td><td class="r">3.1</td></tr>
+        <tr><td>Head grade — Cu</td><td class="r">% Cu</td><td class="r">0.28%</td></tr>
+        <tr><td>Gold contained (LOM)</td><td class="r">Moz</td><td class="r">1.27</td></tr>
+        <tr><td>Copper contained (LOM)</td><td class="r">kt</td><td class="r">36</td></tr>
+        <tr><td>Gold recovery</td><td class="r">%</td><td class="r">88.5%</td></tr>
+        <tr><td>Mine life</td><td class="r">years</td><td class="r">12</td></tr>
+        <tr class="section-row"><td colspan="3">Steady-State Operating Performance (Years 3–10)</td></tr>
+        <tr><td>Annual gold production (steady state)</td><td class="r">oz</td><td class="r">120,000</td></tr>
+        <tr><td>Annual copper production (steady state)</td><td class="r">t</td><td class="r">4,000</td></tr>
+        <tr><td>AISC (net of by-product credits)</td><td class="r">A$/oz</td><td class="r total">1,580</td></tr>
+        <tr><td>C1 cash cost (net of by-product credits)</td><td class="r">A$/oz</td><td class="r">1,220</td></tr>
+        <tr class="section-row"><td colspan="3">Capital Costs</td></tr>
+        <tr><td>Pre-production capex (incl. 10% contingency)</td><td class="r">A$m</td><td class="r total">420</td></tr>
+        <tr><td>Post-production expansion capex</td><td class="r">A$m</td><td class="r">85</td></tr>
+        <tr><td>Sustaining capex (LOM)</td><td class="r">A$m</td><td class="r">186</td></tr>
+        <tr><td>Closure costs</td><td class="r">A$m</td><td class="r">48</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Capital Breakdown -->
+  <h3 class="sub">Pre-Production Capital Cost Breakdown</h3>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Capital Category</th>
+          <th class="r">A$m</th>
+          <th class="r">% of Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Mining development (decline, drives, chambers)</td><td class="r">168</td><td class="r">40%</td></tr>
+        <tr><td>Processing plant upgrades and CIL capacity</td><td class="r">84</td><td class="r">20%</td></tr>
+        <tr><td>Surface infrastructure (haul road upgrade, power, water)</td><td class="r">50</td><td class="r">12%</td></tr>
+        <tr><td>Ventilation shafts and airways</td><td class="r">34</td><td class="r">8%</td></tr>
+        <tr><td>EPCM, owners costs, and indirects</td><td class="r">46</td><td class="r">11%</td></tr>
+        <tr><td>Contingency (10%)</td><td class="r">38</td><td class="r">9%</td></tr>
+        <tr><td class="total">Total pre-production capex</td><td class="r total">420</td><td class="r total">100%</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Ore Reserve -->
+  <h2 class="section">Updated Ore Reserve</h2>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Ore Reserve Category</th>
+          <th class="r">Tonnes (Mt)</th>
+          <th class="r">Au Grade (g/t)</th>
+          <th class="r">Cu Grade (%)</th>
+          <th class="r">Contained Au (koz)</th>
+          <th class="r">Contained Cu (kt)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Probable</td><td class="r">12.8</td><td class="r">3.1</td><td class="r">0.28</td><td class="r">1,274</td><td class="r">36</td></tr>
+        <tr><td>Proved</td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">—</td></tr>
+        <tr><td class="total">Total Ore Reserve</td><td class="r total">12.8</td><td class="r total">3.1</td><td class="r total">0.28</td><td class="r total">1,274</td><td class="r total">36</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="body">The Creston Ore Reserve is based on conservative metal pricing of A$2,800/oz gold and A$10,000/t copper. Compared to the previous estimate, the updated Reserve represents a <strong>42% increase in contained gold</strong>. Creston is Australia's fifth-largest undeveloped underground gold reserve.</p>
+
+  <!-- Mineral Resource -->
+  <h3 class="sub">Mineral Resource Estimate (inclusive of Ore Reserve)</h3>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Category</th>
+          <th class="r">Tonnes (Mt)</th>
+          <th class="r">Au (g/t)</th>
+          <th class="r">Cu (%)</th>
+          <th class="r">Au (koz)</th>
+          <th class="r">Cu (kt)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Measured</td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">—</td></tr>
+        <tr><td>Indicated</td><td class="r">14.2</td><td class="r">3.0</td><td class="r">0.26</td><td class="r">1,370</td><td class="r">37</td></tr>
+        <tr><td>Inferred</td><td class="r">4.6</td><td class="r">2.8</td><td class="r">0.22</td><td class="r">414</td><td class="r">10</td></tr>
+        <tr><td class="total">Total</td><td class="r total">18.8</td><td class="r total">2.9</td><td class="r total">0.25</td><td class="r total">1,754</td><td class="r total">47</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Mine Plan / Schedule -->
+  <h2 class="section">Mine Plan and Production Schedule</h2>
+  <p class="body">The FS Mine Plan assumes ore haulage by truck from Creston to the existing Kalgara processing plant 25km north, via the upgraded sealed haul road. Underground mining uses a long-hole open stoping method with paste fill. The Creston decline will be developed from surface via an initial 5m × 5.5m access decline, with a second access decline (ventilation/emergency egress) to follow.</p>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Year / Period</th>
+          <th class="r">Ore Mined (kt)</th>
+          <th class="r">Au Grade (g/t)</th>
+          <th class="r">Au Production (oz)</th>
+          <th class="r">Cu Production (t)</th>
+          <th class="r">AISC (A$/oz)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Pre-production (Y-2.5 to Y0)</td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">—</td></tr>
+        <tr><td>Ramp-up: Year 1</td><td class="r">480</td><td class="r">2.8</td><td class="r">38,400</td><td class="r">1,120</td><td class="r">2,280</td></tr>
+        <tr><td>Ramp-up: Year 2</td><td class="r">840</td><td class="r">2.9</td><td class="r">72,000</td><td class="r">1,980</td><td class="r">1,920</td></tr>
+        <tr><td class="total">Steady State: Years 3–10 (avg)</td><td class="r total">1,068</td><td class="r total">3.1</td><td class="r total">120,000</td><td class="r total">4,000</td><td class="r total">1,580</td></tr>
+        <tr><td>Wind-down: Years 11–12 (avg)</td><td class="r">720</td><td class="r">2.9</td><td class="r">86,400</td><td class="r">2,640</td><td class="r">1,760</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Development Timeline -->
+  <h2 class="section">Development Timeline &amp; Milestones</h2>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Milestone</th>
+          <th>Target / Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Feasibility Study completed</td><td><strong>Achieved — 3 October 2025</strong></td></tr>
+        <tr><td>Environmental Impact Statement (EIS) submitted to WA EPA</td><td><strong>Achieved — September 2025</strong></td></tr>
+        <tr><td>WA EPA environmental approval</td><td>Targeted H2 FY26 (subject to EPA process)</td></tr>
+        <tr><td>Commonwealth EPBC Act approval</td><td>Targeted H2 FY26 (concurrent with EPA)</td></tr>
+        <tr><td>Final Investment Decision (FID)</td><td>Targeted H1 FY27</td></tr>
+        <tr><td>Financial close of debt facility</td><td>Prior to or concurrent with FID</td></tr>
+        <tr><td>Construction commencement</td><td>Following FID</td></tr>
+        <tr><td>First gold production</td><td>~2.5 years from FID</td></tr>
+        <tr><td>Steady-state production</td><td>~4.5 years from FID</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Funding -->
+  <h2 class="section">Funding and Capital Structure</h2>
+  <p class="body">Ironfield expects Creston's development to be fully funded from:</p>
+  <ul style="padding-left:20px;margin-bottom:12px;">
+    <li class="body"><strong>Existing cash reserves:</strong> A$309 million at 30 September 2025, growing to approximately A$422 million at 31 December 2025, reflecting ongoing strong Kalgara operating cash flows.</li>
+    <li class="body"><strong>A$150 million committed corporate debt facility</strong> (ANZ, CBA, Westpac), comprising two A$75 million revolving credit facilities, entered into September 2025.</li>
+    <li class="body"><strong>Ongoing Kalgara operating cash flows</strong> during the Creston construction period (estimated A$280–360 million per annum at current gold prices).</li>
+  </ul>
+  <p class="body">No equity issuance is required to fund Creston's development at current gold prices. The capital structure provides significant headroom and flexibility, particularly given Kalgara's AISC guidance trending towards the lower end of A$2,200–A$2,600/oz for FY26.</p>
+
+  <div class="callout-gold">
+    <p><strong>Cautionary Statement:</strong> The FS Mine Plan is a production target underpinned by approximately 78% Probable Ore Reserves, 4% Indicated Mineral Resources, 12% Inferred Mineral Resources, and 6% Exploration Target (on a contained gold basis over the LOM). The Inferred Mineral Resources and Exploration Target included in the FS Mine Plan are predominantly in the later years of the LOM. There is a low level of geological confidence associated with Inferred Mineral Resources and Exploration Targets and there is no certainty that further exploration work will result in the determination of Indicated or Measured Mineral Resources, or that production targets will be realised. All material assumptions are set out in Appendix 2. Forward-looking financial information is based on assumptions set out therein and is subject to risks including, but not limited to, commodity prices, exchange rates, permitting timelines, cost inflation and capital market conditions.</p>
+  </div>
+
+  <div class="doc-footer">
+    <p>This announcement has been authorised for release by the Board of Ironfield Resources Limited. This document contains forward-looking statements. Actual results may differ materially from those expressed or implied. Mineral Resources and Ore Reserves are reported in accordance with the JORC Code (2012 Edition). Competent Persons statements and full technical appendices are available in the complete FS announcement.</p>
+    <p style="margin-top:8px;"><strong>Contact:</strong> Investor Relations &nbsp;|&nbsp; Ironfield Resources Limited, Level 8, 140 St Georges Terrace, Perth WA 6000</p>
+  </div>
+
+</div>
+</body>
+</html>

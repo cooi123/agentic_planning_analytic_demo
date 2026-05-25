@@ -1,0 +1,86 @@
+{
+  "dimension": "Account",
+  "description": "Financial account hierarchy — P&L, Balance Sheet summary, and EBITDA bridge",
+  "cube": "FinancialPerformance",
+  "unit": "A$000",
+  "sign_convention": "Income positive, Expense negative",
+  "hierarchy": [
+    {
+      "name": "Revenue",
+      "type": "Aggregate",
+      "members": [
+        { "name": "Gold Revenue",            "type": "Input",     "driver": "GoldSold_oz × AvgPrice_AUD" },
+        { "name": "Copper Revenue",          "type": "Input",     "driver": "CopperSold_t × NetCuPrice_AUD" },
+        { "name": "Silver & Other Revenue",  "type": "Input",     "driver": "Minor by-products and freight services" },
+        { "name": "Hedge Gains/(Losses)",    "type": "Input",     "driver": "Realised put option premiums and expired options" }
+      ]
+    },
+    {
+      "name": "Cost of Sales",
+      "type": "Aggregate",
+      "sign": "Negative",
+      "members": [
+        { "name": "Mining Costs",            "type": "Input",     "driver": "Total material mined × unit mining cost" },
+        { "name": "Processing Costs",        "type": "Input",     "driver": "Ore processed × unit processing cost" },
+        { "name": "Site Services",           "type": "Input",     "driver": "Fixed + variable site overhead" },
+        { "name": "TC/RC & Freight",         "type": "Input",     "driver": "Concentrate tonnes shipped × treatment/refining rate" },
+        { "name": "Royalties",               "type": "Input",     "driver": "Revenue × royalty rate (approx. 3.5%)" },
+        { "name": "Change in Inventories",   "type": "Input",     "driver": "Movement in ore stockpile and finished goods values" },
+        { "name": "Depreciation & Amort.",   "type": "Input",     "driver": "UoP depreciation on PP&E; straight-line on other assets" }
+      ]
+    },
+    {
+      "name": "Gross Profit",
+      "type": "Calc",
+      "formula": "[Revenue] + [Cost of Sales]"
+    },
+    {
+      "name": "Below-the-Line Costs",
+      "type": "Aggregate",
+      "sign": "Negative",
+      "members": [
+        { "name": "Exploration Expense",     "type": "Input",     "driver": "Expensed portion of resource development drilling" },
+        { "name": "Corporate G&A",           "type": "Input",     "driver": "Perth office, exec remuneration, listed-company costs" },
+        { "name": "Other Income/(Loss)",     "type": "Input",     "driver": "Asset disposals, FX, MTM movements on financial assets" }
+      ]
+    },
+    {
+      "name": "EBIT",
+      "type": "Calc",
+      "formula": "[Gross Profit] + [Below-the-Line Costs]"
+    },
+    {
+      "name": "Finance Items",
+      "type": "Aggregate",
+      "members": [
+        { "name": "Finance Income",          "type": "Input",     "driver": "Interest on cash deposits" },
+        { "name": "Finance Costs",           "type": "Input",     "driver": "Lease interest; borrowing costs" }
+      ]
+    },
+    {
+      "name": "Profit Before Tax",
+      "type": "Calc",
+      "formula": "[EBIT] + [Finance Items]"
+    },
+    {
+      "name": "Income Tax Expense",
+      "type": "Input",
+      "driver": "Statutory tax rate 30% applied to taxable income; deferred tax adjustments"
+    },
+    {
+      "name": "NPAT",
+      "type": "Calc",
+      "formula": "[Profit Before Tax] + [Income Tax Expense]"
+    },
+    {
+      "name": "EBITDA",
+      "type": "Calc",
+      "formula": "[EBIT] - [Depreciation & Amort.]"
+    },
+    {
+      "name": "Underlying EBITDA",
+      "type": "Calc",
+      "formula": "[EBITDA] - [Hedge Gains/(Losses)]"
+    }
+  ]
+}
