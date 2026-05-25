@@ -45,7 +45,7 @@ function navBar(active) {
   const items = links
     .map(l => `<a href="${l.href}" class="ih-link${active === l.key ? ' active' : ''}">${l.label}</a>`)
     .join('');
-  return `<nav id="__ih-nav"><a href="/" class="ih-brand">Ironfield Hub</a>${items}<span class="ih-sep"></span></nav>`;
+  return `<nav id="__ih-nav"><a href="/" class="ih-brand">Demo Company A Hub</a>${items}<span class="ih-sep"></span></nav>`;
 }
 
 function injectNav(html, active) {
@@ -83,7 +83,7 @@ function reportsIndex() {
 
   return `<!doctype html><html lang="en"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Reports — Ironfield Hub</title>
+<title>Reports — Demo Company A Hub</title>
 <style>
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
   :root{
@@ -151,7 +151,7 @@ function reportsIndex() {
   <section class="hero">
     <div class="eyebrow">Investor Centre</div>
     <h1>Corporate Reports</h1>
-    <p class="sub">Access Ironfield Resources reporting, presentations, studies and guidance updates in a dashboard style aligned with the market data experience.</p>
+    <p class="sub">Access Demo Company A reporting, presentations, studies and guidance updates in a dashboard style aligned with the market data experience.</p>
   </section>
   <div class="list">${items}</div>
 </div>
@@ -216,5 +216,5 @@ app.get('/api/market/*', (req, res) => {
 // ─── Start ────────────────────────────────────────────────────────────────────
 
 app.listen(PORT, () => {
-  console.log(`Ironfield Hub listening on http://localhost:${PORT}`);
+  console.log(`Demo Company A Hub listening on http://localhost:${PORT}`);
 });
