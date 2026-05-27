@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agent Architecture — Company A Finance AI</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:        #0f1117;
+    --surface:   #1a1d27;
+    --surface2:  #21253a;
+    --border:    #2a2d3a;
+    --text:      #e4e6f0;
+    --muted:     #8b8fa8;
+    --gold:      #f5a623;
+    --blue:      #4a9ef5;
+    --green:     #34c77b;
+    --purple:    #9b6bf5;
+    --red:       #e05555;
+    --teal:      #4acfe8;
+    --orange:    #e07840;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 13px;
+    min-height: 100vh;
+  }
+
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 18px 32px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  header h1 { font-size: 17px; font-weight: 600; }
+  header span { color: var(--muted); font-size: 12px; }
+
+  .canvas {
+    padding: 40px 32px 60px;
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+
+  /* ── row helpers ─────────────────────────────────────────── */
+  .row {
+    display: flex;
+    align-items: stretch;
+    gap: 20px;
+    justify-content: center;
+  }
+
+  /* ── connector arrows ────────────────────────────────────── */
+  .connector-down {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 44px;
+    position: relative;
+  }
+  .connector-down::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 32px;
+    background: var(--border);
+  }
+  .connector-down::after {
+    content: '▼';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--muted);
+    font-size: 11px;
+  }
+
+  .connector-label {
+    font-size: 10px;
+    color: var(--muted);
+    text-align: center;
+    margin-top: -30px;
+    margin-bottom: 4px;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+  }
+
+  /* ── MCP connector row ───────────────────────────────────── */
+  .mcp-connectors {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    position: relative;
+    height: 50px;
+    margin: 0 auto;
+    width: 900px;
+    max-width: 100%;
+  }
+
+  .mcp-connectors::before {
+    /* horizontal line across top */
+    content: '';
+    position: absolute;
+    top: 0;
+    left: calc(16.5% + 10px);
+    right: calc(16.5% + 10px);
+    height: 2px;
+    background: var(--border);
+  }
+
+  .mcp-connector-segment {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+  }
+
+  .mcp-connector-segment::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 34px;
+    background: var(--border);
+  }
+
+  .mcp-connector-segment::after {
+    content: '▼';
+    position: absolute;
+    top: 34px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--muted);
+    font-size: 11px;
+  }
+
+  /* ── boxes ───────────────────────────────────────────────── */
+  .box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 20px;
+  }
+
+  .box-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+  .box-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+  .box-title { font-weight: 600; font-size: 13px; }
+  .box-subtitle { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+  .tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 100px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .03em;
+    text-transform: uppercase;
+  }
+
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 12px 0;
+  }
+
+  .tool-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .tool-list li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .tool-list li .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .tool-list li strong { color: var(--text); font-weight: 500; }
+
+  .data-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 5px 10px;
+    font-size: 11px;
+    margin: 3px 3px 0 0;
+  }
+  .data-badge .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* ── specific box widths ─────────────────────────────────── */
+  .box-user     { width: 420px; flex-shrink: 0; }
+  .box-agent    { width: 860px; flex-shrink: 0; }
+  .box-mcp      { flex: 1; min-width: 220px; }
+  .box-source   { flex: 1; min-width: 200px; }
+  .box-rag      { width: 220px; flex-shrink: 0; }
+
+  /* ── accent colours ──────────────────────────────────────── */
+  .accent-gold   { color: var(--gold); }
+  .accent-blue   { color: var(--blue); }
+  .accent-green  { color: var(--green); }
+  .accent-purple { color: var(--purple); }
+  .accent-teal   { color: var(--teal); }
+  .accent-orange { color: var(--orange); }
+
+  .bg-gold   { background: rgba(245,166,35,.15); }
+  .bg-blue   { background: rgba(74,158,245,.15); }
+  .bg-green  { background: rgba(52,199,123,.15); }
+  .bg-purple { background: rgba(155,107,245,.15); }
+  .bg-teal   { background: rgba(74,207,232,.15); }
+  .bg-orange { background: rgba(224,120,64,.15); }
+
+  .border-gold   { border-color: rgba(245,166,35,.4) !important; }
+  .border-blue   { border-color: rgba(74,158,245,.4) !important; }
+  .border-green  { border-color: rgba(52,199,123,.4) !important; }
+  .border-purple { border-color: rgba(155,107,245,.4) !important; }
+  .border-teal   { border-color: rgba(74,207,232,.4) !important; }
+  .border-orange { border-color: rgba(224,120,64,.4) !important; }
+
+  .tag-gold   { background: rgba(245,166,35,.2);   color: var(--gold); }
+  .tag-blue   { background: rgba(74,158,245,.2);   color: var(--blue); }
+  .tag-green  { background: rgba(52,199,123,.2);   color: var(--green); }
+  .tag-purple { background: rgba(155,107,245,.2);  color: var(--purple); }
+  .tag-teal   { background: rgba(74,207,232,.2);   color: var(--teal); }
+  .tag-orange { background: rgba(224,120,64,.2);   color: var(--orange); }
+
+  .section-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: .07em;
+    color: var(--muted);
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+
+  /* agent model pills row */
+  .pills { display: flex; flex-wrap: wrap; gap: 8px; }
+  .pill {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 11px;
+  }
+  .pill .dot { width: 7px; height: 7px; border-radius: 50%; }
+
+  /* ── legend ──────────────────────────────────────────────── */
+  .legend {
+    display: flex;
+    gap: 24px;
+    justify-content: center;
+    margin-top: 40px;
+    flex-wrap: wrap;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 11px;
+    color: var(--muted);
+  }
+  .legend-line {
+    width: 24px;
+    height: 2px;
+    background: var(--border);
+    position: relative;
+  }
+  .legend-line.dashed {
+    background: none;
+    border-top: 2px dashed var(--muted);
+    opacity: .5;
+  }
+
+  /* flow label on connector */
+  .flow-label {
+    font-size: 10px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    text-align: center;
+  }
+
+  /* ── RAG branch ──────────────────────────────────────────── */
+  .rag-row {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    align-items: flex-start;
+    width: 860px;
+    margin: 0 auto;
+  }
+  .rag-spacer { flex: 1; }
+
+  /* three-column source area */
+  .source-area {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    width: 900px;
+    max-width: 100%;
+    margin: 0 auto;
+  }
+
+  /* line between agent and rag box */
+  .agent-rag-bridge {
+    width: 860px;
+    margin: 0 auto;
+    position: relative;
+    height: 44px;
+    display: flex;
+  }
+
+  /* cube chip */
+  .cube-chip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 4px 9px;
+    font-size: 11px;
+    margin: 3px 3px 0 0;
+    color: var(--text);
+  }
+  .cube-chip .dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink:0; }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>Agent Architecture</h1>
+    <span>Ironfield Resources Finance AI — watsonx Orchestrate · MCP · Planning Analytics · RAG</span>
+  </div>
+</header>
+
+<div class="canvas">
+
+  <!-- ══════════════════════════════════════════════════════
+       ROW 1: USER
+  ═══════════════════════════════════════════════════════ -->
+  <div class="row">
+    <div class="box box-user">
+      <div class="box-header">
+        <div class="box-icon bg-blue"><span style="font-size:16px">👤</span></div>
+        <div>
+          <div class="box-title">User (FP&amp;A / Operations)</div>
+          <div class="box-subtitle">Natural-language question via watsonx Orchestrate chat</div>
+        </div>
+      </div>
+      <div class="pills">
+        <div class="pill"><div class="dot" style="background:var(--blue)"></div>Variance analysis</div>
+        <div class="pill"><div class="dot" style="background:var(--gold)"></div>Price sensitivity</div>
+        <div class="pill"><div class="dot" style="background:var(--green)"></div>Production KPIs</div>
+        <div class="pill"><div class="dot" style="background:var(--purple)"></div>Scenario modelling</div>
+        <div class="pill"><div class="dot" style="background:var(--teal)"></div>Capex &amp; cash flow</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- connector -->
+  <div class="connector-down"></div>
+  <div class="flow-label" style="margin-top:-10px;margin-bottom:6px;">Conversation / Tool Calls</div>
+
+  <!-- ══════════════════════════════════════════════════════
+       ROW 2: AGENT
+  ═══════════════════════════════════════════════════════ -->
+  <div class="row">
+    <div class="box box-agent border-gold" style="background:rgba(245,166,35,.05)">
+      <div class="box-header">
+        <div class="box-icon" style="background:rgba(69,137,255,.15);padding:0;display:flex;align-items:center;justify-content:center">
+          <svg width="28" height="28" viewBox="0 0 36 22" xmlns="http://www.w3.org/2000/svg">
+            <text x="0" y="18" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-weight="700" font-size="18" fill="#e4e6f0">w</text>
+            <text x="20" y="18" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-weight="700" font-size="18" fill="#4589ff">x</text>
+          </svg>
+        </div>
+        <div>
+          <div class="box-title accent-gold">IBM watsonx Orchestrate — finance-assistance Agent</div>
+          <div class="box-subtitle">Reasoning layer · tool router · response synthesiser</div>
+        </div>
+        <div style="margin-left:auto">
+          <span class="tag tag-gold">Agent</span>
+        </div>
+      </div>
+
+      <div>
+        <div class="section-label">Tool routing logic</div>
+        <ul class="tool-list">
+          <li><div class="dot" style="background:var(--blue)"></div><span>P&amp;L / AISC / Capex / Cash flow → <strong>PA MCP</strong></span></li>
+          <li><div class="dot" style="background:var(--green)"></div><span>Commodity prices / FX / summary → <strong>Market Data API</strong></span></li>
+          <li><div class="dot" style="background:var(--purple)"></div><span>Safety / Creston / narrative → <strong>RAG</strong></span></li>
+        </ul>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="section-label">Key formulas &amp; rules embedded in system prompt</div>
+      <div class="pills">
+        <div class="pill">AISC = C1 + sustaining capex/oz + G&A/oz</div>
+        <div class="pill">Variance = Actual − Budget</div>
+        <div class="pill">Free Cash Flow = OCF + Investing CF</div>
+        <div class="pill">Price · Volume decomposition</div>
+        <div class="pill">NPAT sensitivity per driver</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       CONNECTOR → 3 MCP branches
+  ═══════════════════════════════════════════════════════ -->
+  <div style="width:900px;margin:0 auto;position:relative;height:50px;">
+    <!-- vertical stem from agent -->
+    <div style="position:absolute;top:0;left:50%;width:2px;height:20px;background:var(--border);transform:translateX(-50%)"></div>
+    <!-- horizontal bar -->
+    <div style="position:absolute;top:20px;left:16.5%;right:16.5%;height:2px;background:var(--border)"></div>
+    <!-- left drop -->
+    <div style="position:absolute;top:20px;left:16.5%;width:2px;height:22px;background:var(--border)"></div>
+    <!-- centre drop -->
+    <div style="position:absolute;top:20px;left:50%;width:2px;height:22px;background:var(--border);transform:translateX(-50%)"></div>
+    <!-- right drop -->
+    <div style="position:absolute;top:20px;right:16.5%;width:2px;height:22px;background:var(--border)"></div>
+    <!-- arrowheads -->
+    <div style="position:absolute;top:38px;left:calc(16.5% - 4px);color:var(--muted);font-size:11px">▼</div>
+    <div style="position:absolute;top:38px;left:calc(50% - 4px);color:var(--muted);font-size:11px">▼</div>
+    <div style="position:absolute;top:38px;right:calc(16.5% - 4px);color:var(--muted);font-size:11px">▼</div>
+    <!-- labels -->
+    <div style="position:absolute;top:4px;left:calc(16.5% - 60px);width:120px;text-align:center;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em">MCP (stdio/SSE)</div>
+    <div style="position:absolute;top:4px;left:calc(50% - 60px);width:120px;text-align:center;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em">OpenAPI / REST</div>
+    <div style="position:absolute;top:4px;right:calc(16.5% - 60px);width:120px;text-align:center;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em">RAG retrieval</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       ROW 3: MCP SERVERS + RAG
+  ═══════════════════════════════════════════════════════ -->
+  <div class="source-area">
+
+    <!-- PA MCP Server -->
+    <div class="box box-mcp border-blue">
+      <div class="box-header">
+        <div class="box-icon" style="background:rgba(74,158,245,.12);padding:0;display:flex;align-items:center;justify-content:center;overflow:visible">
+          <svg width="30" height="22" viewBox="0 0 48 34" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="paG1" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#1a56db"/>
+                <stop offset="100%" stop-color="#06b6d4"/>
+              </linearGradient>
+            </defs>
+            <circle cx="4" cy="6"  r="2.8" fill="url(#paG1)"/>
+            <circle cx="4" cy="17" r="2.8" fill="url(#paG1)"/>
+            <circle cx="4" cy="28" r="2.8" fill="url(#paG1)"/>
+            <rect x="10" y="3.5"  width="16" height="5" rx="2.5" fill="url(#paG1)"/>
+            <rect x="10" y="14.5" width="22" height="5" rx="2.5" fill="url(#paG1)"/>
+            <rect x="10" y="25.5" width="16" height="5" rx="2.5" fill="url(#paG1)"/>
+            <path d="M34 1 L46 17 L34 33" stroke="url(#paG1)" stroke-width="4.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div>
+          <div class="box-title accent-blue">PA MCP Server</div>
+          <div class="box-subtitle">pa_mcp_server.py · FastMCP · via PA Assistant</div>
+        </div>
+        <div style="margin-left:auto"><span class="tag tag-blue">MCP</span></div>
+      </div>
+      <div class="section-label">Exposed Tools</div>
+      <ul class="tool-list">
+        <li><div class="dot" style="background:var(--blue)"></div><strong>list_cubes</strong> <span>— discover cubes</span></li>
+        <li><div class="dot" style="background:var(--blue)"></div><strong>list_views</strong> <span>— views per cube</span></li>
+        <li><div class="dot" style="background:var(--blue)"></div><strong>get_cube_dimensions</strong></li>
+        <li><div class="dot" style="background:var(--blue)"></div><strong>get_dimension_elements</strong></li>
+        <li><div class="dot" style="background:var(--blue)"></div><strong>query_cube</strong> <span>— view + filter</span></li>
+        <li><div class="dot" style="background:var(--blue)"></div><strong>execute_mdx</strong> <span>— raw MDX query</span></li>
+        <li><div class="dot" style="background:var(--blue)"></div><strong>get_financial_summary</strong></li>
+        <li><div class="dot" style="background:var(--blue)"></div><strong>get_production_summary</strong></li>
+        <li><div class="dot" style="background:var(--blue)"></div><strong>get_capex_summary</strong></li>
+        <li><div class="dot" style="background:var(--blue)"></div><strong>get_cash_flow_summary</strong></li>
+      </ul>
+      <div class="divider"></div>
+      <div class="section-label">Connection</div>
+      <div style="display:flex;align-items:center;gap:10px;background:rgba(74,158,245,.08);border:1px solid rgba(74,158,245,.25);border-radius:6px;padding:8px 10px;">
+        <svg width="24" height="18" viewBox="0 0 48 34" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="paG1b" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#1a56db"/>
+              <stop offset="100%" stop-color="#06b6d4"/>
+            </linearGradient>
+          </defs>
+          <circle cx="4" cy="6"  r="2.8" fill="url(#paG1b)"/>
+          <circle cx="4" cy="17" r="2.8" fill="url(#paG1b)"/>
+          <circle cx="4" cy="28" r="2.8" fill="url(#paG1b)"/>
+          <rect x="10" y="3.5"  width="16" height="5" rx="2.5" fill="url(#paG1b)"/>
+          <rect x="10" y="14.5" width="22" height="5" rx="2.5" fill="url(#paG1b)"/>
+          <rect x="10" y="25.5" width="16" height="5" rx="2.5" fill="url(#paG1b)"/>
+          <path d="M34 1 L46 17 L34 33" stroke="url(#paG1b)" stroke-width="4.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <div>
+          <div style="font-size:12px;font-weight:600;color:var(--text)">PA Assistant MCP</div>
+          <div style="font-size:10px;color:var(--muted);margin-top:1px">Security: <strong style="color:var(--blue)">OAuth 2.0</strong></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Market Data API (OpenAPI) -->
+    <div class="box box-mcp border-green">
+      <div class="box-header">
+        <div class="box-icon bg-green"><span style="font-size:15px">📈</span></div>
+        <div>
+          <div class="box-title accent-green">Market Data API</div>
+          <div class="box-subtitle">openapi.yaml · IBM Code Engine REST</div>
+        </div>
+        <div style="margin-left:auto"><span class="tag tag-green">OpenAPI</span></div>
+      </div>
+      <div class="section-label">Endpoints</div>
+      <ul class="tool-list">
+        <li><div class="dot" style="background:var(--green)"></div><strong>GET /prices</strong> <span>— monthly prices, filterable by FY / quarter / commodity</span></li>
+        <li><div class="dot" style="background:var(--green)"></div><strong>GET /prices/latest</strong> <span>— most recent month snapshot</span></li>
+        <li><div class="dot" style="background:var(--green)"></div><strong>GET /summary</strong> <span>— latest prices, FY26 &amp; FY25 averages, base case</span></li>
+      </ul>
+      <div class="divider"></div>
+      <div class="section-label">Commodities available</div>
+      <div>
+        <span class="data-badge"><div class="dot" style="background:var(--gold)"></div>Gold (US$/oz, A$/oz)</span>
+        <span class="data-badge"><div class="dot" style="background:var(--orange)"></div>Copper LME (US$/t)</span>
+        <span class="data-badge"><div class="dot" style="background:var(--purple)"></div>Brent Crude</span>
+        <span class="data-badge"><div class="dot" style="background:var(--teal)"></div>Diesel (A$/L)</span>
+        <span class="data-badge"><div class="dot" style="background:var(--blue)"></div>Electricity (A$/MWh)</span>
+        <span class="data-badge"><div class="dot" style="background:var(--muted)"></div>AUD/USD FX</span>
+        <span class="data-badge"><div class="dot" style="background:var(--muted)"></div>ANFO, Cyanide, Steel Balls</span>
+      </div>
+    </div>
+
+    <!-- RAG -->
+    <div class="box box-mcp border-purple">
+      <div class="box-header">
+        <div class="box-icon bg-purple"><span style="font-size:15px">📄</span></div>
+        <div>
+          <div class="box-title accent-purple">RAG — Company Reports</div>
+          <div class="box-subtitle">Unstructured document retrieval</div>
+        </div>
+        <div style="margin-left:auto"><span class="tag tag-purple">RAG</span></div>
+      </div>
+      <div class="section-label">Indexed Documents</div>
+      <ul class="tool-list">
+        <li><div class="dot" style="background:var(--purple)"></div><strong>quarterly-sep-2025</strong> <span>— Q1 FY26 activities</span></li>
+        <li><div class="dot" style="background:var(--purple)"></div><strong>quarterly-dec-2025</strong> <span>— Q2 FY26, 44,273oz record</span></li>
+        <li><div class="dot" style="background:var(--purple)"></div><strong>half-year-dec-2025</strong> <span>— H1 FY26 financials</span></li>
+        <li><div class="dot" style="background:var(--purple)"></div><strong>fy26-guidance</strong> <span>— full-year guidance bands</span></li>
+        <li><div class="dot" style="background:var(--purple)"></div><strong>creston-feasibility-study</strong> <span>— NPV A$1.42bn, IRR 24.2%</span></li>
+        <li><div class="dot" style="background:var(--purple)"></div><strong>investor-presentation-h1-fy26</strong></li>
+      </ul>
+      <div class="divider"></div>
+      <div class="section-label">Used when asked about</div>
+      <div>
+        <span class="data-badge"><div class="dot" style="background:var(--purple)"></div>Safety (LTIFR/TRIFR)</span>
+        <span class="data-badge"><div class="dot" style="background:var(--purple)"></div>Creston project status</span>
+        <span class="data-badge"><div class="dot" style="background:var(--purple)"></div>Drill intercepts</span>
+        <span class="data-badge"><div class="dot" style="background:var(--purple)"></div>Guidance tracking</span>
+        <span class="data-badge"><div class="dot" style="background:var(--purple)"></div>Management commentary</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       CONNECTOR → DATA SOURCES
+  ═══════════════════════════════════════════════════════ -->
+  <div style="width:900px;margin:0 auto;position:relative;height:44px;">
+    <div style="position:absolute;top:0;left:25%;width:2px;height:32px;background:var(--border)"></div>
+    <div style="position:absolute;top:0;left:50%;width:2px;height:32px;background:var(--border);transform:translateX(-50%)"></div>
+    <div style="position:absolute;top:32px;left:calc(25% - 4px);color:var(--muted);font-size:11px">▼</div>
+    <div style="position:absolute;top:32px;left:calc(50% - 4px);color:var(--muted);font-size:11px">▼</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       ROW 4: DATA SOURCES
+  ═══════════════════════════════════════════════════════ -->
+  <div class="source-area" style="align-items:flex-start">
+
+    <!-- IBM Planning Analytics -->
+    <div class="box box-mcp border-blue" style="background:rgba(74,158,245,.04)">
+      <div class="box-header">
+        <div class="box-icon" style="background:rgba(74,158,245,.12);padding:0;display:flex;align-items:center;justify-content:center;overflow:visible">
+          <svg width="30" height="22" viewBox="0 0 48 34" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="paG2" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#1a56db"/>
+                <stop offset="100%" stop-color="#06b6d4"/>
+              </linearGradient>
+            </defs>
+            <circle cx="4" cy="6"  r="2.8" fill="url(#paG2)"/>
+            <circle cx="4" cy="17" r="2.8" fill="url(#paG2)"/>
+            <circle cx="4" cy="28" r="2.8" fill="url(#paG2)"/>
+            <rect x="10" y="3.5"  width="16" height="5" rx="2.5" fill="url(#paG2)"/>
+            <rect x="10" y="14.5" width="22" height="5" rx="2.5" fill="url(#paG2)"/>
+            <rect x="10" y="25.5" width="16" height="5" rx="2.5" fill="url(#paG2)"/>
+            <path d="M34 1 L46 17 L34 33" stroke="url(#paG2)" stroke-width="4.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div>
+          <div class="box-title accent-blue">IBM Planning Analytics (TM1)</div>
+          <div class="box-subtitle">Cloud · TM1Service · PA Assistant module</div>
+        </div>
+        <div style="margin-left:auto"><span class="tag tag-blue">Source of Record</span></div>
+      </div>
+      <div style="background:rgba(74,158,245,.08);border:1px solid rgba(74,158,245,.25);border-radius:6px;padding:7px 10px;font-size:11px;color:var(--text);margin-bottom:12px;line-height:1.5">
+        <strong>PA Assistant module</strong> — the built-in gateway within IBM Planning Analytics that exposes TM1 cube data via REST &amp; MDX to the MCP server layer.
+      </div>
+
+      <div class="section-label">Cubes</div>
+      <div style="margin-bottom:12px">
+        <div class="cube-chip" style="display:inline-flex;margin-bottom:4px"><div class="dot" style="background:var(--gold)"></div>FinancialPerformance<span style="color:var(--muted);margin-left:6px;font-size:10px">— P&amp;L in A$000</span></div><br>
+        <div class="cube-chip" style="display:inline-flex;margin-bottom:4px"><div class="dot" style="background:var(--green)"></div>ProductionKPI<span style="color:var(--muted);margin-left:6px;font-size:10px">— gold oz, AISC, grades</span></div><br>
+        <div class="cube-chip" style="display:inline-flex;margin-bottom:4px"><div class="dot" style="background:var(--teal)"></div>CapexPlanning<span style="color:var(--muted);margin-left:6px;font-size:10px">— sustaining &amp; growth</span></div><br>
+        <div class="cube-chip" style="display:inline-flex"><div class="dot" style="background:var(--purple)"></div>CashFlow<span style="color:var(--muted);margin-left:6px;font-size:10px">— OCF, investing, financing</span></div>
+      </div>
+
+      <div class="section-label">Versions / Periods</div>
+      <div class="pills">
+        <div class="pill"><div class="dot" style="background:var(--green)"></div>Actual — FY26-Q1, Q2</div>
+        <div class="pill"><div class="dot" style="background:var(--teal)"></div>Latest Forecast — Q3, Q4</div>
+        <div class="pill"><div class="dot" style="background:var(--blue)"></div>Budget — all quarters</div>
+        <div class="pill"><div class="dot" style="background:var(--muted)"></div>Last Year — Q3, Q4</div>
+      </div>
+
+      <div class="divider"></div>
+      <div class="section-label">Key data points</div>
+      <ul class="tool-list">
+        <li><div class="dot" style="background:var(--gold)"></div><span>Revenue lines: Gold, Copper, Silver &amp; Other, Hedge</span></li>
+        <li><div class="dot" style="background:var(--gold)"></div><span>Cost lines: Mining, Processing, Site Services, TC/RC, Royalties</span></li>
+        <li><div class="dot" style="background:var(--gold)"></div><span>Production: Ore Milled, Head Grade, Recovery, AISC, C1</span></li>
+        <li><div class="dot" style="background:var(--gold)"></div><span>Capex: Kalgara sustaining &amp; growth, Creston, Resource Dev.</span></li>
+      </ul>
+    </div>
+
+    <!-- Market Data Files -->
+    <div class="box box-mcp border-green" style="background:rgba(52,199,123,.04)">
+      <div class="box-header">
+        <div class="box-icon bg-green"><span style="font-size:15px">📊</span></div>
+        <div>
+          <div class="box-title accent-green">Market Data Store</div>
+          <div class="box-subtitle">Flat-file store · Node.js · IBM Code Engine</div>
+        </div>
+        <div style="margin-left:auto"><span class="tag tag-green">External Prices</span></div>
+      </div>
+
+      <div class="section-label">Data Files</div>
+      <ul class="tool-list">
+        <li><div class="dot" style="background:var(--green)"></div><strong>commodity-prices.csv</strong> <span>— 24 months (Jul-24→Jun-26), 11 price columns</span></li>
+        <li><div class="dot" style="background:var(--green)"></div><strong>commodity-prices-historical-annual.csv</strong> <span>— 1990–2024 annual series</span></li>
+        <li><div class="dot" style="background:var(--green)"></div><strong>openapi.yaml</strong> <span>— REST API spec (v1.0.0)</span></li>
+      </ul>
+
+      <div class="divider"></div>
+      <div class="section-label">API endpoints served</div>
+      <ul class="tool-list">
+        <li><div class="dot" style="background:var(--green)"></div><span>GET /prices — filterable by FY, quarter, commodity</span></li>
+        <li><div class="dot" style="background:var(--green)"></div><span>GET /prices/latest — most recent month snapshot</span></li>
+        <li><div class="dot" style="background:var(--green)"></div><span>GET /summary — latest + FY averages rollup</span></li>
+      </ul>
+    </div>
+
+    <!-- RAG Corpus -->
+    <div class="box box-mcp border-purple" style="background:rgba(155,107,245,.04)">
+      <div class="box-header">
+        <div class="box-icon bg-purple"><span style="font-size:15px">🗂️</span></div>
+        <div>
+          <div class="box-title accent-purple">Unstructured Report Corpus</div>
+          <div class="box-subtitle">HTML reports — embedded &amp; vector-indexed</div>
+        </div>
+        <div style="margin-left:auto"><span class="tag tag-purple">RAG Corpus</span></div>
+      </div>
+
+      <div class="section-label">Document content</div>
+      <ul class="tool-list">
+        <li><div class="dot" style="background:var(--purple)"></div><strong>Quarterly Activities (Sep &amp; Dec 2025)</strong> — operational tables, mining &amp; processing detail, safety KPIs, drill results</li>
+        <li><div class="dot" style="background:var(--purple)"></div><strong>Half-Year Financial Report (Dec 2025)</strong> — audited financials, balance sheet, director commentary</li>
+        <li><div class="dot" style="background:var(--purple)"></div><strong>FY26 Guidance</strong> — gold 130–155koz, AISC A$2,200–2,600/oz, capex bands, H1/H2 phasing</li>
+        <li><div class="dot" style="background:var(--purple)"></div><strong>Creston Feasibility Study</strong> — post-tax NPV₅% A$1.42bn, IRR 24.2%, mine life, capex estimate</li>
+        <li><div class="dot" style="background:var(--purple)"></div><strong>Investor Presentation H1 FY26</strong> — strategy, peer comparison, capital allocation</li>
+      </ul>
+
+      <div class="divider"></div>
+      <div class="section-label">Cross-reference rule</div>
+      <div style="color:var(--muted);font-size:12px;line-height:1.5">
+        Reports are <em>unaudited</em>. PA cubes are the planning source of record.
+        Agent cross-references both and flags discrepancies.
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       LEGEND
+  ═══════════════════════════════════════════════════════ -->
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-line"></div>
+      MCP tool call (stdio or SSE)
+    </div>
+    <div class="legend-item">
+      <div style="width:24px;height:2px;background:none;border-top:2px solid var(--green);opacity:.8"></div>
+      OpenAPI / REST call
+    </div>
+    <div class="legend-item">
+      <div class="legend-line dashed"></div>
+      RAG similarity retrieval
+    </div>
+    <div class="legend-item">
+      <div style="width:12px;height:12px;border-radius:3px;background:rgba(74,158,245,.3);border:1px solid rgba(74,158,245,.5)"></div>
+      Planning Analytics (TM1)
+    </div>
+    <div class="legend-item">
+      <div style="width:12px;height:12px;border-radius:3px;background:rgba(52,199,123,.3);border:1px solid rgba(52,199,123,.5)"></div>
+      Market Data API
+    </div>
+    <div class="legend-item">
+      <div style="width:12px;height:12px;border-radius:3px;background:rgba(155,107,245,.3);border:1px solid rgba(155,107,245,.5)"></div>
+      Unstructured reports (RAG)
+    </div>
+  </div>
+
+</div><!-- /canvas -->
+</body>
+</html>

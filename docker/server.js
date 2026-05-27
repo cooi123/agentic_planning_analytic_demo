@@ -37,11 +37,12 @@ const NAV_STYLE = `
 
 function navBar(active) {
   const links = [
-    { href: '/company',  label: 'Company Overview',  key: 'company'  },
-    { href: '/',         label: 'AI Agent',          key: 'agent'    },
-    { href: '/market',   label: 'Market Data',       key: 'market'   },
-    { href: '/planning', label: 'Planning Analytics',key: 'planning' },
-    { href: '/reports',  label: 'Reports',           key: 'reports'  },
+    { href: '/company',       label: 'Company Overview',  key: 'company'       },
+    { href: '/',              label: 'AI Agent',          key: 'agent'         },
+    { href: '/market',        label: 'Market Data',       key: 'market'        },
+    { href: '/planning',      label: 'Planning Analytics',key: 'planning'      },
+    { href: '/reports',       label: 'Reports',           key: 'reports'       },
+    { href: '/architecture',  label: 'Architecture',      key: 'architecture'  },
   ];
   const items = links
     .map(l => `<a href="${l.href}" class="ih-link${active === l.key ? ' active' : ''}">${l.label}</a>`)
@@ -189,6 +190,10 @@ app.get('/planning', (_req, res) => {
 
 app.get('/reports', (_req, res) => {
   res.type('html').send(injectNav(reportsIndex(), 'reports'));
+});
+
+app.get('/architecture', (_req, res) => {
+  res.type('html').send(injectNav(readStatic('architecture.html'), 'architecture'));
 });
 
 const ALLOWED_REPORTS = new Set(REPORTS_META.map(r => r.file));

@@ -9,10 +9,11 @@ RUN npm install --omit=dev --no-fund --no-audit
 COPY docker/server.js ./
 COPY market-data/index.js ./market-api.js
 
-COPY company.html ./static/company.html
-COPY agent.html   ./static/agent.html
+COPY company.html       ./static/company.html
+COPY agent.html         ./static/agent.html
 COPY market-data/dashboard.html ./static/market.html
 COPY planning-analytics/viewer.html ./static/planning.html
+COPY architecture.html  ./static/architecture.html
 
 COPY reports/half-year-dec-2025.html          ./static/reports/half-year-dec-2025.html
 COPY reports/quarterly-dec-2025.html          ./static/reports/quarterly-dec-2025.html
