@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Market Data — Ironfield Resources</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:       #0f1117;
+    --surface:  #1a1d27;
+    --border:   #2a2d3a;
+    --text:     #e4e6f0;
+    --muted:    #8b8fa8;
+    --gold:     #f5a623;
+    --copper:   #c0704a;
+    --blue:     #4a9ef5;
+    --green:    #34c77b;
+    --red:      #e05555;
+    --purple:   #9b6bf5;
+    --diesel:   #e8a130;
+    --elec:     #4acfe8;
+    --coal:     #a0a8b8;
+    --iron:     #e07840;
+    --nickel:   #60c8a0;
+    --spod:     #c070e0;
+  }
+
+  body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-size: 14px; }
+
+  header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 16px 24px; display: flex; align-items: center; gap: 16px; }
+  header h1 { font-size: 18px; font-weight: 600; }
+  header span { color: var(--muted); font-size: 13px; }
+
+  nav { display: flex; gap: 4px; padding: 16px 24px 0; border-bottom: 1px solid var(--border); }
+  nav button { background: none; border: none; color: var(--muted); font-size: 13px; padding: 8px 16px; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; }
+  nav button.active { color: var(--text); border-bottom-color: var(--gold); }
+
+  .page { display: none; padding: 24px; }
+  .page.active { display: block; }
+
+  .kpi-row { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; margin-bottom: 24px; }
+  .kpi { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 16px; }
+  .kpi .label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; margin-bottom: 6px; }
+  .kpi .value { font-size: 22px; font-weight: 700; }
+  .kpi .sub   { font-size: 11px; color: var(--muted); margin-top: 4px; }
+  .kpi.gold   .value { color: var(--gold); }
+  .kpi.copper .value { color: var(--copper); }
+  .kpi.diesel .value { color: var(--diesel); }
+  .kpi.elec   .value { color: var(--elec); }
+  .kpi.audusd .value { color: var(--blue); }
+  .kpi.brent  .value { color: var(--purple); }
+  .kpi.coal   .value { color: var(--coal); }
+  .kpi.iron   .value { color: var(--iron); }
+  .kpi.nickel .value { color: var(--nickel); }
+  .kpi.spod   .value { color: var(--spod); }
+
+  .charts-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+  .charts-1col { margin-bottom: 16px; }
+  .chart-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 16px; }
+  .chart-card h3 { font-size: 13px; color: var(--muted); margin-bottom: 12px; font-weight: 500; }
+  .chart-card canvas { max-height: 220px; }
+
+  .section-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 14px; margin-top: 8px; }
+
+  @media (max-width: 900px) {
+    .charts-2col { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>Market Data Dashboard</h1>
+    <span>Ironfield Resources — commodity &amp; input price tracker</span>
+  </div>
+</header>
+
+<nav>
+  <button class="active" onclick="showPage('prices', this)">Prices</button>
+  <button onclick="showPage('historical', this)">Historical</button>
+</nav>
+
+<!-- ══════════════ PAGE 1: PRICES (FY25–FY26 monthly) ══════════════ -->
+<div id="page-prices" class="page active">
+
+  <div class="kpi-row" id="kpi-row"></div>
+
+  <div class="charts-2col">
+    <div class="chart-card">
+      <h3>Gold Price — A$/oz &amp; US$/oz</h3>
+      <canvas id="chartGold"></canvas>
+    </div>
+    <div class="chart-card">
+      <h3>Copper LME — US$/t</h3>
+      <canvas id="chartCopper"></canvas>
+    </div>
+    <div class="chart-card">
+      <h3>Diesel (A$/L) &amp; Brent Crude (US$/bbl)</h3>
+      <canvas id="chartFuel"></canvas>
+    </div>
+    <div class="chart-card">
+      <h3>Electricity — A$/MWh</h3>
+      <canvas id="chartElec"></canvas>
+    </div>
+  </div>
+
+  <div class="chart-card charts-1col">
+    <h3>AUD/USD Exchange Rate</h3>
+    <canvas id="chartFX"></canvas>
+  </div>
+</div>
+
+<!-- ══════════════ PAGE 2: HISTORICAL (1990–2024 annual) ══════════════ -->
+<div id="page-historical" class="page">
+
+  <div class="kpi-row" id="hist-kpi-row"></div>
+
+  <p class="section-label">Precious &amp; Base Metals</p>
+  <div class="charts-2col">
+    <div class="chart-card">
+      <h3>Gold — US$/oz (1990–2024)</h3>
+      <canvas id="hChartGold"></canvas>
+    </div>
+    <div class="chart-card">
+      <h3>Copper LME — US$/t (1990–2024)</h3>
+      <canvas id="hChartCopper"></canvas>
+    </div>
+    <div class="chart-card">
+      <h3>Nickel — US$/t (1990–2024)</h3>
+      <canvas id="hChartNickel"></canvas>
+    </div>
+    <div class="chart-card">
+      <h3>Spodumene — US$/t (2018–2024)</h3>
+      <canvas id="hChartSpod"></canvas>
+    </div>
+  </div>
+
+  <p class="section-label">Energy &amp; Bulk Commodities</p>
+  <div class="charts-2col">
+    <div class="chart-card">
+      <h3>Brent Crude — US$/bbl (1992–2024)</h3>
+      <canvas id="hChartBrent"></canvas>
+    </div>
+    <div class="chart-card">
+      <h3>Thermal Coal (Newcastle) — US$/t (1990–2024)</h3>
+      <canvas id="hChartCoal"></canvas>
+    </div>
+    <div class="chart-card">
+      <h3>Metallurgical Coal — US$/t (2011–2024)</h3>
+      <canvas id="hChartMetCoal"></canvas>
+    </div>
+    <div class="chart-card">
+      <h3>Iron Ore CFR — US$/dmtu (2008–2024)</h3>
+      <canvas id="hChartIron"></canvas>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── FY25–FY26 monthly data ───────────────────────────────────────────────────
+const DATA = [
+  {m:"Jul-24",fy:"FY25",q:"FY25-Q1",gU:2382,gA:3612,cuU:9180,cuA:11840,fx:0.660,ds:1.82,el:138,bn:84.2},
+  {m:"Aug-24",fy:"FY25",q:"FY25-Q1",gU:2448,gA:3724,cuU:9060,cuA:11700,fx:0.657,ds:1.78,el:142,bn:80.8},
+  {m:"Sep-24",fy:"FY25",q:"FY25-Q1",gU:2555,gA:3882,cuU:9380,cuA:12020,fx:0.658,ds:1.74,el:145,bn:74.1},
+  {m:"Oct-24",fy:"FY25",q:"FY25-Q2",gU:2680,gA:4085,cuU:9540,cuA:12260,fx:0.656,ds:1.71,el:148,bn:76.2},
+  {m:"Nov-24",fy:"FY25",q:"FY25-Q2",gU:2638,gA:4028,cuU:9320,cuA:12010,fx:0.655,ds:1.69,el:152,bn:72.8},
+  {m:"Dec-24",fy:"FY25",q:"FY25-Q2",gU:2617,gA:4002,cuU:9140,cuA:11820,fx:0.654,ds:1.72,el:155,bn:69.4},
+  {m:"Jan-25",fy:"FY25",q:"FY25-Q3",gU:2724,gA:4141,cuU:9020,cuA:11680,fx:0.657,ds:1.76,el:158,bn:78.3},
+  {m:"Feb-25",fy:"FY25",q:"FY25-Q3",gU:2882,gA:4384,cuU:9220,cuA:11940,fx:0.657,ds:1.79,el:155,bn:74.6},
+  {m:"Mar-25",fy:"FY25",q:"FY25-Q3",gU:3084,gA:4669,cuU:9560,cuA:12360,fx:0.661,ds:1.81,el:152,bn:71.2},
+  {m:"Apr-25",fy:"FY25",q:"FY25-Q4",gU:3102,gA:4706,cuU:9840,cuA:12680,fx:0.659,ds:1.83,el:148,bn:66.8},
+  {m:"May-25",fy:"FY25",q:"FY25-Q4",gU:3180,gA:4828,cuU:9520,cuA:12320,fx:0.659,ds:1.80,el:145,bn:62.4},
+  {m:"Jun-25",fy:"FY25",q:"FY25-Q4",gU:3246,gA:4920,cuU:9340,cuA:12120,fx:0.660,ds:1.77,el:142,bn:67.3},
+  {m:"Jul-25",fy:"FY26",q:"FY26-Q1",gU:3350,gA:5210,cuU:9140,cuA:11780,fx:0.643,ds:1.75,el:145,bn:71.4},
+  {m:"Aug-25",fy:"FY26",q:"FY26-Q1",gU:3380,gA:5256,cuU:9080,cuA:11720,fx:0.644,ds:1.78,el:148,bn:73.2},
+  {m:"Sep-25",fy:"FY26",q:"FY26-Q1",gU:3480,gA:5410,cuU:8960,cuA:11550,fx:0.643,ds:1.82,el:152,bn:70.8},
+  {m:"Oct-25",fy:"FY26",q:"FY26-Q2",gU:3450,gA:5408,cuU:9200,cuA:11900,fx:0.638,ds:1.84,el:155,bn:68.4},
+  {m:"Nov-25",fy:"FY26",q:"FY26-Q2",gU:3480,gA:5454,cuU:9360,cuA:12080,fx:0.638,ds:1.86,el:158,bn:65.2},
+  {m:"Dec-25",fy:"FY26",q:"FY26-Q2",gU:3490,gA:5468,cuU:9440,cuA:12190,fx:0.638,ds:1.88,el:162,bn:66.8},
+  {m:"Jan-26",fy:"FY26",q:"FY26-Q3",gU:3500,gA:5512,cuU:9560,cuA:12380,fx:0.635,ds:1.85,el:165,bn:69.4},
+  {m:"Feb-26",fy:"FY26",q:"FY26-Q3",gU:3560,gA:5606,cuU:9480,cuA:12280,fx:0.635,ds:1.82,el:162,bn:72.1},
+  {m:"Mar-26",fy:"FY26",q:"FY26-Q3",gU:3560,gA:5606,cuU:9380,cuA:12160,fx:0.635,ds:1.80,el:158,bn:70.8},
+  {m:"Apr-26",fy:"FY26",q:"FY26-Q4",gU:3500,gA:5486,cuU:9260,cuA:12010,fx:0.638,ds:1.78,el:155,bn:68.2},
+  {m:"May-26",fy:"FY26",q:"FY26-Q4",gU:3450,gA:5407,cuU:9140,cuA:11880,fx:0.638,ds:1.76,el:152,bn:65.4},
+  {m:"Jun-26",fy:"FY26",q:"FY26-Q4",gU:3410,gA:5344,cuU:9020,cuA:11750,fx:0.638,ds:1.75,el:148,bn:63.8},
+];
+
+// ─── Historical annual data 1990–2024 (Source: DISR Resources & Energy Quarterly Dec-2025, Table 6) ─
+const HIST_YEARS = ['1990','1991','1992','1993','1994','1995','1996','1997','1998','1999','2000','2001','2002','2003','2004','2005','2006','2007','2008','2009','2010','2011','2012','2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024'];
+
+const HIST = {
+  gold:     [384.35,362.29,343.83,359.83,384.09,384.17,387.42,331.11,294.25,278.81,279.01,271.01,309.97,363.53,409.23,444.92,604.34,696.66,871.71,972.98,1224.66,1560.0,1668.82,1411.03,1266.19,1160.15,1248.28,1257.33,1269.14,1392.17,1769.59,1799.58,1800.8,1942.74,2387.04],
+  copper:   [2660.02,2338.94,2280.59,1913.47,2307.3,2935.6,2293.73,2277.02,1654.06,1572.55,1813.47,1578.08,1559.36,1779.14,2865.88,3679.27,6723.41,7118.78,6955.88,5149.55,7534.09,8852.23,7948.09,7326.17,6860.07,5501.91,4862.88,6164.02,6525.33,6005.12,6168.59,9314.74,8814.82,8483.4,9144.09],
+  brent:    [null,null,19.47,16.96,15.83,17.02,20.47,19.12,12.69,17.86,28.47,24.4,25.02,28.87,38.32,54.51,65.42,72.71,97.69,62.04,79.73,111.05,111.94,108.79,98.88,52.31,44.11,54.35,71.15,64.03,42.35,70.52,99.93,82.68,80.69],
+  thermalCoal: [40.85,39.85,38.9,36.35,34.35,40.3,40.3,37.65,34.35,29.95,28.75,34.5,26.75,26.75,45.0,52.5,52.5,55.5,125.0,70.35,98.0,129.85,115.0,95.0,81.8,67.8,61.6,84.97,110.0,94.75,68.75,109.97,395.0,200.0,138.96],
+  metCoal:  [null,null,null,null,null,null,null,null,null,null,null,295.37,191.15,148.3,114.39,88.37,141.6,190.59,207.41,175.96,119.88,220.7,363.95,291.93,242.1],
+  ironOre:  [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,66.19,85.67,144.49,167.09,126.9,134.91,95.0,56.23,57.84,70.62,66.38,90.21,104.91,156.02,112.85,114.3,103.66],
+  nickel:   [8895.0,8158.25,6923.45,5292.98,6339.17,8228.78,7505.97,6927.17,4629.12,6014.84,8645.63,5951.01,6769.86,9621.58,13835.95,14739.55,24262.34,37273.11,21115.83,14642.08,21799.65,22854.23,17507.88,15025.48,16871.62,11839.01,9598.9,10404.28,13133.45,13904.39,13769.22,18468.47,25696.29,21470.4,16825.45],
+  spod:     [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,870.66,614.69,429.38,946.78,4364.17,3729.69,969.65],
+};
+
+// Slice helpers for commodities that only have data from a certain year
+const HIST_YEARS_METCOAL  = HIST_YEARS.slice(11);   // 2001 onwards
+const HIST_YEARS_IRONORE  = HIST_YEARS.slice(18);   // 2008 onwards
+const HIST_YEARS_SPOD     = HIST_YEARS.slice(28);   // 2018 onwards
+
+// ─── Chart defaults ───────────────────────────────────────────────────────────
+Chart.defaults.color = '#8b8fa8';
+Chart.defaults.borderColor = '#2a2d3a';
+const OPTS = {
+  responsive: true, maintainAspectRatio: true,
+  plugins: { legend: { labels: { boxWidth: 10, font: { size: 11 } } } },
+  scales: {
+    x: { ticks: { font: { size: 10 }, maxRotation: 45 } },
+    y: { ticks: { font: { size: 10 } } },
+  },
+};
+
+function lineDS(label, data, color, yAxisID) {
+  return {
+    label, data,
+    borderColor: color, backgroundColor: color + '22',
+    borderWidth: 2, pointRadius: 2, tension: 0.3,
+    fill: false, yAxisID,
+    spanGaps: false,
+  };
+}
+
+function histLineDS(label, data, color) {
+  return {
+    label, data,
+    borderColor: color, backgroundColor: color + '18',
+    borderWidth: 1.5, pointRadius: 0, tension: 0.2,
+    fill: true,
+    spanGaps: false,
+  };
+}
+
+const HIST_OPTS = {
+  ...OPTS,
+  plugins: { legend: { display: false } },
+  scales: {
+    x: { ticks: { font: { size: 9 }, maxRotation: 45, autoSkip: true, maxTicksLimit: 12 } },
+    y: { ticks: { font: { size: 10 } } },
+  },
+};
+
+const labels = DATA.map(d => d.m);
+
+// ─── Monthly charts ───────────────────────────────────────────────────────────
+new Chart(document.getElementById('chartGold'), {
+  type: 'line',
+  data: {
+    labels,
+    datasets: [
+      lineDS('A$/oz', DATA.map(d => d.gA), '#f5a623', 'yA'),
+      lineDS('US$/oz', DATA.map(d => d.gU), '#e0c060', 'yU'),
+    ],
+  },
+  options: { ...OPTS, scales: {
+    x: OPTS.scales.x,
+    yA: { position:'left',  ticks:{ font:{size:10} }, title:{display:true,text:'A$/oz',font:{size:10}} },
+    yU: { position:'right', ticks:{ font:{size:10} }, grid:{drawOnChartArea:false}, title:{display:true,text:'US$/oz',font:{size:10}} },
+  }},
+});
+
+new Chart(document.getElementById('chartCopper'), {
+  type: 'line',
+  data: {
+    labels,
+    datasets: [lineDS('LME US$/t', DATA.map(d => d.cuU), '#c0704a', 'y')],
+  },
+  options: OPTS,
+});
+
+new Chart(document.getElementById('chartFuel'), {
+  type: 'line',
+  data: {
+    labels,
+    datasets: [
+      lineDS('Diesel A$/L', DATA.map(d => d.ds), '#e8a130', 'yD'),
+      lineDS('Brent US$/bbl', DATA.map(d => d.bn), '#9b6bf5', 'yB'),
+    ],
+  },
+  options: { ...OPTS, scales: {
+    x: OPTS.scales.x,
+    yD: { position:'left',  ticks:{font:{size:10}}, title:{display:true,text:'A$/L',font:{size:10}} },
+    yB: { position:'right', ticks:{font:{size:10}}, grid:{drawOnChartArea:false}, title:{display:true,text:'US$/bbl',font:{size:10}} },
+  }},
+});
+
+new Chart(document.getElementById('chartElec'), {
+  type: 'line',
+  data: {
+    labels,
+    datasets: [lineDS('A$/MWh', DATA.map(d => d.el), '#4acfe8', 'y')],
+  },
+  options: OPTS,
+});
+
+new Chart(document.getElementById('chartFX'), {
+  type: 'line',
+  data: {
+    labels,
+    datasets: [lineDS('AUD/USD', DATA.map(d => d.fx), '#4a9ef5', 'y')],
+  },
+  options: { ...OPTS, scales: {
+    x: OPTS.scales.x,
+    y: { min:0.60, max:0.70, ticks:{font:{size:10}} },
+  }},
+});
+
+// ─── KPI row (latest month) ──────────────────────────────────────────────────
+const latest = DATA[DATA.length - 1];
+const kpiData = [
+  { label:'Gold Price', value:`A$${latest.gA.toLocaleString()}`, sub:'per oz', cls:'gold' },
+  { label:'Gold (USD)',  value:`US$${latest.gU.toLocaleString()}`, sub:'per oz', cls:'gold' },
+  { label:'Copper LME', value:`US$${latest.cuU.toLocaleString()}`, sub:'per tonne', cls:'copper' },
+  { label:'AUD/USD',    value:latest.fx.toFixed(3), sub:'exchange rate', cls:'audusd' },
+  { label:'Diesel',     value:`A$${latest.ds.toFixed(2)}`, sub:'per litre', cls:'diesel' },
+  { label:'Electricity',value:`A$${latest.el}`, sub:'per MWh', cls:'elec' },
+  { label:'Brent Crude',value:`US$${latest.bn}`, sub:'per barrel', cls:'brent' },
+];
+const kpiRow = document.getElementById('kpi-row');
+kpiData.forEach(k => {
+  kpiRow.innerHTML += `<div class="kpi ${k.cls}">
+    <div class="label">${k.label}</div>
+    <div class="value">${k.value}</div>
+    <div class="sub">${k.sub} · ${latest.m}</div>
+  </div>`;
+});
+
+// ─── Historical KPI row (2024 annual) ────────────────────────────────────────
+const histKpis = [
+  { label:'Gold',           value:`US$${HIST.gold[34].toLocaleString()}`,      sub:'per oz · 2024 avg',    cls:'gold'   },
+  { label:'Copper LME',     value:`US$${HIST.copper[34].toLocaleString()}`,    sub:'per tonne · 2024 avg', cls:'copper' },
+  { label:'Brent Crude',    value:`US$${HIST.brent[34]}`,                      sub:'per barrel · 2024 avg',cls:'brent'  },
+  { label:'Thermal Coal',   value:`US$${HIST.thermalCoal[34]}`,                sub:'per tonne · 2024 avg', cls:'coal'   },
+  { label:'Met Coal',       value:`US$${HIST.metCoal[24]}`,                    sub:'per tonne · 2024 avg', cls:'coal'   },
+  { label:'Iron Ore CFR',   value:`US$${HIST.ironOre[34]}`,                    sub:'per dmtu · 2024 avg',  cls:'iron'   },
+  { label:'Nickel',         value:`US$${HIST.nickel[34].toLocaleString()}`,    sub:'per tonne · 2024 avg', cls:'nickel' },
+  { label:'Spodumene',      value:`US$${HIST.spod[24]}`,                       sub:'per tonne · 2024 avg', cls:'spod'   },
+];
+const histKpiRow = document.getElementById('hist-kpi-row');
+histKpis.forEach(k => {
+  histKpiRow.innerHTML += `<div class="kpi ${k.cls}">
+    <div class="label">${k.label}</div>
+    <div class="value">${k.value}</div>
+    <div class="sub">${k.sub}</div>
+  </div>`;
+});
+
+// ─── Historical charts ────────────────────────────────────────────────────────
+new Chart(document.getElementById('hChartGold'), {
+  type: 'line',
+  data: { labels: HIST_YEARS, datasets: [histLineDS('US$/oz', HIST.gold, '#f5a623')] },
+  options: HIST_OPTS,
+});
+
+new Chart(document.getElementById('hChartCopper'), {
+  type: 'line',
+  data: { labels: HIST_YEARS, datasets: [histLineDS('US$/t', HIST.copper, '#c0704a')] },
+  options: HIST_OPTS,
+});
+
+new Chart(document.getElementById('hChartNickel'), {
+  type: 'line',
+  data: { labels: HIST_YEARS, datasets: [histLineDS('US$/t', HIST.nickel, '#60c8a0')] },
+  options: HIST_OPTS,
+});
+
+new Chart(document.getElementById('hChartSpod'), {
+  type: 'line',
+  data: { labels: HIST_YEARS_SPOD, datasets: [histLineDS('US$/t', HIST.spod, '#c070e0')] },
+  options: HIST_OPTS,
+});
+
+new Chart(document.getElementById('hChartBrent'), {
+  type: 'line',
+  data: { labels: HIST_YEARS, datasets: [histLineDS('US$/bbl', HIST.brent, '#9b6bf5')] },
+  options: HIST_OPTS,
+});
+
+new Chart(document.getElementById('hChartCoal'), {
+  type: 'line',
+  data: { labels: HIST_YEARS, datasets: [histLineDS('US$/t', HIST.thermalCoal, '#a0a8b8')] },
+  options: HIST_OPTS,
+});
+
+new Chart(document.getElementById('hChartMetCoal'), {
+  type: 'line',
+  data: { labels: HIST_YEARS_METCOAL, datasets: [histLineDS('US$/t', HIST.metCoal, '#c8b880')] },
+  options: HIST_OPTS,
+});
+
+new Chart(document.getElementById('hChartIron'), {
+  type: 'line',
+  data: { labels: HIST_YEARS_IRONORE, datasets: [histLineDS('US$/dmtu', HIST.ironOre, '#e07840')] },
+  options: HIST_OPTS,
+});
+
+// ─── Navigation ──────────────────────────────────────────────────────────────
+function showPage(id, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>

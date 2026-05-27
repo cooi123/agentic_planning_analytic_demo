@@ -1,0 +1,1 @@
+historical pricing data from https://www.industry.gov.au/publications/resources-and-energy-quarterly-december-2025
