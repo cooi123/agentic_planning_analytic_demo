@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Company Overview — Demo Company A</title>
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface2: #202432;
+      --border: #2a2d3a;
+      --text: #e4e6f0;
+      --muted: #8b8fa8;
+      --gold: #f5a623;
+      --gold-dim: rgba(245,166,35,0.12);
+      --gold-border: rgba(245,166,35,0.30);
+      --green: #34c77b;
+      --green-dim: rgba(52,199,123,0.10);
+      --blue-dim: rgba(60,120,220,0.10);
+      --radius: 12px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: Inter, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    /* ── Layout ── */
+    .page { max-width: 1100px; margin: 0 auto; padding: 32px 24px 60px; }
+
+    /* ── Hero ── */
+    .hero {
+      background: linear-gradient(135deg, #131824 0%, #1a2538 55%, #161e2c 100%);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 48px 48px 40px;
+      margin-bottom: 28px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      top: -40px; right: -40px;
+      width: 260px; height: 260px;
+      background: radial-gradient(circle, rgba(245,166,35,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-eyebrow {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--gold); margin-bottom: 12px;
+    }
+    .hero h1 {
+      font-size: 2.2rem; font-weight: 700; line-height: 1.15;
+      color: var(--text); margin-bottom: 10px;
+    }
+    .hero-sub {
+      font-size: 1.05rem; color: var(--muted); max-width: 680px; margin-bottom: 28px;
+    }
+    .hero-tagline {
+      display: inline-block;
+      font-size: 0.9rem; font-style: italic; color: #a8b4cc;
+      border-left: 3px solid var(--gold); padding-left: 14px;
+    }
+
+    /* ── KPI strip ── */
+    .kpi-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+    .kpi-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 16px;
+      text-align: center;
+    }
+    .kpi-card.gold  { border-color: var(--gold-border); background: var(--gold-dim); }
+    .kpi-card.green { border-color: rgba(52,199,123,0.28); background: var(--green-dim); }
+    .kpi-val  { font-size: 1.65rem; font-weight: 700; color: var(--text); line-height: 1; margin-bottom: 6px; }
+    .kpi-lbl  { font-size: 0.76rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+    .kpi-note { font-size: 0.75rem; color: var(--muted); margin-top: 4px; }
+
+    /* ── Section heading ── */
+    .section-head {
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--gold);
+      margin-bottom: 14px; padding-bottom: 6px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* ── Two-col grid ── */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 28px; }
+
+    /* ── Panel ── */
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+    }
+    .panel h3 { font-size: 1rem; font-weight: 700; color: var(--text); margin-bottom: 14px; }
+
+    /* ── Story beats ── */
+    .story-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+    .story-beat {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px;
+    }
+    .beat-date {
+      font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.07em; color: var(--gold); margin-bottom: 8px;
+    }
+    .beat-title { font-size: 0.92rem; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+    .beat-body  { font-size: 0.84rem; color: var(--muted); line-height: 1.5; }
+
+    /* ── Stat rows ── */
+    .stat-row {
+      display: flex; justify-content: space-between; align-items: baseline;
+      padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 0.88rem;
+    }
+    .stat-row:last-child { border-bottom: none; }
+    .stat-label { color: var(--muted); }
+    .stat-value { font-weight: 600; color: var(--text); }
+    .stat-value.gold  { color: var(--gold); }
+    .stat-value.green { color: var(--green); }
+
+    /* ── PA structure table ── */
+    .pa-section { margin-bottom: 28px; }
+    .cube-block { margin-bottom: 20px; }
+    .cube-header {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px 8px 0 0;
+      padding: 10px 14px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .cube-name {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 0.85rem; font-weight: 700; color: var(--gold);
+    }
+    .cube-desc { font-size: 0.82rem; color: var(--muted); }
+    .cube-rows {
+      border: 1px solid var(--border); border-top: none;
+      border-radius: 0 0 8px 8px;
+      overflow: hidden;
+    }
+    .cube-row {
+      display: grid;
+      grid-template-columns: 220px 90px 1fr;
+      padding: 8px 14px;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.82rem;
+      align-items: center;
+      gap: 12px;
+    }
+    .cube-row:last-child { border-bottom: none; }
+    .cube-row:nth-child(even) { background: rgba(255,255,255,0.02); }
+    .cube-row.section-row { background: rgba(245,166,35,0.05); }
+    .row-name  { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.78rem; color: var(--text); }
+    .row-type  { font-size: 0.72rem; font-weight: 600; border-radius: 4px; padding: 2px 7px; text-align: center; }
+    .row-type.consolidated { background: rgba(60,120,220,0.15); color: #7ab0f5; }
+    .row-type.numeric      { background: rgba(52,199,123,0.12); color: var(--green); }
+    .row-desc { font-size: 0.80rem; color: var(--muted); }
+
+    /* ── Callout ── */
+    .callout {
+      border-radius: 10px; padding: 14px 18px; margin-bottom: 28px;
+      display: flex; align-items: flex-start; gap: 12px;
+    }
+    .callout.gold  { background: var(--gold-dim);  border: 1px solid var(--gold-border); }
+    .callout.green { background: var(--green-dim); border: 1px solid rgba(52,199,123,0.28); }
+    .callout-icon  { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+    .callout p     { font-size: 0.88rem; line-height: 1.55; color: var(--text); }
+    .callout strong { color: var(--gold); }
+    .callout.green strong { color: var(--green); }
+
+    /* ── Responsive ── */
+    @media (max-width: 900px) {
+      .kpi-strip    { grid-template-columns: repeat(2, 1fr); }
+      .story-grid   { grid-template-columns: repeat(2, 1fr); }
+      .two-col      { grid-template-columns: 1fr; }
+      .cube-row     { grid-template-columns: 1fr 80px; }
+      .cube-row .row-desc { display: none; }
+    }
+    @media (max-width: 600px) {
+      .hero { padding: 28px 20px; }
+      .hero h1 { font-size: 1.5rem; }
+      .kpi-strip  { grid-template-columns: 1fr 1fr; }
+      .story-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-eyebrow">Demo Company A &nbsp;|&nbsp; Investor Demo &nbsp;|&nbsp; FY26</div>
+    <h1>Australian Gold &amp; Copper Producer</h1>
+    <p class="hero-sub">
+      Operating the Kalgara Gold-Copper Mine in the Murchison Province of Western Australia,
+      while developing the Creston Underground Project — a world-class asset that will double
+      production at lower unit costs, fully funded without equity issuance.
+    </p>
+    <div class="hero-tagline">
+      A new owner. A world-class mine. A transformational growth project ready to build.
+    </div>
+  </div>
+
+  <!-- H1 FY26 KPIs -->
+  <div class="kpi-strip">
+    <div class="kpi-card gold">
+      <div class="kpi-val">83,417oz</div>
+      <div class="kpi-lbl">Gold Produced — H1 FY26</div>
+      <div class="kpi-note">Record H1; tracking upper guidance</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-val">A$2,341/oz</div>
+      <div class="kpi-lbl">AISC — H1 FY26</div>
+      <div class="kpi-note">Trending to lower-end guidance</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-val">A$461m</div>
+      <div class="kpi-lbl">Revenue — H1 FY26</div>
+      <div class="kpi-note">A$155m NPAT</div>
+    </div>
+    <div class="kpi-card green">
+      <div class="kpi-val">A$422m</div>
+      <div class="kpi-lbl">Cash at Dec 2025</div>
+      <div class="kpi-note">Debt free · +A$193m in H1</div>
+    </div>
+  </div>
+
+  <!-- Story beats -->
+  <p class="section-head">The Story</p>
+  <div class="story-grid">
+    <div class="story-beat">
+      <div class="beat-date">Dec 2024</div>
+      <div class="beat-title">Kalgara Acquisition</div>
+      <div class="beat-body">Demo Company A acquires the Kalgara Gold-Copper Mine — a 10Mtpa operation with open pit and underground mining in WA's Murchison Province. H1 FY25 reflects only one month of ownership.</div>
+    </div>
+    <div class="story-beat">
+      <div class="beat-date">H1 FY26</div>
+      <div class="beat-title">Record Performance</div>
+      <div class="beat-body">Kalgara delivers 83,417oz Au at AISC A$2,341/oz — record H1 production, lowest-ever quarterly AISC in Dec Q (A$2,296/oz), A$318m operating cash flow. Cash position more than doubles.</div>
+    </div>
+    <div class="story-beat">
+      <div class="beat-date">Oct 2025</div>
+      <div class="beat-title">Creston FS Confirmed</div>
+      <div class="beat-body">Feasibility Study: post-tax NPV₅% A$1.42bn, IRR 24.2%, 12-year mine life, A$420m pre-production capex, steady-state 120koz Au/yr at AISC A$1,580/oz. Fully funded — no equity required.</div>
+    </div>
+    <div class="story-beat">
+      <div class="beat-date">H1 FY27 Target</div>
+      <div class="beat-title">Final Investment Decision</div>
+      <div class="beat-body">EPA approval targeted H2 FY26 (prerequisite). Decline at 712m cumulative. FID then unlocks construction — first gold ~2.5 years from FID. Combined group output: 250–275koz/yr at lower unit costs.</div>
+    </div>
+  </div>
+
+  <!-- Operations + Growth side by side -->
+  <div class="two-col">
+
+    <div class="panel">
+      <h3>Kalgara Mine — Current Operations</h3>
+      <div class="stat-row"><span class="stat-label">Location</span><span class="stat-value">Murchison Province, WA</span></div>
+      <div class="stat-row"><span class="stat-label">Processing capacity</span><span class="stat-value">10 Mtpa</span></div>
+      <div class="stat-row"><span class="stat-label">FY26 production guidance</span><span class="stat-value gold">130,000–155,000oz Au</span></div>
+      <div class="stat-row"><span class="stat-label">FY26 AISC guidance</span><span class="stat-value">A$2,200–A$2,600/oz</span></div>
+      <div class="stat-row"><span class="stat-label">H1 FY26 gold produced</span><span class="stat-value">83,417oz (tracking upper end)</span></div>
+      <div class="stat-row"><span class="stat-label">H1 FY26 AISC</span><span class="stat-value">A$2,341/oz (tracking lower end)</span></div>
+      <div class="stat-row"><span class="stat-label">H1 FY26 copper produced</span><span class="stat-value">3,300t Cu</span></div>
+      <div class="stat-row"><span class="stat-label">Mining method</span><span class="stat-value">Open pit (West/North Pit) + LKU underground</span></div>
+      <div class="stat-row"><span class="stat-label">FY26 sustaining capex</span><span class="stat-value">A$40–50m guidance</span></div>
+      <div class="stat-row"><span class="stat-label">Gold recovery (H1 avg)</span><span class="stat-value green">91.7%</span></div>
+    </div>
+
+    <div class="panel">
+      <h3>Creston Underground Project — Growth Pipeline</h3>
+      <div class="stat-row"><span class="stat-label">Location</span><span class="stat-value">25km south of Kalgara plant</span></div>
+      <div class="stat-row"><span class="stat-label">Ore Reserve</span><span class="stat-value">12.8Mt @ 3.1g/t Au, 0.28% Cu</span></div>
+      <div class="stat-row"><span class="stat-label">Contained gold</span><span class="stat-value">1.27Moz Au</span></div>
+      <div class="stat-row"><span class="stat-label">Post-tax NPV₅%</span><span class="stat-value gold">A$1.42bn (base) · A$2.4bn (spot)</span></div>
+      <div class="stat-row"><span class="stat-label">Post-tax IRR</span><span class="stat-value gold">24.2% (base) · 34.8% (spot)</span></div>
+      <div class="stat-row"><span class="stat-label">Steady-state production</span><span class="stat-value">120,000oz Au/yr + 4,000t Cu/yr</span></div>
+      <div class="stat-row"><span class="stat-label">Steady-state AISC</span><span class="stat-value green">A$1,580/oz</span></div>
+      <div class="stat-row"><span class="stat-label">Pre-production capex</span><span class="stat-value">A$420m (incl. 10% contingency)</span></div>
+      <div class="stat-row"><span class="stat-label">Mine life</span><span class="stat-value">12 years</span></div>
+      <div class="stat-row"><span class="stat-label">FID target</span><span class="stat-value">H1 FY27 (subject to EPA approval)</span></div>
+    </div>
+
+  </div>
+
+  <!-- Funding callout -->
+  <div class="callout green">
+    <div class="callout-icon">✓</div>
+    <p>
+      <strong>Creston is fully funded without equity issuance.</strong>
+      A$421.8m cash (Dec 2025) + A$150m committed revolving debt facility (ANZ/CBA/Westpac, undrawn) +
+      ongoing Kalgara operating cash flows (~A$280–360m/yr at current gold prices) cover the entire
+      A$420m pre-production capex. No shareholder dilution required.
+    </p>
+  </div>
+
+  <!-- PA Data Structure -->
+  <p class="section-head">Planning Analytics — Data Model Reference</p>
+
+  <div class="callout gold" style="margin-bottom:20px;">
+    <div class="callout-icon">ℹ</div>
+    <p>
+      The Finance AI Agent queries four IBM Planning Analytics cubes live.
+      <strong>Versions available:</strong> Actual (FY26-Q1, Q2) · Latest Forecast (FY26-Q3, Q4) ·
+      Budget (all quarters) · Last Year (FY25-Q3, Q4).
+      All financial values in A$000; production KPIs in physical units.
+    </p>
+  </div>
+
+  <div class="pa-section">
+
+    <!-- FinancialPerformance -->
+    <div class="cube-block">
+      <div class="cube-header">
+        <span class="cube-name">FinancialPerformance</span>
+        <span class="cube-desc">P&amp;L lines — Revenue, Costs, Finance items &amp; Tax (A$000)</span>
+      </div>
+      <div class="cube-rows">
+        <div class="cube-row"><span class="row-name">Gold Revenue</span><span class="row-type numeric">Numeric</span><span class="row-desc">Gold doré + concentrate sales revenue</span></div>
+        <div class="cube-row"><span class="row-name">Copper Revenue</span><span class="row-type numeric">Numeric</span><span class="row-desc">Copper-gold concentrate revenue net of TC/RC</span></div>
+        <div class="cube-row"><span class="row-name">Silver &amp; Other Revenue</span><span class="row-type numeric">Numeric</span><span class="row-desc">Silver by-product and freight services</span></div>
+        <div class="cube-row"><span class="row-name">Hedge Gains/(Losses)</span><span class="row-type numeric">Numeric</span><span class="row-desc">Mark-to-market on gold put option book</span></div>
+        <div class="cube-row"><span class="row-name">Mining Costs</span><span class="row-type numeric">Numeric</span><span class="row-desc">Open pit and underground mining operating costs</span></div>
+        <div class="cube-row"><span class="row-name">Processing Costs</span><span class="row-type numeric">Numeric</span><span class="row-desc">Mill processing, reagents, maintenance</span></div>
+        <div class="cube-row"><span class="row-name">Site Services</span><span class="row-type numeric">Numeric</span><span class="row-desc">Camp, transport, FIFO and site overheads</span></div>
+        <div class="cube-row"><span class="row-name">TC/RC &amp; Freight</span><span class="row-type numeric">Numeric</span><span class="row-desc">Treatment charges, refining and shipping costs</span></div>
+        <div class="cube-row"><span class="row-name">Royalties</span><span class="row-type numeric">Numeric</span><span class="row-desc">State royalties on gold and copper production</span></div>
+        <div class="cube-row"><span class="row-name">Depreciation &amp; Amort.</span><span class="row-type numeric">Numeric</span><span class="row-desc">D&amp;A on mine assets and right-of-use</span></div>
+        <div class="cube-row"><span class="row-name">Corporate G&amp;A</span><span class="row-type numeric">Numeric</span><span class="row-desc">Head office, directors, insurance</span></div>
+        <div class="cube-row"><span class="row-name">Finance Income / Costs</span><span class="row-type numeric">Numeric</span><span class="row-desc">Interest earned on cash; lease interest</span></div>
+        <div class="cube-row"><span class="row-name">Income Tax Expense</span><span class="row-type numeric">Numeric</span><span class="row-desc">Current and deferred tax at 30%</span></div>
+      </div>
+    </div>
+
+    <!-- ProductionKPI -->
+    <div class="cube-block">
+      <div class="cube-header">
+        <span class="cube-name">ProductionKPI</span>
+        <span class="cube-desc">Operational metrics — use Source = "Total Kalgara" for site totals</span>
+      </div>
+      <div class="cube-rows">
+        <div class="cube-row"><span class="row-name">Gold Produced / Sold</span><span class="row-type numeric">Numeric</span><span class="row-desc">oz Au produced and oz sold in period</span></div>
+        <div class="cube-row"><span class="row-name">Copper Produced / Sold</span><span class="row-type numeric">Numeric</span><span class="row-desc">tonnes Cu produced and sold in period</span></div>
+        <div class="cube-row"><span class="row-name">Ore Milled</span><span class="row-type numeric">Numeric</span><span class="row-desc">kt of ore processed through the mill</span></div>
+        <div class="cube-row"><span class="row-name">Mill Head Grade — Au / Cu</span><span class="row-type numeric">Numeric</span><span class="row-desc">g/t Au and % Cu feed grade to mill</span></div>
+        <div class="cube-row"><span class="row-name">Au Recovery / Cu Recovery</span><span class="row-type numeric">Numeric</span><span class="row-desc">Metallurgical recovery rates (%)</span></div>
+        <div class="cube-row"><span class="row-name">Mill Availability</span><span class="row-type numeric">Numeric</span><span class="row-desc">% uptime of processing plant</span></div>
+        <div class="cube-row"><span class="row-name">Throughput Rate</span><span class="row-type numeric">Numeric</span><span class="row-desc">Actual tonnes per hour through mill</span></div>
+        <div class="cube-row"><span class="row-name">AISC</span><span class="row-type numeric">Numeric</span><span class="row-desc">All-in sustaining cost A$/oz Au (net Cu by-product credit)</span></div>
+        <div class="cube-row"><span class="row-name">C1 Cash Cost</span><span class="row-type numeric">Numeric</span><span class="row-desc">C1 operating cost A$/oz Au before sustaining capex</span></div>
+        <div class="cube-row"><span class="row-name">By-Product Cu Credit</span><span class="row-type numeric">Numeric</span><span class="row-desc">A$/oz credit reducing AISC from copper by-product</span></div>
+        <div class="cube-row"><span class="row-name">Avg Realised Gold / Cu Price</span><span class="row-type numeric">Numeric</span><span class="row-desc">A$/oz gold and A$/t copper realised in period</span></div>
+        <div class="cube-row"><span class="row-name">Mining / Processing Unit Cost</span><span class="row-type numeric">Numeric</span><span class="row-desc">A$/t mined and A$/t milled respectively</span></div>
+      </div>
+    </div>
+
+    <!-- CapexPlanning -->
+    <div class="cube-block">
+      <div class="cube-header">
+        <span class="cube-name">CapexPlanning</span>
+        <span class="cube-desc">Capital expenditure by project and category (A$000)</span>
+      </div>
+      <div class="cube-rows">
+        <div class="cube-row section-row"><span class="row-name">Kalgara Mine</span><span class="row-type consolidated">Consolidated</span><span class="row-desc">Parent node for all Kalgara-related capex</span></div>
+        <div class="cube-row"><span class="row-name">Kalgara Sustaining — Maintenance</span><span class="row-type numeric">Numeric</span><span class="row-desc">Ongoing maintenance on open-pit operations</span></div>
+        <div class="cube-row"><span class="row-name">Kalgara Sustaining — Underground Dev.</span><span class="row-type numeric">Numeric</span><span class="row-desc">Minor underground development (exploratory drifts)</span></div>
+        <div class="cube-row"><span class="row-name">Kalgara Sustaining — Fleet Rebuild</span><span class="row-type numeric">Numeric</span><span class="row-desc">Replacement/overhaul of haul-fleet assets</span></div>
+        <div class="cube-row"><span class="row-name">Kalgara Growth — TSF Stage 2</span><span class="row-type numeric">Numeric</span><span class="row-desc">Tailings storage facility Stage 2 lift construction</span></div>
+        <div class="cube-row"><span class="row-name">Kalgara Growth — North Pit Pre-strip</span><span class="row-type numeric">Numeric</span><span class="row-desc">Waste pre-strip for North Pit extension (FY28 ore access)</span></div>
+        <div class="cube-row"><span class="row-name">Kalgara Growth — UG Growth Dev.</span><span class="row-type numeric">Numeric</span><span class="row-desc">LKU underground expansion development</span></div>
+        <div class="cube-row"><span class="row-name">Kalgara Growth — Fleet Expansion</span><span class="row-type numeric">Numeric</span><span class="row-desc">Additional haul-fleet procurement for production growth</span></div>
+        <div class="cube-row section-row"><span class="row-name">Creston Project</span><span class="row-type consolidated">Consolidated</span><span class="row-desc">Parent node for Creston underground development capex</span></div>
+        <div class="cube-row"><span class="row-name">Creston — Feasibility Study</span><span class="row-type numeric">Numeric</span><span class="row-desc">FS study costs (completed Oct 2025; largely expensed)</span></div>
+        <div class="cube-row"><span class="row-name">Creston — Decline Tunnelling</span><span class="row-type numeric">Numeric</span><span class="row-desc">Capital spend on access decline (712m cumulative at Dec 2025)</span></div>
+        <div class="cube-row"><span class="row-name">Creston — Civil &amp; Portal Works</span><span class="row-type numeric">Numeric</span><span class="row-desc">Surface infrastructure: portal, roads, utilities</span></div>
+        <div class="cube-row"><span class="row-name">Creston — Blind Bore &amp; Ventilation</span><span class="row-type numeric">Numeric</span><span class="row-desc">Ventilation shafts and blind-bore drilling</span></div>
+        <div class="cube-row"><span class="row-name">Creston — EPCM &amp; Owner Costs</span><span class="row-type numeric">Numeric</span><span class="row-desc">EPCM fees and owner-direct project costs</span></div>
+        <div class="cube-row section-row"><span class="row-name">Resource Development</span><span class="row-type consolidated">Consolidated</span><span class="row-desc">Exploration and resource drilling programmes</span></div>
+        <div class="cube-row"><span class="row-name">Resource Dev — West Pit Drilling</span><span class="row-type numeric">Numeric</span><span class="row-desc">RC/diamond drilling on West Pit Stage 3/4 extension</span></div>
+        <div class="cube-row"><span class="row-name">Resource Dev — LKU Drilling</span><span class="row-type numeric">Numeric</span><span class="row-desc">LKU underground resource growth drilling program</span></div>
+        <div class="cube-row"><span class="row-name">Resource Dev — Satellite Deposits</span><span class="row-type numeric">Numeric</span><span class="row-desc">Near-mine satellite targets within trucking distance of Kalgara</span></div>
+      </div>
+    </div>
+
+    <!-- CashFlow -->
+    <div class="cube-block">
+      <div class="cube-header">
+        <span class="cube-name">CashFlow</span>
+        <span class="cube-desc">Cash flow waterfall — opening balance to closing balance (A$000)</span>
+      </div>
+      <div class="cube-rows">
+        <div class="cube-row"><span class="row-name">Opening Cash Balance</span><span class="row-type numeric">Numeric</span><span class="row-desc">Cash at start of quarter</span></div>
+        <div class="cube-row"><span class="row-name">Operating Cash Flow</span><span class="row-type numeric">Numeric</span><span class="row-desc">Cash from mining operations (pre-capex)</span></div>
+        <div class="cube-row"><span class="row-name">Total Investing Cash Flow</span><span class="row-type numeric">Numeric</span><span class="row-desc">Capital expenditure + resource development (negative)</span></div>
+        <div class="cube-row"><span class="row-name">Total Financing Cash Flow</span><span class="row-type numeric">Numeric</span><span class="row-desc">Debt drawdowns/repayments, lease principal, dividends</span></div>
+        <div class="cube-row"><span class="row-name">Closing Cash Balance</span><span class="row-type numeric">Numeric</span><span class="row-desc">Cash at end of quarter (A$421.8m at Dec 2025)</span></div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+</body>
+</html>

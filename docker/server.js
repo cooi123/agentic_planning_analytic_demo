@@ -37,6 +37,7 @@ const NAV_STYLE = `
 
 function navBar(active) {
   const links = [
+    { href: '/company',  label: 'Company Overview',  key: 'company'  },
     { href: '/',         label: 'AI Agent',          key: 'agent'    },
     { href: '/market',   label: 'Market Data',       key: 'market'   },
     { href: '/planning', label: 'Planning Analytics',key: 'planning' },
@@ -45,7 +46,7 @@ function navBar(active) {
   const items = links
     .map(l => `<a href="${l.href}" class="ih-link${active === l.key ? ' active' : ''}">${l.label}</a>`)
     .join('');
-  return `<nav id="__ih-nav"><a href="/" class="ih-brand">Demo Company A Hub</a>${items}<span class="ih-sep"></span></nav>`;
+  return `<nav id="__ih-nav"><a href="/" class="ih-brand">Company A Demo Hub</a>${items}<span class="ih-sep"></span></nav>`;
 }
 
 function injectNav(html, active) {
@@ -159,6 +160,10 @@ function reportsIndex() {
 }
 
 // ─── Routes ───────────────────────────────────────────────────────────────────
+
+app.get('/company', (_req, res) => {
+  res.type('html').send(injectNav(readStatic('company.html'), 'company'));
+});
 
 app.get('/', (_req, res) => {
   res.type('html').send(injectNav(readStatic('agent.html'), 'agent'));
